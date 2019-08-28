@@ -4,6 +4,7 @@ nav:
     - Home: index.md
     - Programming: programming.md
     - Technical: technical.md
+    - Hardware: hardware.md
 
 theme:
   name: 'material'
