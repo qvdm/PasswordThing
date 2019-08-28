@@ -1,0 +1,3 @@
+[submodule "lib/SSD1306Ascii"]
+	path = lib/SSD1306Ascii
+	url = https://github.com/greiman/SSD1306Ascii.git
