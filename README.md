@@ -1,6 +1,8 @@
 # PasswordThing
-Password generator and typer
+Atmega 32U4 based Password generator and typer
 
 
-See docs/ directory for a manual, which can be generated with **mkdocs**
+See docs directory for a manual, which is published at 
+https://qvdm.github.io/PasswordThing/
+and can be generated with **mkdocs gh-deploy**
 

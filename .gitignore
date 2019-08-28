@@ -1,6 +1,9 @@
 # Platformio
-.pio
-.vscode
+.pio/
+.vscode/
+
+# Mkdocs
+site/
 
 # Prerequisites
 *.d
