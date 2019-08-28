@@ -1,7 +1,7 @@
 /*
- * Name: PwGen - Cooperative multitasking version version
+ * Name: PwGen - Cooperative multitasking version
  *
- * Purpose: Provides a password typer
+ * Purpose: Provides a password generator and typer
  * 
  * Features:
  *   Password select - 1-6
@@ -9,9 +9,11 @@
  *   Password generate
  *   EEPROM storage of passwords
  *   OLED and RGB/onboard LED display
+ *   Simple 'lock' mechanism
  * 
  * Operation:
  *   See "hardware.h" for physical description
+ *   See documentation for user guide
  * 
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
@@ -135,6 +137,7 @@ void setup()
   byte ledcols = (cEeprom.getvar(EEVAR_BUTTONS) & 0xF0) >> 4; // LED color assignments
   cMenu.set_slotcolors(ledcols);
 
+  // Initialize button 'menu' or serial menu depending in global mode
   if (kbmode == KM_KBD)
   {
     cSui.sio_menu_off();
@@ -143,7 +146,7 @@ void setup()
   }
   else
   {
-//    cSui.init(sseq); // uncomment to ask for pwd on serial
+//    cSui.init(sseq); // uncomment to ask for pwd on serial TBD debug
     cSui.init(0);
     cDisp.displaylarge((char *) "SERIAL"); 
   }
@@ -160,6 +163,7 @@ void sysTick()
   Time++;
   
   // Reset on watchdog timeout  TBD this does not work - need to use the WD timer with a better boot loader
+  //   also, not really needed for 32U4 / current implementation due to fast boot mechanism and cooperative multitasking
 //  if (++wdTime > WD_TIMEOUT)
 //    resetFunc(); 
 }
@@ -185,7 +189,7 @@ void kickWdog()
 // Main processing loop
 void loop()
 {
-  static unsigned long loopcount=0;
+  static unsigned long loopcount=0; 
   unsigned long loopstart, loopend, loopduration, ldms, delaytime;
 
   // Measure loop start time
@@ -197,7 +201,7 @@ void loop()
   if ( (loopcount % (LOOPS_PERSEC*5)) == 0) 
     kickWdog();
 
-  // Execute periodic Tasks
+  // Execute periodic 'Tasks' (naming convention remains from FreeRTOS days, now we just call them in sequence)
   cLed.vTaskManageLeds();      // LED manager
   cDisp.vTaskManageDisplay();  // Display manager
   cRandom.vTaskRandomGen();    // Random # entropy harvester
