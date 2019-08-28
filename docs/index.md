@@ -41,6 +41,25 @@ use by unathorized people, but it will not deter a determined attacker, and can
 be trivially bypassed through brute force or by using the serial port setup / 
 debug mechanism. 
 
+### Threat model
+Think of the PT as an old-fashioned key.  You may own, lease or rent a car
+and/or a house which is secured by nothing more than a key.  If someoone
+really wants to take your car, they can steal your key, or beat you with a
+rubber hose until you give it to them.  Your only protection is the law. 
+
+If you lose your key, there is a level of security afforded by the fact that 
+it is not immediately obvious what car or house the key belongs to.  If
+someone takes the key off your desk, they may know exactly where your car is
+parked or where you live.   
+
+The PT is the same, just for your computer.  If someone really wants to get
+into your computer, they could always beat you with a rubber hose until you
+give them the password.  
+
+If you lose a PT, chances are that nobody will know what it is or who it
+belongs to.  But if you walk away from your computer and leave the PT stuck
+in a USB port, you make a thief's life much easier.  
+
 
 # Theory of operation
 The PT has six 'slots' for storing passwords and optionally userids.  Each
