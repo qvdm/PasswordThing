@@ -8,14 +8,14 @@ The board is available from Aliexpress and other vendors.
 
 *PT-U circuit diagram*
 
-
-The model A is the same, excpet that it uses a smaller board (sometimes
-called 'beetle' by online vendors.  The connector is USB-A of course. 
+The circuit for the model A is the same, excpet that it uses a smaller board 
+(sometimes called 'beetle' by online vendors.  The connector is USB-A of course. 
 
 Note  that you would typically not wire in an OLED display for a model A
 (although it is supported).  The buttons are connected to D9, D8 and D7 
 as opposed to D9, D10, D11 in the  model U.  Finally, the model A board has a 
 build-in LED on D6, so no need to connect an external one.  
+
 
 
 # Compliling
