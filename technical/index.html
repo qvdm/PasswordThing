@@ -215,7 +215,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../hardware/" title="Hardware" class="md-nav__link">
+    <a href="../hardware.md" title="Hardware" class="md-nav__link">
       Hardware
     </a>
   </li>
@@ -250,6 +250,8 @@
                 
                 
                 <h1 id="pasword-generation">Pasword Generation</h1>
+<p>The entropy harvester for the password generator is based on a scheme
+documented at https://gist.github.com/endolith/2568571 .</p>
 <p>When you plug the Password Thing into a USB port it starts to harvest
 entropy by periodically sampling the lower buts of a fast-running timer. 
 The bits are scrambled and combined to generate one bit of entropy for each
@@ -305,20 +307,6 @@ generate a password for the slot in normal mode, and try again. </p>
             </div>
           </a>
         
-        
-          <a href="../hardware/" title="Hardware" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Hardware
-              </span>
-            </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-            </div>
-          </a>
         
       </nav>
     </div>
