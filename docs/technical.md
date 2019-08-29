@@ -16,18 +16,18 @@ Up to 256 bytes of entropy are stored in a queue to be used by the password
 generator.  
 
 The stored entropy is used to create password characters from the available
-character set, which may be modified by the user through the programming
+character set, which may be modified by the user through the configuration
 interface.  
 
 Some entropy is wasted on thrown-away bits to avoid modulo bias  so that the
 randomness of the generated passwords are not dependent on the selected
 character set.  
 
-# Programming interface issues
-The programming user interface is not very fault tolerant and bad input can
+# Configuration interface issues
+The configuration user interface is not very fault tolerant and bad input can
 cause it to go into a state where nothing seems to work properly,  
 
-In that case, just unplug and restart the programming session.  If password
+In that case, just unplug and restart the configuration session.  If password
 generation or entry stops working for a slot, use the Generate button to
 generate a password for the slot in normal mode, and try again. 
 

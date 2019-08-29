@@ -2,9 +2,9 @@ site_name: Password Thing
 
 nav:
     - Home: index.md
-    - Programming: programming.md
+    - Configuration: configuration.md
     - Technical: technical.md
-    - Hardware: hardware.md
+    - Hardware and Software: hardware_and_software.md
 
 theme:
   name: 'material'

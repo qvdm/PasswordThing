@@ -1,18 +1,15 @@
 # Introduction
 
-The Password Thing (PT) provides a **"programming"** interface to allow you to use
+The Password Thing (PT) provides a **"configuration"** interface to allow you to use
 extended functionality that would be difficult to implement using just the
 three (or two) buttons on the device.  
-
-Note that the term **"Programming"** is used here to describe customization
-of the operation of the device.  
 
 The actual code running on the PT is documented in the **Hardware and
 Software** section of this manual. 
 
 # Software
 
-To access Program mode, you need a Serial Terminal Emulator, since the PT emulates a
+To access Configuration mode, you need a Serial Terminal Emulator, since the PT emulates a
 serial port.  CoolTerm is one option that works fine, but you can use any
 terminal emulator that supports USB serial ports.  
 
@@ -24,12 +21,12 @@ data bits, 1 stop bit).
 The terminal emulator should also be configured to assert DTR and RTS on
 startup.  
 
-# Entering Program mode
+# Entering Configurationmode
 
-To enter program mode, press any button while plugging the PT into a USB
+To enter configuration mode, press any button while plugging the PT into a USB
 port.  The LED will be solid white until the terminal emulator connects
 (asserts DTR/RTS) and then the LED will blink off briefly once a second to
-indicate programming mode. 
+indicate configuration mode. 
 
 # Commands
 
@@ -63,13 +60,13 @@ Press **'M'** to set the mode for subsequent generated passwords.  The
 options are Alphabetic, Numeric, Alphanumeric and Special (allow special
 characters)
 
-The mode only applies to passwords generated via the programming interface,
+The mode only applies to passwords generated via the configuration interface,
 and a mode change only lasts for the current serial terminal sesssion.  
 
 ## Set password generator Length
 Press **'L'** to set the length of subsequent generated passwords.  
 
-The length only applies to passwords generated via the programming interface,
+The length only applies to passwords generated via the configuration interface,
 and a length change only lasts for the current serial terminal sesssion.  
 
 ## Generate password

@@ -66,7 +66,7 @@ The PT has six 'slots' for storing passwords and optionally userids.  Each
 slot can store a userid and a password up to 30 characters in length.  
 
 The PT can auto-generate a password for each slot, but userids have to be
-entered through the programming interface.  
+entered through the configuration interface.  
 
 To use the PT, connect it to a USB port, select the appropriate slot using
 the Next button (see below for button assignments), move your cursor to the
@@ -88,7 +88,7 @@ indicators but no display and only 2 buttons.
 
 
 # Buttons
-The function of the buttons can be re-assigned (See the Programming section). 
+The function of the buttons can be re-assigned (See the Configuration section). 
 The default functions are shown below.  
 
 Each button behaves differently depending on whether it was pressed a short
@@ -99,7 +99,7 @@ Sends the password stored in the current slot (if any) to the computer via
 the emulated keyboard interface. The password entry is followed by an emulated
 Enter key.  
 
-If there is a userid stored in the slot (see Programming section) then the
+If there is a userid stored in the slot (see Configurationsection) then the
 PT will send the userid, followed by a Tab character, followed by the
 password, followed by Enter.  
 
@@ -126,8 +126,8 @@ The second LED can display colors and is used to indicate the curent slot or
 mode.  
 
 ## White
-The LED briefly flashes white during startup.  When Programming mode is
-selected (see Programming on the left), the LED is solid white until a
+The LED briefly flashes white during startup.  When Configuration mode is
+selected (see configuration on the left), the LED is solid white until a
 serial terminal program is connected.  Once the terminal is connected, the
 LED remains white but turns off briefly once a second. 
 
@@ -162,8 +162,8 @@ password manager password is stored in your PT.  If you lose it, or it
 breaks, you are locked out of all your passwords.  
 
 1. When you generate a new important password, wether through the Generate
-button, the programming interface or through another method (and use the
-programming interface to store it on the PT), you should make a copy of the
+button, the configuration interface or through another method (and use the
+configuration  interface to store it on the PT), you should make a copy of the
 password **immediately** and store it somehwere safe.  
 2. Good practice is to store a copy of all your passwords on another PT and
 to keeup that in a safe place offsite (like a safe deposit box).  
