@@ -1,5 +1,8 @@
 # Pasword Generation
 
+The entropy harvester for the password generator is based on a scheme
+documented at https://gist.github.com/endolith/2568571 .
+
 When you plug the Password Thing into a USB port it starts to harvest
 entropy by periodically sampling the lower buts of a fast-running timer. 
 The bits are scrambled and combined to generate one bit of entropy for each

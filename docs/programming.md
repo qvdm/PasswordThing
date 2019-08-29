@@ -1,8 +1,14 @@
 # Introduction
 
-The Password Thing (PT) provides a programming interface to allow you to use
+The Password Thing (PT) provides a **"programming"** interface to allow you to use
 extended functionality that would be difficult to implement using just the
 three (or two) buttons on the device.  
+
+Note that the term **"Programming"** is used here to describe customization
+of the operation of the device.  
+
+The actual code running on the PT is documented in the **Hardware and
+Software** section of this manual. 
 
 # Software
 
