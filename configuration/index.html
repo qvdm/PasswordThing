@@ -36,7 +36,7 @@
     
     
       
-        <title>Programming - Password Thing</title>
+        <title>Configuration - Password Thing</title>
       
     
     
@@ -101,7 +101,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Programming
+                Configuration
               
             </span>
           
@@ -190,8 +190,8 @@
       
     
     
-    <a href="./" title="Programming" class="md-nav__link md-nav__link--active">
-      Programming
+    <a href="./" title="Configuration" class="md-nav__link md-nav__link--active">
+      Configuration
     </a>
     
   </li>
@@ -250,15 +250,13 @@
                 
                 
                 <h1 id="introduction">Introduction</h1>
-<p>The Password Thing (PT) provides a <strong>"programming"</strong> interface to allow you to use
+<p>The Password Thing (PT) provides a <strong>"configuration"</strong> interface to allow you to use
 extended functionality that would be difficult to implement using just the
 three (or two) buttons on the device.  </p>
-<p>Note that the term <strong>"Programming"</strong> is used here to describe customization
-of the operation of the device.  </p>
 <p>The actual code running on the PT is documented in the <strong>Hardware and
 Software</strong> section of this manual. </p>
 <h1 id="software">Software</h1>
-<p>To access Program mode, you need a Serial Terminal Emulator, since the PT emulates a
+<p>To access Configuration mode, you need a Serial Terminal Emulator, since the PT emulates a
 serial port.  CoolTerm is one option that works fine, but you can use any
 terminal emulator that supports USB serial ports.  </p>
 <h1 id="settings">Settings</h1>
@@ -266,11 +264,11 @@ terminal emulator that supports USB serial ports.  </p>
 data bits, 1 stop bit).</p>
 <p>The terminal emulator should also be configured to assert DTR and RTS on
 startup.  </p>
-<h1 id="entering-program-mode">Entering Program mode</h1>
-<p>To enter program mode, press any button while plugging the PT into a USB
+<h1 id="entering-configurationmode">Entering Configurationmode</h1>
+<p>To enter configuration mode, press any button while plugging the PT into a USB
 port.  The LED will be solid white until the terminal emulator connects
 (asserts DTR/RTS) and then the LED will blink off briefly once a second to
-indicate programming mode. </p>
+indicate configuration mode. </p>
 <h1 id="commands">Commands</h1>
 <h2 id="help">Help</h2>
 <p>You can press <strong>'?'</strong> or <strong>'h'</strong> at any Slot prompt to get a list of available commands.  </p>
@@ -295,11 +293,11 @@ is 30 characters. </p>
 <p>Press <strong>'M'</strong> to set the mode for subsequent generated passwords.  The
 options are Alphabetic, Numeric, Alphanumeric and Special (allow special
 characters)</p>
-<p>The mode only applies to passwords generated via the programming interface,
+<p>The mode only applies to passwords generated via the configuration interface,
 and a mode change only lasts for the current serial terminal sesssion.  </p>
 <h2 id="set-password-generator-length">Set password generator Length</h2>
 <p>Press <strong>'L'</strong> to set the length of subsequent generated passwords.  </p>
-<p>The length only applies to passwords generated via the programming interface,
+<p>The length only applies to passwords generated via the configuration interface,
 and a length change only lasts for the current serial terminal sesssion.  </p>
 <h2 id="generate-password">Generate password</h2>
 <p>Press <strong>'G'</strong> to generate a new password for the currently selected slot. 
