@@ -51,11 +51,11 @@ void sysTick();
 void(* resetFunc) (void) = 0;
 
 // Create utility classes
-SSD1306AsciiWire oled;
+SSD1306AsciiWire cOled;
 Random cRandom;
 Eeprom cEeprom;
 Led cLed;
-Display cDisp(oled, cEeprom);
+Display cDisp(cOled, cEeprom);
 SerialUi cSui(cLed, cDisp, cRandom, cEeprom);
 Menu cMenu(cLed, cDisp, cRandom, cEeprom);
 Input cInput(cMenu);

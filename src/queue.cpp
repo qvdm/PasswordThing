@@ -13,7 +13,7 @@
  * Private: 
   *
  * Operation:
- *   Just a Queue
+ *   Just a Queue.  No idea where I got the code from originally, but an alsmost identical version appears in various tutorials around the web.  
  * 
  */
 

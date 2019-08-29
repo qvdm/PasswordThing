@@ -35,7 +35,7 @@ byte Random::rotl(const byte value, int shift)
   return (value << shift) | (value >> (sizeof(value)*8 - shift));
 }
 
-// Grab a single byte from the entropy pool.  Block up to 8 ticks if one is not available - that should give the Task enough time to generate another one
+// Grab a single byte from the entropy pool.  
 byte Random::getbyte()
 {
   if( !q.isEmpty() )
@@ -45,8 +45,7 @@ byte Random::getbyte()
   return (byte) 0;
 }
 
-// Get bytes from the entropy pool and create a password with characters between 0x20 and 0x7E - start @32, range 94 decimal
-// This is not great; replace with something that grabs bits out of the stream or something 
+// Get bytes from the entropy pool and create a password according to the selected rules
 bool Random::genPw(char *buf, byte len, byte mode)
 {
   byte range, irange, startc, eneeded, b;
@@ -136,9 +135,7 @@ void Random::vTaskRandomGen()
   static byte current_byte=0;
   static byte current_bit=0;
 
- //  SDBG("!_RA")
-
-  // Sample timer, ignore higher bits
+   // Sample timer, ignore higher bits
   randsample = TCNT1L; 
 
   // Spread randomness around, XOR preserves randomness 

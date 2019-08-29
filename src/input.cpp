@@ -70,7 +70,7 @@ void Input::sendevent(byte button, byte event)
   }
 }
 
-// Read the button states and debounce them. Send callback events
+// Read the button states and debounce them. Send events
 void Input::vTaskDigitalRead() 
 {
   for (int i=0; i < NBUTTONS; ++i)

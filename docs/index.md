@@ -38,8 +38,8 @@ valuable assests, like a safe filled with valuables.
 The PT **can** be configured to require a 4-button sequence to be tapped before
 it will operate.  This provides a basic minimal layer of security against casual 
 use by unathorized people, but it will not deter a determined attacker, and can 
-be trivially bypassed through brute force or by using the serial port setup / 
-debug mechanism. 
+be trivially bypassed through brute force or by using the serial port
+configuration / debug mechanism. 
 
 ### Threat model
 Think of the PT as an old-fashioned key.  You may own, lease or rent a car
