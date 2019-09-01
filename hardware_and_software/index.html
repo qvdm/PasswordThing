@@ -263,14 +263,13 @@ ability to act as a USB HID device, emulating a keyboard. </p>
 <p>Here are the bare boards used for the U and A versions of the project.  </p>
 <p><img alt="Boards" src="../img/boards.JPG" />
 <em>Boards used for model U (left) and A (right)</em></p>
-<p>The peripheral components needed are:
-    - A common-anode RGB LED (you can use common cathode, but then you
-      need to adjust the wiring and code appropriately).
-    - A 270 ohm resistor for the R, G and B led channels. The value nay be
-      tweaked to change brightness. 
-    - A monochrome LED, and another 270 ohm resistor for model U. 
-    - Three momentary push button switches.<br />
-    - An optional  128x32 I2C OLED display. </p>
+<p>The peripheral components needed are:</p>
+<pre><code>- A common-anode RGB LED (you can use common cathode, but then you need to adjust the wiring and code appropriately).
+- A 270 ohm resistor for the R, G and B led channels. The value nay be tweaked to change brightness. 
+- A monochrome LED, and another 270 ohm resistor for model U. 
+- Three momentary push button switches.  
+- An optional  128x32 I2C OLED display.
+</code></pre>
 <p>Note  that you would typically not wire in an OLED display for a model A
 (although it is supported).  The buttons are connected to D9, D8 and D7 in
 model A, as opposed to D9, D10, D11 in the  model U.  You may wish to ommit 
