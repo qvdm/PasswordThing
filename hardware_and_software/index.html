@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
     
     
       
@@ -40,7 +40,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.0284f74d.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
       
       
     
@@ -145,7 +145,7 @@
         
       
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -250,31 +250,42 @@
                 
                 
                 <h1 id="circuit">Circuit</h1>
-<p>The circuit for the PT model U is shown below.  The microprocessor board 
-is a generic 32U4 "Leonardo" compatible board with a micro-usb connector. 
-The board is available from Aliexpress and other vendors.  </p>
+<p>The circuit for the PT models U and a are shown below.  The microprocessor board 
+is a generic ATmega 32U4 "Leonardo" compatible board with a micro-usb (model U) or 
+USB A (model A) connector.  The boards are available from Aliexpress and other vendors.  </p>
+<p>Note that boards like Arduino Nano and similar, which use a 328P processor,
+will not work, since the operation of the project depends on the 32U4's
+ability to act as a USB HID device, emulating a keyboard. </p>
 <p><img alt="PasswordThing Model U" src="../img/PWT-U.png" />
 <em>PT-U circuit diagram</em></p>
+<p><img alt="PasswordThing Model A" src="../img/PWT-A.png" />
+<em>PT-A circuit diagram</em></p>
 <p>Here are the bare boards used for the U and A versions of the project.  </p>
 <p><img alt="Boards" src="../img/boards.JPG" />
 <em>Boards used for model U (left) and A (right)</em></p>
-<p>The RGB LED is a common-anode one.  Resistor values can be tweaked to change brightness. </p>
-<p>The circuit for the model A is the same as shown above, , except that it uses the smaller board 
-(sometimes called 'beetle' by online vendors).  </p>
+<p>The peripheral components needed are:
+    - A common-anode RGB LED (you can use common cathode, but then you
+      need to adjust the wiring and code appropriately).
+    - A 270 ohm resistor for the R, G and B led channels. The value nay be
+      tweaked to change brightness. 
+    - A monochrome LED, and another 270 ohm resistor for model U. 
+    - Three momentary push button switches.<br />
+    - An optional  128x32 I2C OLED display. </p>
 <p>Note  that you would typically not wire in an OLED display for a model A
-(although it is supported).  The buttons are connected to D9, D8 and D7 
-as opposed to D9, D10, D11 in the  model U.  You may wish to ommit the middle ("Next")
-button on a model A, to allow the use of larger buttons, since a long press of "Select" 
-has the same functionality.  </p>
+(although it is supported).  The buttons are connected to D9, D8 and D7 in
+model A, as opposed to D9, D10, D11 in the  model U.  You may wish to ommit 
+the middle ("Next") button on a model A, to allow the use of larger buttons, 
+since a long press of "Select"  has the same functionality.  </p>
 <p>Finally, the model A board has a  build-in LED on D6, so no need to connect an external 
 monochrome LED.  </p>
 <h1 id="assembly">Assembly</h1>
-<p>Any small momemtary pushbutton switches can be used for the buttons, and the project 
-can be assembled many ways.  The photos below  show the front and back of model U and A
+<p>The project can be assembled many ways.  A custom 3D-printed case is probably
+the best solition in the long term.  </p>
+<p>The photos below  show the front and back of two of my prototype model U and A
 assemblies.  The "sandwhich" construction of the model U shown is very compact and allows 
-the unit to be glued to your keyboard for easy access.  (Only do this at home of course
--  see the Security section in the documentation).</p>
-<p>The images below show an example of an assembled model A board.</p>
+the unit to be glued to your keyboard for easy access.  (Only do this at home of 
+course - see the Security section in the documentation).</p>
+<p>Assembled model A board.</p>
 <p><img alt="Model A top" src="../img/USBA-top.JPG" />
 <em>Model A top view</em></p>
 <p><img alt="Model A bot" src="../img/USBA-bottom.JPG" />
@@ -296,12 +307,15 @@ buttons and led will not work correctly. </p>
 <h1 id="documentation">Documentation</h1>
 <p>This documentation was generated with mkdocs.  There is a yaml file in the root of 
 the repository. </p>
-<h1 id="coding-style">Coding Style</h1>
-<p>Hey, I learned C++ shortly after it was invented, in the 90s, and I am sure
-that is reflected in my coding style.    I am aware of recent developments 
-in the language, which could make this code much more compact and efficient, 
-but this is a hobby project and I have a day job.  Feel free to submit
-improvements.  </p>
+<h1 id="coding-style-and-future-development">Coding Style and future development</h1>
+<p>The code started off as a FreeRTOS project, written in C, which is reflected
+in the lack of C++ feature usage, and some naming conventions.  FreeRTOS was 
+eventually dumped to free up flash space for features, and because the
+application is not time critical at all.  </p>
+<p>The remnants of the RTOS origin of the code can be seen in the main 'Task'
+for each major function, that is now simply periodically called in the main
+loop. Works fine as it is, but there is potentially room for optimization
+there.  </p>
                 
                   
                 
@@ -357,7 +371,7 @@ improvements.  </p>
       
     </div>
     
-      <script src="../assets/javascripts/application.245445c6.js"></script>
+      <script src="../assets/javascripts/application.c648116f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       
