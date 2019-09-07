@@ -39,9 +39,6 @@ The serial terminal should now show a prompt with the current Slot number
 the current slot.  *Shortcut: just press the numeric key corresponding to
 the desired slot number*
 
-Other commands to change the slot are **'N'** for Next slot and **'R'** for
-pRevious slot.  
-
 ## Print password
 Pressing **'P'** prints the password (and userid, if there is one) stored in
 the current slot. 
@@ -51,9 +48,16 @@ Press **'U'** to enter a new Userid for the slot. The maximum lenght of a
 userid is 30 characters. 
 
 ## Enter Password
-press **'O'** to enter a new password for the current slot.  The password
+Press **'O'** to enter a new password for the current slot.  The password
 may contain numbers, letters, spaces  and special characters.  Maximum length 
 is 30 characters. 
+
+## Name a slot
+Press **'N'** to enter a name for the current slot.  0-7 letters or digits. 
+The name is displayed on the OLED when the slot is selected
+
+## Display a slot name
+Press **'R'** to display the name assigned to the current slot
 
 ## Set password generator Mode
 Press **'M'** to set the mode for subsequent generated passwords.  The

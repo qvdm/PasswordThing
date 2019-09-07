@@ -161,8 +161,8 @@ void Menu::shortpress(byte button)
               secok = true;
               waitforseq=0;
               // Reinstate privacy timeout
-              byte priv = eeprom.getvar(EEVAR_PRIV); 
-              disp.setprivacy(priv & 0x0F);
+              byte priv = eeprom.getvar(EEVAR_OPRIV); 
+              disp.setprivacy(priv);
               next();
               break;
             }
@@ -379,7 +379,11 @@ void Menu::showslotled(struct pwvalid *v)
 // Display slot # and info on OLED
 void Menu::displayslot(struct pwvalid *v)
 {
-  sprintf(dispbuf, "Slot %d", slot);
+  eeprom.getname(slot, snbuf);
+  if (strlen(snbuf) > 0)
+    sprintf(dispbuf, "%s", snbuf);
+  else
+    sprintf(dispbuf, "Slot %d", slot);
   if (!v->pwdvalid) strcat(dispbuf, " INV");
   else if (v->uidvalid) strcat(dispbuf, " UID");
   else strcat(dispbuf, " PWD");

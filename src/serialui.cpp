@@ -12,6 +12,7 @@
  *     kbd_on - return to keyboard mode
  *     kbd_off - turn off keyboard mode
  *     printcurpw - print pwd
+ *     ... TBD rest
  *
  * Operation:
  */
@@ -146,6 +147,27 @@ void SerialUi::genpw()
   }
 }
 
+// Print the name of the current slot
+void SerialUi::printcurname()
+{
+  eeprom.getname(curslot, st_buf);
+  Serial.print(F("Name: "));
+  if (strlen(st_buf) > 0)
+  {
+    Serial.write('\"');
+    for (unsigned int i=0; i < strlen(st_buf); i++)
+    {
+      Serial.write(st_buf[i]);
+    }
+    Serial.write('\"');
+  }
+  else
+    Serial.print(F("None "));
+  Serial.println("");
+  Serial.flush();
+  SUICRLF;
+}
+
 
 // Main task
 void SerialUi::vTaskSerialUi()
@@ -235,21 +257,16 @@ void SerialUi::handle_cmd()
       SUIPROMPT;
       break;
 
-    case 'n' : // next slot
-      curslot++; if (curslot >= MAXSLOTS) curslot=0;
-      SUICRLF;
-      SUIPROMPT;
-      break;
-
-    case 'r' : // prev slot
-      curslot--; if (curslot >=  MAXSLOTS) curslot=MAXSLOTS-1;
-      SUICRLF;
-      SUIPROMPT;
-      break;
-
     case 'p' :
       SUICRLF;
       printcurpw();
+      SUICRLF;
+      SUIPROMPT;
+      break;
+
+    case 'r' :
+      SUICRLF;
+      printcurname();
       SUICRLF;
       SUIPROMPT;
       break;
@@ -274,6 +291,14 @@ void SerialUi::handle_cmd()
       st_ptr=0;
       SUICRLF;
       Serial.print(F("Password for Slot ")); Serial.print(curslot); Serial.print(F(": ")); Serial.flush();
+      break;
+
+    case 'n' : // enter name
+      st_mode = SM_WAIT_DATA;
+      waitfor = WD_NAME;
+      st_ptr=0;
+      SUICRLF;
+      Serial.print(F("Name for Slot ")); Serial.print(curslot); Serial.print(F(" [0-7 chars]: ")); Serial.flush();
       break;
 
     case 'm' : // generator mode
@@ -406,11 +431,11 @@ void SerialUi::help(void)
   SUICRLF;
   Serial.println(F("? or h - help")); Serial.flush();
   Serial.println(F("s - Select (S)lot")); Serial.flush();
-  Serial.println(F("n - (N)ext slot")); Serial.flush();
-  Serial.println(F("r - p(R)evious slot")); Serial.flush();
   Serial.println(F("p - (P)rint uid/pwd")); Serial.flush();
   Serial.println(F("u - Enter (U)id")); Serial.flush();
   Serial.println(F("o - Enter (O)wn pwd")); Serial.flush();
+  Serial.println(F("n - Set slot (N)ame")); Serial.flush();
+  Serial.println(F("r - p(R)int slot name")); Serial.flush();
   Serial.println(F("m - Set generator (M)ode")); Serial.flush();
   Serial.println(F("l - Set generator (L)ength")); Serial.flush();
   Serial.println(F("g - (G)enerate pwd")); Serial.flush();
@@ -446,13 +471,13 @@ void SerialUi::toggle_blink()
 // Toggle display flip state
 void SerialUi::toggle_flip()
 {
-      byte b = eeprom.getvar(EEVAR_DFLIP);
-      bool flip = (bool) (b & 0x01);
+      byte b = eeprom.getvar(EEVAR_DFLP);
+      bool flip = (bool) b;
       flip = !flip;
       disp.setflip(flip);
       b &= 0xfe;
       if (flip) b |= 0x01;
-      eeprom.storevar(EEVAR_DFLIP, (byte) b);
+      eeprom.storevar(EEVAR_DFLP, (byte) b);
       Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
 }
 
@@ -487,17 +512,17 @@ void SerialUi::show_eevars()
 {
   bool blnk = (bool) eeprom.getvar(EEVAR_LBLINK);
   Serial.print(F("\nBlink ")); if (blnk) Serial.print("ON"); else Serial.print("OFF"); Serial.flush();
-  bool flip = (bool) (eeprom.getvar(EEVAR_DFLIP) & 0x01);
+  bool flip = (bool) eeprom.getvar(EEVAR_DFLP) ;
   Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
-  byte ss = (eeprom.getvar(EEVAR_DFLIP) >> 1);
+  byte ss = eeprom.getvar(EEVAR_SEC) ;
   Serial.print(F("\nSecurity Seq: ")); if (ss > 0) Serial.print(Secseq[ss+1]); else Serial.print(F("None")); Serial.flush();
-  byte priv = (eeprom.getvar(EEVAR_PRIV) & 0x0F) * 10;
+  byte priv = eeprom.getvar(EEVAR_OPRIV)  * 10;
   Serial.print(F("\nDisplay Timeout ")); Serial.print(priv); Serial.print(F("s")); Serial.flush();
-  priv = ( (eeprom.getvar(EEVAR_PRIV) & 0xF0) >> 4) * 10;
+  priv = eeprom.getvar(EEVAR_LPRIV) * 10;
   Serial.print(F("\nLED Timeout ")); Serial.print(priv); Serial.print(F("s")); Serial.flush();
-  byte b = eeprom.getvar(EEVAR_BUTTONS);
+  byte b = eeprom.getvar(EEVAR_BUTSEQ);
   Serial.print(F("\nButton assignment ")); 
-  switch (b & 0x0F)
+  switch (b)
   {
     case 0 : // GNS
       Serial.print(F("\nGenerate Next Select")); 
@@ -522,8 +547,9 @@ void SerialUi::show_eevars()
       break;
   }
   Serial.flush();
+  byte l = eeprom.getvar(EEVAR_LEDSEQ);
   Serial.print(F("\nLed slot colors ")); 
-  switch ( (b & 0xF0) >> 4)
+  switch (l)
   {
     case 0 : 
       Serial.print(F("\nR Y G Ma B Cy")); 
@@ -582,6 +608,18 @@ void SerialUi::handle_data()
       {
         set_eepw();
         printcurpw();
+        st_mode = SM_WAIT_CMD;
+        SUIPROMPT;
+      }
+    }
+    break;
+
+    case WD_NAME : // Expect a Name
+    {
+      if (get_string(EE_SNLEN-1))
+      {
+        set_eename();
+        printcurname();
         st_mode = SM_WAIT_CMD;
         SUIPROMPT;
       }
@@ -725,6 +763,14 @@ void SerialUi::set_eepw()
   eeprom.storepw(curslot, &pw);
 }
 
+// Write slot name in buf to eeprom
+void SerialUi::set_eename()
+{
+  st_buf[st_ptr]=0;
+  eeprom.storename(curslot, st_buf);
+}
+
+
 // Set pw generator mode
 void SerialUi::set_pwgmode(char m)
 {
@@ -809,10 +855,7 @@ void SerialUi::set_dispto()
   if ( d >= 0 )
   {            
     byte priv = (byte) d;
-    byte v = eeprom.getvar(EEVAR_PRIV); 
-    v &= 0xF0; priv &= 0x0F;
-    v |= priv;
-    eeprom.storevar(EEVAR_PRIV, (byte) v);
+    eeprom.storevar(EEVAR_OPRIV, priv);
     disp.setprivacy(priv);
   }
   else
@@ -830,10 +873,7 @@ void SerialUi::set_ledto()
   if ( d >= 0 )
   {            
     byte priv = (byte) d;
-    byte v = eeprom.getvar(EEVAR_PRIV); 
-    v &= 0x0F; priv &= 0x0F; priv <<= 4;
-    v |= priv;
-    eeprom.storevar(EEVAR_PRIV, (byte) v);
+    eeprom.storevar(EEVAR_LPRIV, priv);
     led.settimeout(priv);
   }
   else
@@ -846,9 +886,7 @@ void SerialUi::set_ledto()
 // Set button mode
 void SerialUi::set_btnmode(char m)
 {
-  byte v = eeprom.getvar(EEVAR_BUTTONS); // button selection in lower nibble
   byte b;
-
   switch (m)
   {
     case '1' : // GNS
@@ -880,15 +918,12 @@ void SerialUi::set_btnmode(char m)
       b=0X0F;
       break;
   }
-  v &= 0xF0;
-  v |= b;
-  eeprom.storevar(EEVAR_BUTTONS, v);
+  eeprom.storevar(EEVAR_BUTSEQ, b);
 }
 
 // Set led colormode
 void SerialUi::set_colmode(char m)
 {
-  byte v = eeprom.getvar(EEVAR_BUTTONS); // led color in upper nibble
   byte b; 
   switch (st_inchar)
   {
@@ -905,9 +940,7 @@ void SerialUi::set_colmode(char m)
       b=0x0F;
       break;
   }
-  v &= 0x0F;
-  v |= (b<< 4);
-  eeprom.storevar(EEVAR_BUTTONS, v);
+  eeprom.storevar(EEVAR_LEDSEQ, b);
 }
 
 
@@ -915,7 +948,6 @@ void SerialUi::set_colmode(char m)
 void SerialUi::set_secseq()
 {
   int i, d, ss;
-  byte v, s;
 
   st_buf[st_ptr]=0;
   bool ok=true;
@@ -938,18 +970,13 @@ void SerialUi::set_secseq()
         break;
       }
     }
-    v = eeprom.getvar(EEVAR_DFLIP); 
-    v &= 0x01; s = (byte) ss <<  1; 
-    v |= s;
-    eeprom.storevar(EEVAR_DFLIP, (byte) v);
+    eeprom.storevar(EEVAR_SEC, (byte) ss);
   }
   else
   {
     if (st_buf[0] == '0')
     {
-      v = eeprom.getvar(EEVAR_DFLIP); 
-      v &= 0x01;
-      eeprom.storevar(EEVAR_DFLIP, (byte) v);
+      eeprom.storevar(EEVAR_SEC, 0);
     }
     else
     {

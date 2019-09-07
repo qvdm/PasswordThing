@@ -19,11 +19,11 @@
  * 
  * Operation:
  *   Eeprom is organized as follows:
- *   0000:                      <UID0_Len> <PWD0_Len> <UID0_B0> <UID0_B1> ... <UID0_Bn> <PAD>x(EE_PWLEN - UID_0Len) <PWD0_B0> <PWD0_B1> ... <PWD0_Bn> <PAD>x(EE_PWLEN - PWD_0Len)
- *   EE_STRLEN:                 <UID1_Len> <PWD1_Len> <UID1_B0> <UID1_B1> ... <UID1_Bn> <PAD>x(EE_PWLEN - UID_1Len) <PWD1_B0> <PWD1_B1> ... <PWD1_Bn> <PAD>x(EE_PWLEN - PWD_1Len)
+ *   0000:                      <UID0_Len> <PWD0_Len> <SLOT0 NAME> <UID0_B0> <UID0_B1> ... <UID0_Bn> <PAD>x(EE_PWLEN - UID_0Len) <PWD0_B0> <PWD0_B1> ... <PWD0_Bn> <PAD>x(EE_PWLEN - PWD_0Len)
+ *   EE_SLOTLEN:                <UID1_Len> <PWD1_Len> <SLOT0 NAME> <UID1_B0> <UID1_B1> ... <UID1_Bn> <PAD>x(EE_PWLEN - UID_1Len) <PWD1_B0> <PWD1_B1> ... <PWD1_Bn> <PAD>x(EE_PWLEN - PWD_1Len)
  *   ...
- *   EE_STRLEN x (EE_MAXSTR-1): <UIDn_Len> <PWDn_Len> <UIDn_B0> ...
- *   EE_STRLEN x EE_MAXSTR:     <NVBYTE0> <NVBYTE1> <NVBYTE2> <NVBYTE3> <CRC0> <CRC1> <CRC2> <CRC3>
+ *   EE_SLOTLEN x (EE_NUMSLOTS-1): <UIDn_Len> <PWDn_Len> <UIDn_B0> ...
+ *   EE_SLOTLEN x EE_NUMSLOTS:     <NVBYTE0> <NVBYTE1> <NVBYTE2> ... <NVBYTE15> <CRC0> <CRC1> <CRC2> <CRC3>
  * 
  */
 
@@ -63,13 +63,14 @@ void Eeprom::zero()
   int i;
   char buf[16];
 
-  for (i = 0 ; i < EE_MAXSTR  ; i++)
+  for (i = 0 ; i < EE_NUMSLOTS  ; i++)
   {
-    sprintf(buf, "%04x", (i * (EE_STRLEN) ) );
+    sprintf(buf, "%04x", (i * (EE_SLOTLEN) ) );
     SDBG(buf);
 
-    EEPROM.update( (i * (EE_STRLEN)    ), (byte) 0 );
-    EEPROM.update( (i * (EE_STRLEN) + 1), (byte) 0 );
+    EEPROM.update( (i * (EE_SLOTLEN)    ), (byte) 0 );
+    EEPROM.update( (i * (EE_SLOTLEN) + 1), (byte) 0 );
+    EEPROM.update( (i * (EE_SLOTLEN) + 2), (byte) 0 );
   }
   
   for (i=0; i < EE_VARS; i++)
@@ -108,7 +109,7 @@ unsigned long Eeprom::calc_crc(void)
 struct pwvalid Eeprom::entryvalid (int slot)
 {
   struct pwvalid res;
-  int addr = slot * EE_STRLEN;
+  int addr = slot * EE_SLOTLEN;
   
   res.uidvalid = false;
   res.pwdvalid = false;
@@ -127,13 +128,13 @@ struct pwvalid Eeprom::entryvalid (int slot)
 // Store a pwd entry in EEprom
 void Eeprom::storepw(byte slot, struct eepw* pw)
 {
-  int addr = slot*EE_STRLEN;
+  int addr = slot*EE_SLOTLEN;
   if (pw->uidlen > 0)
   {
     EEPROM.updateByte(addr, pw->uidlen);
     for (int i=0; i < pw->uidlen; i++)
     {
-      EEPROM.updateByte(addr+2+i, pw->uid[i]);
+      EEPROM.updateByte(addr+EE_HDRLEN+i, pw->uid[i]);
     }
   }
   else
@@ -146,7 +147,7 @@ void Eeprom::storepw(byte slot, struct eepw* pw)
     EEPROM.updateByte(addr+1, pw->pwdlen);
     for (int i=0; i < pw->pwdlen; i++)
     {
-      EEPROM.updateByte(addr+2+EE_PWLEN+i, pw->pwd[i]);
+      EEPROM.updateByte(addr+EE_PWOFS+i, pw->pwd[i]);
     }
   }
   else
@@ -159,7 +160,7 @@ void Eeprom::storepw(byte slot, struct eepw* pw)
 // Get a Pwd entry from EEPROM
 void Eeprom::getpw(byte slot, struct eepw* pw)
 {
-  int addr = slot*EE_STRLEN;
+  int addr = slot*EE_SLOTLEN;
 
   pw->uidlen = EEPROM.readByte(addr);
   pw->pwdlen = EEPROM.readByte(addr+1);
@@ -168,7 +169,7 @@ void Eeprom::getpw(byte slot, struct eepw* pw)
   {
     for (int i=0; i < pw->uidlen; i++)
     {
-      pw->uid[i] = EEPROM.readByte(addr+2+i);
+      pw->uid[i] = EEPROM.readByte(addr+EE_HDRLEN+i);
     }
   }
   
@@ -176,8 +177,28 @@ void Eeprom::getpw(byte slot, struct eepw* pw)
   {
     for (int i=0; i < pw->pwdlen; i++)
     {
-      pw->pwd[i] = EEPROM.readByte(addr+2+EE_PWLEN+i);
+      pw->pwd[i] = EEPROM.readByte(addr+EE_PWOFS+i);
     }
+  }
+}
+
+// Store a slot name to EEprom
+void Eeprom::storename(byte slot, char* name)
+{
+  int addr = slot*EE_SLOTLEN;
+  for (int i=0; i < EE_SNLEN; i++)
+  {
+    EEPROM.updateByte(addr+EE_ULLEN+EE_PLLEN+i, name[i]);
+  }
+}
+
+// Retrieve a slot name from EEprom
+void Eeprom::getname(byte slot, char* name)
+{
+  int addr = slot*EE_SLOTLEN;
+  for (int i=0; i < EE_SNLEN; i++)
+  {      
+    name[i] = EEPROM.readByte(addr+EE_ULLEN+EE_PLLEN+i);
   }
 }
 
@@ -202,7 +223,7 @@ byte Eeprom::getvar(int var)
 // Clears a UID/PWD slot
 void Eeprom::clearslot(int slot)
 {
-  int addr = slot*EE_STRLEN;
+  int addr = slot*EE_SLOTLEN;
   EEPROM.updateByte(addr, 0);
   EEPROM.updateByte(addr+1, 0);
   update_crc();
@@ -210,9 +231,9 @@ void Eeprom::clearslot(int slot)
 
 void Eeprom::dupslot(int source, int dest)
 {
-  int src_addr = source*EE_STRLEN;
-  int dst_addr = dest*EE_STRLEN;
-  for (int i=0; i < EE_STRLEN; i++)
+  int src_addr = source*EE_SLOTLEN;
+  int dst_addr = dest*EE_SLOTLEN;
+  for (int i=0; i < EE_SLOTLEN; i++)
   {
     EEPROM.updateByte(dst_addr+i, EEPROM.readByte(src_addr+i));
   }
@@ -229,16 +250,16 @@ void Eeprom::dump()
   Serial.begin(115200);  while (!Serial);
   Serial.println("EEPROM Dump");
 
-  for (int i = 0 ; i < EE_MAXSTR  ; ++i)
+  for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
   {
-    sprintf(buf, "%04x", (i*EE_STRLEN));
+    sprintf(buf, "%04x", (i*EE_SLOTLEN));
     Serial.println(buf);
     Serial.flush();
-    for (int j=0; j < EE_STRLEN; j++)
+    for (int j=0; j < EE_SLOTLEN; j++)
     {
-      if ( (j==2) || (j==2+EE_PWLEN) )
+      if ( (j==EE_HDRLEN) || (j==EE_PWOFS) )
         Serial.println("");
-      Serial.print(EEPROM.readByte(i*EE_STRLEN+j), HEX);
+      Serial.print(EEPROM.readByte(i*EE_SLOTLEN+j), HEX);
       Serial.print(" ");
       Serial.flush();
     }

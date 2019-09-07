@@ -35,6 +35,7 @@
 #define WD_LLEN  9 // Wait for LED timeout length
 #define WD_SECC  10 // Wait for security code
 #define WD_SECP  11 // Wait for password
+#define WD_NAME  12 // Wait for slot name
 
 #define SUIPROMPT  Serial.print(F("Slot ")); Serial.print(curslot); Serial.print(F(" >> "));  Serial.flush(); 
 #define SUICRLF    Serial.println(" "); Serial.flush()
@@ -73,6 +74,7 @@ class SerialUi {
 
     void help(void);
     void printcurpw(void);
+    void printcurname(void);
     void genpw(void);
     void handle_input(void);
     void handle_cmd(void);
@@ -85,6 +87,7 @@ class SerialUi {
     bool get_string(int len);
     void set_eeuid(void);
     void set_eepw(void);
+    void set_eename(void);
     void set_pwgmode(char m);
     int buf_to_int(int min, int max);
     void set_pwglen(void);
