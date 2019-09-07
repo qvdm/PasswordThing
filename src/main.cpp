@@ -17,6 +17,7 @@
  * 
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
+ *      Reorg EEPROM, more vars, add named slots
  * 
  * BUGS:
  * 
@@ -126,15 +127,16 @@ void setup()
   // Initialize EEPROM vars
   byte blnk = cEeprom.getvar(EEVAR_LBLINK); // Loop led blink
   cLed.ob_enable((bool) blnk);
-  byte priv = cEeprom.getvar(EEVAR_PRIV); // Display timeout
-  cDisp.setprivacy(priv & 0x0F);
-  cLed.settimeout((priv & 0xF0) >> 4);
-  byte flip = cEeprom.getvar(EEVAR_DFLIP) & 0x01; // Display flip
+  byte priv = cEeprom.getvar(EEVAR_OPRIV); // Display timeout
+  cDisp.setprivacy(priv);
+  priv = cEeprom.getvar(EEVAR_LPRIV); // LED timeout
+  cLed.settimeout(priv);
+  byte flip = cEeprom.getvar(EEVAR_DFLP); // Display flip
   cDisp.setflip((bool) flip);
-  byte sseq = cEeprom.getvar(EEVAR_DFLIP) >> 1; // Security Seq
-  byte btnmode = cEeprom.getvar(EEVAR_BUTTONS) & 0x0F; // Button assignments
+  byte sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq
+  byte btnmode = cEeprom.getvar(EEVAR_BUTSEQ); // Button assignments
   cMenu.set_buttonmode(btnmode);
-  byte ledcols = (cEeprom.getvar(EEVAR_BUTTONS) & 0xF0) >> 4; // LED color assignments
+  byte ledcols = cEeprom.getvar(EEVAR_LEDSEQ); // LED color assignments
   cMenu.set_slotcolors(ledcols);
 
   // Initialize button 'menu' or serial menu depending in global mode

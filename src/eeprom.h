@@ -5,16 +5,22 @@
 #include <Arduino.h>
 #include "hardware.h"
 
-#define EE_PWLEN  31 // Max space for uid/pwd
-#define EE_STRLEN (EE_PWLEN*2+2) 
-#define EE_MAXSTR  8
-#define EE_VARS    4
-#define EE_VARLOC EE_STRLEN * EE_MAXSTR
-#define EE_CRCLOC EE_STRLEN * EE_MAXSTR + EE_VARS
+#define EE_PWLEN   30 // Max space for uid/pwd
+#define EE_SNLEN    8 // Slot name
+#define EE_ULLEN    1 // Space for UID length
+#define EE_PLLEN    1 // Space for PWD length
+#define EE_HDRLEN   (EE_ULLEN+EE_PLLEN+EE_SNLEN)
+#define EE_SLOTLEN  (EE_HDRLEN+EE_PWLEN*2) 
+#define EE_PWOFS    (EE_HDRLEN+EE_PWLEN)
+#define EE_NUMSLOTS 8
+#define EE_VARS    16
+#define EE_VARLOC (EE_SLOTLEN*EE_NUMSLOTS)
+#define EE_CRCLOC (EE_VARLOC+EE_VARS)
 
 struct eepw {
   byte uidlen;
   byte pwdlen;
+  byte slotname[EE_SNLEN];
   byte uid[EE_PWLEN];
   byte pwd[EE_PWLEN];
 };
@@ -34,6 +40,8 @@ class Eeprom {
     struct pwvalid entryvalid (int slot);
     void storepw(byte slot, struct eepw* pw);
     void getpw(byte slot, struct eepw* pw);
+    void storename(byte slot, char* name);
+    void getname(byte slot, char* name);
     void storevar(int var, byte value);
     byte getvar(int var);
     void clearslot(int slot);

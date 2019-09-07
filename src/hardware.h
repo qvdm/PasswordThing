@@ -86,10 +86,13 @@ typedef unsigned char byte;
 #define SDBG(S)   Serial.println(S); Serial.flush();
 
 // EEPROM var offsets
-#define EEVAR_LBLINK  0 // Onboard Led blink        - boolean
-#define EEVAR_DFLIP   1 // Flip display             - boolean in bot bit, security seq in top 7 bits
-#define EEVAR_PRIV    2 // Privacy (turn OLED | LED off)  - timeout in secs/10, 0 = none, OLED in bot nibble, CLED in top
-#define EEVAR_BUTTONS 3 // Button defs - see menu.h - button sequence in bot nibble, led seq in top
+#define EEVAR_LBLINK  0 // Onboard Led blink   - boolean
+#define EEVAR_DFLP    1 // Flip display        - boolean 
+#define EEVAR_SEC     2 // Security seq #      - byte seq
+#define EEVAR_OPRIV   3 // OLED  Privacy       - byte timeout in secs/10, 0 = none
+#define EEVAR_LPRIV   4 // LED  Privacy        - byte timeout in secs/10, 0 = none
+#define EEVAR_BUTSEQ  5 // Button seq          - byte index, see menu.h
+#define EEVAR_LEDSEQ  6 // LED seq             - byte index, see menu.h
   
 // # of possible security seqs and seq length
 #define NSSEQ 81 

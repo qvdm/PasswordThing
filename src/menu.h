@@ -50,6 +50,7 @@ class Menu {
     byte slot=0;
     struct eepw pwbuf;
     char dispbuf[64];
+    char snbuf[EE_SNLEN];
     byte gen_button=B_GENERATE;
     byte nxt_button=B_NEXT;
     byte sel_button=B_SELECT;
