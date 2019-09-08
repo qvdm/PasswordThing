@@ -21,7 +21,7 @@ data bits, 1 stop bit).
 The terminal emulator should also be configured to assert DTR and RTS on
 startup.  
 
-# Entering Configurationmode
+# Entering Configuration mode
 
 To enter configuration mode, press any button while plugging the PT into a USB
 port.  The LED will be solid white until the terminal emulator connects

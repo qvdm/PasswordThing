@@ -140,12 +140,12 @@ table.
 
 |Slot|Color|
 |---|---|
-| 1 | Red |
-| 2 | Yellow |
-| 3 | Green |
-| 4 | Magenta |
-| 5 | Blue |
-| 6 | Cyan|
+| 0 | Red |
+| 1 | Yellow |
+| 2 | Green |
+| 3 | Magenta |
+| 4 | Blue |
+| 5 | Cyan|
 
 When a slot contains a valid password, the LED shows a solid color,
 otherwise it blinks at a fast rate. 
