@@ -264,7 +264,7 @@ terminal emulator that supports USB serial ports.  </p>
 data bits, 1 stop bit).</p>
 <p>The terminal emulator should also be configured to assert DTR and RTS on
 startup.  </p>
-<h1 id="entering-configurationmode">Entering Configurationmode</h1>
+<h1 id="entering-configuration-mode">Entering Configuration mode</h1>
 <p>To enter configuration mode, press any button while plugging the PT into a USB
 port.  The LED will be solid white until the terminal emulator connects
 (asserts DTR/RTS) and then the LED will blink off briefly once a second to
@@ -277,8 +277,6 @@ indicate configuration mode. </p>
 (0).  You can press <strong>'S'</strong> followed by a slot number in the range 0-5 to change
 the current slot.  <em>Shortcut: just press the numeric key corresponding to
 the desired slot number</em></p>
-<p>Other commands to change the slot are <strong>'N'</strong> for Next slot and <strong>'R'</strong> for
-pRevious slot.  </p>
 <h2 id="print-password">Print password</h2>
 <p>Pressing <strong>'P'</strong> prints the password (and userid, if there is one) stored in
 the current slot. </p>
@@ -286,9 +284,14 @@ the current slot. </p>
 <p>Press <strong>'U'</strong> to enter a new Userid for the slot. The maximum lenght of a
 userid is 30 characters. </p>
 <h2 id="enter-password">Enter Password</h2>
-<p>press <strong>'O'</strong> to enter a new password for the current slot.  The password
+<p>Press <strong>'O'</strong> to enter a new password for the current slot.  The password
 may contain numbers, letters, spaces  and special characters.  Maximum length 
 is 30 characters. </p>
+<h2 id="name-a-slot">Name a slot</h2>
+<p>Press <strong>'N'</strong> to enter a name for the current slot.  0-7 letters or digits. 
+The name is displayed on the OLED when the slot is selected</p>
+<h2 id="display-a-slot-name">Display a slot name</h2>
+<p>Press <strong>'R'</strong> to display the name assigned to the current slot</p>
 <h2 id="set-password-generator-mode">Set password generator Mode</h2>
 <p>Press <strong>'M'</strong> to set the mode for subsequent generated passwords.  The
 options are Alphabetic, Numeric, Alphanumeric and Special (allow special
