@@ -392,6 +392,13 @@ void SerialUi::handle_cmd()
       Serial.print(F("\nType (D)ebug or (B)ackup : ")); Serial.flush();
       break;
 
+    case 'r' : // restore from backup
+      Serial.println(F("Paste backup : ")); Serial.flush();
+      eeprom.restore();
+      SUICRLF;
+      SUIPROMPT;
+      break;
+
     case 'z' : // zero eeprom
       eeprom.zero();
       SUIPROMPT;
@@ -428,7 +435,7 @@ void SerialUi::handle_cmd()
 void SerialUi::help(void)
 {
   // abcdefghijklmnopqrstuvwxyz
-  // xxxxxxxxxxxxxxxxx xxxxx  x
+  // xxxxxxxxxxxxxxxxxxxxxxx  x
   SUICRLF;
   Serial.println(F("? or h - help")); Serial.flush();
   Serial.println(F("s - Select (S)lot")); Serial.flush();
@@ -452,7 +459,8 @@ void SerialUi::help(void)
   Serial.println(F("w - Set security sequence")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
   Serial.println(F("v - Show EEPROM (V)ariables")); Serial.flush();
-  Serial.println(F("d - (D)ump EEPROM")); Serial.flush();
+  Serial.println(F("d - (D)ump / Backup EEPROM")); Serial.flush();
+  Serial.println(F("r - (R)estore from Backup")); Serial.flush();
   Serial.println(F("z - (Z)ero EEPROM")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
   Serial.println(F("e - Show available (E)ntropy")); Serial.flush();
@@ -737,7 +745,7 @@ void SerialUi::handle_data()
       }
       SUIPROMPT;
     }
-    break
+    break;
   }
 }
 

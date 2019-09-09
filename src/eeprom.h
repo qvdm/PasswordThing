@@ -30,6 +30,12 @@ struct pwvalid {
   bool pwdvalid;
 };
 
+union eeentry
+{
+    struct eepw eep;
+    byte b[EE_SLOTLEN];
+}; 
+
 class Eeprom {
   public:
 
@@ -55,6 +61,7 @@ class Eeprom {
     bool eevalid;
     unsigned long calc_crc(void);
     void update_crc(void);
+    union eeentry eee;
 
 };
 
