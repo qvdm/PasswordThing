@@ -1,8 +1,8 @@
 # Circuit
 
-The circuit for the PT model U is shown below.  The microprocessor board 
-is a generic ATmega 32U4 "Leonardo" compatible board with a micro-usb connector. 
-The board is available from Aliexpress and other vendors.  
+The circuit for the PT models U and a are shown below.  The microprocessor board 
+is a generic ATmega 32U4 "Leonardo" compatible board with a micro-usb (model U) or 
+USB A (model A) connector.  The boards are available from Aliexpress and other vendors.  
 
 Note that boards like Arduino Nano and similar, which use a 328P processor,
 will not work, since the operation of the project depends on the 32U4's
@@ -11,27 +11,25 @@ ability to act as a USB HID device, emulating a keyboard.
 ![PasswordThing Model U](img/PWT-U.png)
 *PT-U circuit diagram*
 
-The circuit for the model A is the same as shown above, except that it uses
-a smaller board with a USB A interface.  
+![PasswordThing Model A](img/PWT-A.png)
+*PT-A circuit diagram*
 
 Here are the bare boards used for the U and A versions of the project.  
 
 ![Boards](img/boards.JPG)
 *Boards used for model U (left) and A (right)*
 
-Other components needed are:
-	- A common-anode RGB LED (you can use common cathode, but then you
-	  need to adjust the wiring and code appropriately).
-	- A 270 ohm resistor for the R, G and B led channels. The value nay be
-	  tweaked to change brightness. 
-        - A monochrome LED, and another 270 ohm resistor for model U. 
-	- Three momentary push button switches.  
-        - An optional  128x32 I2C OLED display. 
+The peripheral components needed are:
 
+- A common-anode RGB LED (you can use common cathode, but then you need to adjust the wiring and code appropriately).
+- A 270 ohm resistor for the R, G and B led channels. The value nay be tweaked to change brightness. 
+- A monochrome LED, and another 270 ohm resistor for model U. 
+- Three momentary push button switches.  
+- An optional  128x32 I2C OLED display. 
 
 Note  that you would typically not wire in an OLED display for a model A
-(although it is supported).  The buttons are connected to D9, D8 and D7 in
-model A, as opposed to D9, D10, D11 in the  model U.  You may wish to ommit 
+(although it is supported).  The buttons are connected to D9, D10 and D11 in
+model A, as opposed to D9, D8, D7 in the  model U.  You may wish to ommit 
 the middle ("Next") button on a model A, to allow the use of larger buttons, 
 since a long press of "Select"  has the same functionality.  
 
@@ -93,3 +91,4 @@ loop. Works fine as it is, but there is potentially room for optimization
 there.  
 
 
+[comment]: # (Circuit designs at https://www.circuitlab.com/editor/) 

@@ -17,6 +17,7 @@
  * 
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
+ *      Save and Restore
  *      
  * 
  * BUGS:
