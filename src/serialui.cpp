@@ -79,8 +79,15 @@ void SerialUi::printcurpw()
 {
   struct pwvalid ev = eeprom.entryvalid(curslot);
   struct eepw pw;
-
   eeprom.getpw(curslot, &pw);
+  eeprom.getname(curslot, st_buf);
+  if (strlen(st_buf) > 0)
+  {
+    for (unsigned int n=0; n < strlen(st_buf); n++)
+      Serial.write(st_buf[n]);
+    Serial.println("");
+    Serial.flush();
+  }
   Serial.print(F("UID: "));
   if (ev.uidvalid)
   {

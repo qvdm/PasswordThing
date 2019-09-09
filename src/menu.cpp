@@ -385,8 +385,8 @@ void Menu::displayslot(struct pwvalid *v)
   else
     sprintf(dispbuf, "Slot %d", slot);
   if (!v->pwdvalid) strcat(dispbuf, " INV");
-  else if (v->uidvalid) strcat(dispbuf, " UID");
-  else strcat(dispbuf, " PWD");
+  else if (v->uidvalid) strcat(dispbuf, " UP");
+  else strcat(dispbuf, " P");
 
   disp.displaylarge(dispbuf);
 }

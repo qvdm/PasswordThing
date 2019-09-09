@@ -1,3 +1,14 @@
+# Quick start
+
+You should really read the rest of this section at your earliest convenience, but to get started:
+
+- Plug your Password Thing (PT) into a USB port
+- The first time, it may take a few seconds for your computer to install drivers and recognize the device
+- The Colour LED should be blinking red and the Display should say **"Slot 0 I"**
+- Wait about 10 seconds after plugging in the PT for the first time
+- Press the (G)enerate button for more than a second.  The display should now change to **"Slot 0 P"** 
+- Now you have a random password in Slot 0, which will be entered via a virtual keyboard every time you press the (S)elect button
+
 # Introduction
 
 This user guide explains how to use your new Password Thing 
@@ -150,6 +161,12 @@ table.
 When a slot contains a valid password, the LED shows a solid color,
 otherwise it blinks at a fast rate. 
 
+# OLED display
+
+The OLED display on the Model U shows the current Slot number and indicates if the slot contains a 
+**U**serid, **P**assword or both (**UP**).  Invalid / uninitialized slots are indicated by **I**. 
+
+If the slot was named (See Configuration), the name will be displayed instead of the slot number.
 
 # Best Practice
 
