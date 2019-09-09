@@ -47,6 +47,8 @@ class Eeprom {
     void clearslot(int slot);
     void dupslot(int source, int dest);
     void dump();
+    void backup();
+    void restore();
 
 
   private:

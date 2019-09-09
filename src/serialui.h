@@ -36,6 +36,7 @@
 #define WD_SECC  10 // Wait for security code
 #define WD_SECP  11 // Wait for password
 #define WD_NAME  12 // Wait for slot name
+#define WD_EED   13 // Wait eeprom dump type
 
 #define SUIPROMPT  Serial.print(F("Slot ")); Serial.print(curslot); Serial.print(F(" >> "));  Serial.flush(); 
 #define SUICRLF    Serial.println(" "); Serial.flush()

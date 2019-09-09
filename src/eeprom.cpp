@@ -9,9 +9,13 @@
  *   entryvalid - Specific entry valid?
  *   storepw    - Store a PWD and optional UID
  *   getpw      - Get a PWD and optional UID
+ *   storename  - Store a slot name
+ *   getname    - Get slot name
  *   clearslot  - Clear specified PWD slot
  *   dupslot    - duplicate the content of a slot
  *   dump       - Debug: dump eeprom contents to Serial
+ *   backup     - Dump contents in backup format to Serial
+ *   restore    - Restore from backup dump via serial
  * 
  * Private: 
  *   calc_crc
@@ -242,7 +246,6 @@ void Eeprom::dupslot(int source, int dest)
 }
 
 
-
 // Utility function to dump entire EEPROM to Serial
 void Eeprom::dump()
 {
@@ -278,4 +281,84 @@ void Eeprom::dump()
   Serial.println("");
   Serial.println("");
   Serial.flush();
+}
+
+// Utility function to dump entire EEPROM to Serial in backup format
+void Eeprom::backup()
+{
+
+  !! change to struct eepw
+  char buf[16];
+  char name[16];
+  int v, u, p;
+
+  Serial.begin(115200);  while (!Serial);
+  Serial.println("V02"); // Update every time format changes
+
+  for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
+  {
+    u = EEPROM.readByte(i*EE_SLOTLEN);
+    sprintf(buf, "UL%d%02x", i, u);
+    Serial.println(buf);
+    Serial.flush();
+
+    p = EEPROM.readByte(i*EE_SLOTLEN+1);
+    sprintf(buf, "PL%d%02x", i, p);
+    Serial.println(buf);
+    Serial.flush();
+  
+    for (int n=0; n < EE_SNLEN; n++)
+      name[n] = EEPROM.readByte(i*EE_SLOTLEN+2+n);
+
+    sprintf(buf, "NL%d%02x", i, strlen(name));
+    Serial.println(buf);
+    Serial.flush();
+
+    sprintf(buf, "N%d%s", i, name);
+    Serial.println(buf);
+    Serial.flush();
+    
+    if (u > 0)
+    {
+      for (int j=0; j < EE_PWLEN; j++)
+        buf[j] = 
+
+
+    sprintf(buf, "PL%d%02x", i, p);
+    Serial.println(buf);
+    Serial.flush();
+
+    }
+
+    {
+      if ( (j==EE_HDRLEN) || (j==EE_PWOFS) )
+        Serial.println("");
+      Serial.print(EEPROM.readByte(i*EE_SLOTLEN+j), HEX);
+      Serial.print(" ");
+      Serial.flush();
+    }
+    Serial.println("");
+    Serial.flush();
+  }
+
+  Serial.println(F("VARS"));
+  for (int k = 0 ; k < EE_VARS  ; ++k)
+  {
+    Serial.print(EEPROM.readByte(EE_VARLOC+k), HEX);
+    Serial.print(" ");
+    Serial.flush();
+  }
+  Serial.println("");
+  Serial.flush();
+  Serial.println(F("CRC"));
+  for (int l = 0 ; l < 4  ; ++l)
+  {
+    Serial.print(EEPROM.readByte(EE_CRCLOC+l), HEX);
+    Serial.print(" ");
+    Serial.flush();
+  }
+  Serial.println("");
+  Serial.println("");
+  Serial.flush();
+
 }

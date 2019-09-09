@@ -271,13 +271,6 @@ void SerialUi::handle_cmd()
       SUIPROMPT;
       break;
 
-    case 'r' :
-      SUICRLF;
-      printcurname();
-      SUICRLF;
-      SUIPROMPT;
-      break;
-
     case 'g' : // generate password 
       genpw();            
       SUICRLF;
@@ -393,9 +386,10 @@ void SerialUi::handle_cmd()
       break;
 
     case 'd' : // dump eeprom
-      SUICRLF;
-      eeprom.dump();
-      SUIPROMPT;
+      st_mode = SM_WAIT_DATA;
+      waitfor = WD_EED;
+      st_ptr=0;
+      Serial.print(F("\nType (D)ebug or (B)ackup : ")); Serial.flush();
       break;
 
     case 'z' : // zero eeprom
@@ -434,7 +428,7 @@ void SerialUi::handle_cmd()
 void SerialUi::help(void)
 {
   // abcdefghijklmnopqrstuvwxyz
-  // xxxxxxxxxxxxxxxxxxxxxxx  x
+  // xxxxxxxxxxxxxxxxx xxxxx  x
   SUICRLF;
   Serial.println(F("? or h - help")); Serial.flush();
   Serial.println(F("s - Select (S)lot")); Serial.flush();
@@ -442,7 +436,6 @@ void SerialUi::help(void)
   Serial.println(F("u - Enter (U)id")); Serial.flush();
   Serial.println(F("o - Enter (O)wn pwd")); Serial.flush();
   Serial.println(F("n - Set slot (N)ame")); Serial.flush();
-  Serial.println(F("r - p(R)int slot name")); Serial.flush();
   Serial.println(F("m - Set generator (M)ode")); Serial.flush();
   Serial.println(F("l - Set generator (L)ength")); Serial.flush();
   Serial.println(F("g - (G)enerate pwd")); Serial.flush();
@@ -725,6 +718,26 @@ void SerialUi::handle_data()
       }
     }
     break;
+
+    case WD_EED : // Expect '(D)ebug or (B)ackup'
+    {
+      switch (st_inchar)
+      {
+        case 'd' :
+          SUICRLF;
+          eeprom.dump();
+          break;
+        case 'b' :
+          SUICRLF;
+          eeprom.backup();
+          break;
+        default :
+          Serial.print(F("\nInvalid"));
+          break;
+      }
+      SUIPROMPT;
+    }
+    break
   }
 }
 
