@@ -279,6 +279,15 @@ void Eeprom::dump()
     Serial.flush();
   }
   Serial.println("");
+  Serial.flush();
+  Serial.println(F("CRC"));
+  for (int l = 0 ; l < 4  ; ++l)
+  {
+    Serial.print(EEPROM.readByte(EE_CRCLOC+l), HEX);
+    Serial.print(" ");
+    Serial.flush();
+  }
+  Serial.println("");
   Serial.println("");
   Serial.flush();
 }
