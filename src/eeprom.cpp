@@ -190,6 +190,7 @@ void Eeprom::storename(byte slot, char* name)
   {
     EEPROM.updateByte(addr+EE_ULLEN+EE_PLLEN+i, name[i]);
   }
+  update_crc();
 }
 
 // Retrieve a slot name from EEprom

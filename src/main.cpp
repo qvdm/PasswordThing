@@ -17,7 +17,8 @@
  * 
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
- *      Reorg EEPROM, more vars, add named slots
+ *      Save and Restore
+ *      
  * 
  * BUGS:
  * 

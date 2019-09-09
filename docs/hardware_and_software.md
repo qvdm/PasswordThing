@@ -21,11 +21,11 @@ Here are the bare boards used for the U and A versions of the project.
 
 The peripheral components needed are:
 
-	- A common-anode RGB LED (you can use common cathode, but then you need to adjust the wiring and code appropriately).
-	- A 270 ohm resistor for the R, G and B led channels. The value nay be tweaked to change brightness. 
-	- A monochrome LED, and another 270 ohm resistor for model U. 
-	- Three momentary push button switches.  
-	- An optional  128x32 I2C OLED display. 
+- A common-anode RGB LED (you can use common cathode, but then you need to adjust the wiring and code appropriately).
+- A 270 ohm resistor for the R, G and B led channels. The value nay be tweaked to change brightness. 
+- A monochrome LED, and another 270 ohm resistor for model U. 
+- Three momentary push button switches.  
+- An optional  128x32 I2C OLED display. 
 
 Note  that you would typically not wire in an OLED display for a model A
 (although it is supported).  The buttons are connected to D9, D10 and D11 in
