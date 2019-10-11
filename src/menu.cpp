@@ -197,9 +197,14 @@ void Menu::longpress(byte button)
 {
   if (waitforseq > 0) //  Bail if waiting for security sequence
     return;
-  if ( (button == nxt_button) || (button == sel_button) ) // Long press on select is the same as short press on next
+  if (button == sel_button)  // Long press on select is the same as short press on next
   {
     led.unblank();
+    next();
+  }
+  else if (button == nxt_button) // Long press on Next returns to slot 0
+  {
+    slot = -1; 
     next();
   }
   else if (button == gen_button) 
