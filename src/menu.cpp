@@ -406,9 +406,12 @@ void Menu::displayslot(struct pwvalid *v)
 void Menu::indicate_slot()
 {
   struct pwvalid v= eeprom.entryvalid(slot);
-
-  displayslot(&v);
-  showslotled(&v);
+  if (slot != prevslot)
+  {
+    displayslot(&v);
+    showslotled(&v);
+  }
+  prevslot = slot;
 }
 
 // Set password revert timeout
@@ -427,7 +430,7 @@ void Menu::vTaskMenuTick()
 {
   unsigned long rt = (unsigned long) prto * 1000L / LOOP_MS;
 
-  if (++rtcount > rt)
+    if ( (prto > 0) && (++rtcount > rt) )
   {
     slot = -1; 
     next();
