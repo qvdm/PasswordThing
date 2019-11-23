@@ -52,6 +52,8 @@ Menu::~Menu() { }
 void Menu::init(int sseq)
 {
   slot = -1; 
+  setprto(eeprom.getvar(EEVAR_PRTO));
+
   if (sseq == 0)
     next();
   else
@@ -403,4 +405,14 @@ void Menu::indicate_slot()
 
   displayslot(&v);
   showslotled(&v);
+}
+
+
+void Menu::setprto(byte to)
+{
+  if (to < (byte) MAXLTO)
+    prto = to * 10;
+  else
+    prto = MAXLTO * 10;
+  pwreverttime = (unsigned long) prto * 1000L / LOOP_MS;
 }

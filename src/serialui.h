@@ -36,7 +36,9 @@
 #define WD_SECC  10 // Wait for security code
 #define WD_SECP  11 // Wait for password
 #define WD_NAME  12 // Wait for slot name
-#define WD_EED   13 // Wait eeprom dump type
+#define WD_EED   13 // Wait for eeprom dump type
+#define WD_PRT   14 // Wait for PWD revert timeout
+
 
 #define SUIPROMPT  Serial.print(F("Slot ")); Serial.print(curslot); Serial.print(F(" >> "));  Serial.flush(); 
 #define SUICRLF    Serial.println(" "); Serial.flush()
@@ -96,6 +98,7 @@ class SerialUi {
     void dup_slot(char s);
     void set_dispto(void);
     void set_ledto(void);
+    void set_pwrto(void);
     void set_btnmode(char m);
     void set_colmode(char m);
     void set_secseq(void);

@@ -178,9 +178,7 @@ For eaxample, think about what would happen if the only copy of your
 password manager password is stored in your PT.  If you lose it, or it
 breaks, you are locked out of all your passwords.  
 
-1. When you generate a new important password, wether through the Generate
-button, the configuration interface or through another method (and use the
-configuration  interface to store it on the PT), you should make a copy of the
+1. When you generate a new important password, you should make a copy of the
 password **immediately** and store it somehwere safe.  
 2. Good practice is to store a copy of all your passwords on another PT and
 to keeup that in a safe place offsite (like a safe deposit box).  
