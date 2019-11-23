@@ -207,6 +207,7 @@ void loop()
   // Execute periodic 'Tasks' (naming convention remains from FreeRTOS days, now we just call them in sequence)
   cLed.vTaskManageLeds();      // LED manager
   cDisp.vTaskManageDisplay();  // Display manager
+  cMenu.vTaskMenuTick();       // Menu tick
   cRandom.vTaskRandomGen();    // Random # entropy harvester
   
   if (kbmode == KM_SERIAL)

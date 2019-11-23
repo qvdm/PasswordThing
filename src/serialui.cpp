@@ -940,7 +940,6 @@ void SerialUi::set_pwrto()
   {            
     byte prto = (byte) d;
     eeprom.storevar(EEVAR_PRTO, prto);
-    led.settimeout(priv);
   }
   else
   {
