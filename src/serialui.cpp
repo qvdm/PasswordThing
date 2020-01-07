@@ -393,8 +393,10 @@ void SerialUi::handle_cmd()
       break;
 
     case 'r' : // restore from backup
+      SUICRLF;
       Serial.println(F("Paste backup : ")); Serial.flush();
       eeprom.restore();
+      st_mode = SM_WAIT_CMD;
       SUICRLF;
       SUIPROMPT;
       break;
@@ -551,7 +553,7 @@ void SerialUi::show_eevars()
       Serial.print(F("\nSelect Next Generate "));
       break;
     default : 
-      Serial.print(F("\nInvalid"));
+      Serial.print(F("\nInvalid Selection"));
       break;
   }
   Serial.flush();
@@ -578,7 +580,7 @@ void SerialUi::show_eevars()
       Serial.print(F("\nB G Y R Cy Ma"));
       break;
     default : 
-      Serial.print(F("\nInvalid"));
+      Serial.print(F("\nInvalid Selection"));
       break;
   }
   Serial.flush();
@@ -740,9 +742,11 @@ void SerialUi::handle_data()
           eeprom.backup();
           break;
         default :
-          Serial.print(F("\nInvalid"));
+          Serial.print(F("\nInvalid Selection"));
           break;
       }
+      st_mode = SM_WAIT_CMD;
+      SUICRLF;
       SUIPROMPT;
     }
     break;

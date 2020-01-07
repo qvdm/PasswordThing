@@ -18,6 +18,10 @@
 // Privacy timeout
 #define MAXPTO 15 // 150s
 
+// Version display delay
+#define DVDELAY 2000
+
+
 class Display {
   public:
     Display(SSD1306AsciiWire &rd, Eeprom &re);

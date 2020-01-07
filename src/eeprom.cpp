@@ -296,44 +296,24 @@ void Eeprom::dump()
 void Eeprom::backup()
 {
 
-  char buf[16];
-
   Serial.begin(115200);  while (!Serial);
-  Serial.println("V02"); // Update every time format changes
+  Serial.println("V03"); // Update every time format changes
 
   for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
   {
     for (int j=0; j < EE_SLOTLEN; j++)
-      eee.b[j] = EEPROM.readByte(i*EE_SLOTLEN+j);
-  
-    sprintf(buf, "UL%d=%d", i, eee.eep.uidlen); Serial.println(buf);Serial.flush();
-    sprintf(buf, "PL%d=%d", i, eee.eep.pwdlen); Serial.println(buf);Serial.flush();
-    sprintf(buf, "NL%d=%d", i, strlen((char *)eee.eep.slotname)); Serial.println(buf);Serial.flush();
-    sprintf(buf, "SN%d=%s", i, (char *)eee.eep.slotname); Serial.println(buf);Serial.flush();
-
-    if (eee.eep.uidlen > 0)
     {
-      sprintf(buf, "UI%d=", i); Serial.print(buf);Serial.flush();
-      for (int k=0; k < EE_PWLEN; k++)
-        Serial.print(eee.eep.uid[k], HEX);
-      Serial.println("");Serial.flush();
+      Serial.print(EEPROM.readByte(i*EE_SLOTLEN+j), HEX);
     }
-    if (eee.eep.pwdlen > 0)
-    {
-      sprintf(buf, "PW%d=", i); Serial.print(buf);Serial.flush();
-      for (int l=0; l < EE_PWLEN; l++)
-        Serial.print(eee.eep.uid[l], HEX);
-      Serial.println("");Serial.flush();
-    }
+    Serial.println("");
+    Serial.flush();
   }
 
-  Serial.print(F("VAR="));Serial.flush();
   for (int v=0; v < EE_VARS; v++)
     Serial.print(EEPROM.readByte(EE_VARLOC+v), HEX);
   Serial.println("");
   Serial.flush();
 
-  Serial.print(F("CRC="));
   for (int c = 0 ; c < 4  ; c++)
   {
     Serial.print(EEPROM.readByte(EE_CRCLOC+c), HEX);
@@ -345,5 +325,17 @@ void Eeprom::backup()
 
 void Eeprom::restore()
 {
-  
+    int cr=0;
+    while (Serial.available() == 0) ;
+    while (Serial.available() > 0) 
+    {
+      char inchar = Serial.read();
+      cr++;
+      if ( (inchar == 'q') && (cr < 3) ) // can only bail before writing 1st value to eeprom
+        return;
+      
+      Serial.write(inchar); Serial.flush();
+    }
+    while (1) ;
+    Serial.println(F("Restored (not really) - Please reconnect"));
 }

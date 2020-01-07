@@ -17,6 +17,8 @@
 
 #include "display.h"
 
+extern char *Version;
+
 Display::Display(SSD1306AsciiWire &rd, Eeprom &re) : oled(rd), eeprom(re)
 {
 }
@@ -34,6 +36,9 @@ void Display::init()
   oled.setFont(Adafruit5x7);
   oled.set2X();
   oled.clear();
+
+  displaylarge(Version);
+  delay(DVDELAY);
 }
 
 
