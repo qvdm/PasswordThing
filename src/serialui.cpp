@@ -352,6 +352,14 @@ void SerialUi::handle_cmd()
       Serial.print(F("\nCLED Timeout (x 10s) [0-")); Serial.print(MAXPTO); Serial.print(F("] 0=None : ")); Serial.flush();
       break;
 
+    case 'y' : // Set pwd revert timeout
+      st_mode = SM_WAIT_DATA;
+      waitfor = WD_PRT;
+      st_ptr=0;
+      SUICRLF;
+      Serial.print(F("\nPWD Revert Timeout (x 10s) [0-")); Serial.print(MAXPTO); Serial.print(F("] 0=None : ")); Serial.flush();
+      break;
+
     case 'f' : // Toggle display flip
       toggle_flip();
       SUICRLF;
@@ -437,7 +445,7 @@ void SerialUi::handle_cmd()
 void SerialUi::help(void)
 {
   // abcdefghijklmnopqrstuvwxyz
-  // xxxxxxxxxxxxxxxxxxxxxxx  x
+  // xxxxxxxxxxxxxxxxxxxxxxx xx
   SUICRLF;
   Serial.println(F("? or h - help")); Serial.flush();
   Serial.println(F("s - Select (S)lot")); Serial.flush();
@@ -458,6 +466,7 @@ void SerialUi::help(void)
   Serial.println(F("f - (F)lip display")); Serial.flush();
   Serial.println(F("t - Reconfigure bu(T)tons")); Serial.flush();
   Serial.println(F("k - Set LED colors")); Serial.flush();
+  Serial.println(F("y - Set Pwd revert timeout")); Serial.flush();
   Serial.println(F("w - Set security sequence")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
   Serial.println(F("v - Show EEPROM (V)ariables")); Serial.flush();
@@ -674,6 +683,18 @@ void SerialUi::handle_data()
       if (get_string(2))
       {
         set_ledto();        
+        st_mode = SM_WAIT_CMD;
+        SUICRLF;
+        SUIPROMPT;
+      }
+    }
+    break;
+
+    case WD_PRT : // Expect 1-2 digit length between 0 and MAXLTO
+    {
+      if (get_string(2))
+      {
+        set_pwrto();        
         st_mode = SM_WAIT_CMD;
         SUICRLF;
         SUIPROMPT;
@@ -914,6 +935,23 @@ void SerialUi::set_ledto()
     Serial.print(F("Invalid timeout"));
   }
 }
+
+// Set pwd revert timeout from string in buf
+void SerialUi::set_pwrto()
+{
+  int d = buf_to_int(0, MAXLTO);
+  if ( d >= 0 )
+  {            
+    byte prto = (byte) d;
+    eeprom.storevar(EEVAR_PRTO, prto);
+  }
+  else
+  {
+    SUICRLF;
+    Serial.print(F("Invalid timeout"));
+  }
+}
+
 
 // Set button mode
 void SerialUi::set_btnmode(char m)

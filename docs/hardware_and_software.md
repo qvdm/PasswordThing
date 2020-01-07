@@ -39,7 +39,7 @@ monochrome LED.
 
 # Assembly
 The project can be assembled many ways.  A custom 3D-printed case is probably
-the best solition in the long term.  
+the best solution in the long term.  
 
 The photos below  show the front and back of two of my prototype model U and A
 assemblies.  The "sandwhich" construction of the model U shown is very compact and allows 

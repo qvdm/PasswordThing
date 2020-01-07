@@ -1,13 +1,32 @@
+# What is this thing?
+PasswordThing (PT) is a physical device for storing passwords.  When you plug it
+into a USB port on your computer, it pretends to be a keyboard, and when you
+press the right button, it 'types' a password (optionally preceded by a
+username).  
+
+PT's main purpose is to allow you to set a long and complicated startup password on
+your computer, without having to remember it.  The secondary purpose is to
+allow you to set a long and complicated password on your password manager,
+without having to remember it.  
+
+The downside is that you are now carrying a physical device that lets anyone
+with access to it (and knows its purpose) to log into your computer and/or 
+password manager.  
+
+Classic tradeof between security and convenience. 
+
 # Quick start
 
-You should really read the rest of this section at your earliest convenience, but to get started:
+You should really read the rest of the manual at your earliest convenience, but to get started:
 
 - Plug your Password Thing (PT) into a USB port
 - The first time, it may take a few seconds for your computer to install drivers and recognize the device
 - The Colour LED should be blinking red and the Display should say **"Slot 0 I"**
-- Wait about 10 seconds after plugging in the PT for the first time
+- PT is now furiously generating entropy.  Give it about 10 seconds to do its thing
 - Press the (G)enerate button for more than a second.  The display should now change to **"Slot 0 P"** 
 - Now you have a random password in Slot 0, which will be entered via a virtual keyboard every time you press the (S)elect button
+- Log into your computer and change the login password.  When prompted for the new password, press the (S)elect button on the PT
+- Next time you log on to the computer, just press the (S)elect button to enter the generated password
 
 # Introduction
 
@@ -178,9 +197,7 @@ For eaxample, think about what would happen if the only copy of your
 password manager password is stored in your PT.  If you lose it, or it
 breaks, you are locked out of all your passwords.  
 
-1. When you generate a new important password, wether through the Generate
-button, the configuration interface or through another method (and use the
-configuration  interface to store it on the PT), you should make a copy of the
+1. When you generate a new important password, you should make a copy of the
 password **immediately** and store it somehwere safe.  
 2. Good practice is to store a copy of all your passwords on another PT and
 to keeup that in a safe place offsite (like a safe deposit box).  

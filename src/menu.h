@@ -45,9 +45,14 @@ class Menu {
     void pressinglong(byte button);
     void set_buttonmode(byte mode);
     void set_slotcolors(byte cols);
+    void setprto(byte to);
+    void vTaskMenuTick();
 
   private:
     byte slot=0;
+    byte prevslot=99;
+    byte prto=0;
+    unsigned long rtcount=0;
     struct eepw pwbuf;
     char dispbuf[64];
     char snbuf[EE_SNLEN];
