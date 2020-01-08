@@ -18,7 +18,6 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore
- *      Merge display and LED timeouts
  * 
  * BUGS:
  * 
@@ -47,7 +46,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20010801";
+char Version[]="20010802";
 
 // Forward declare systick function
 void sysTick();

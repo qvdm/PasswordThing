@@ -10,10 +10,10 @@ allow you to set a long and complicated password on your password manager,
 without having to remember it.  
 
 The downside is that you are now carrying a physical device that lets anyone
-with access to it (and knows its purpose) to log into your computer and/or 
+with access to it (and who knows its purpose) to log into your computer and/or 
 password manager.  
 
-Classic tradeof between security and convenience. 
+This is an example of the classic tradeof between security and convenience. 
 
 # Quick start
 
@@ -27,6 +27,7 @@ You should really read the rest of the manual at your earliest convenience, but 
 - Now you have a random password in Slot 0, which will be entered via a virtual keyboard every time you press the (S)elect button
 - Log into your computer and change the login password.  When prompted for the new password, press the (S)elect button on the PT
 - Next time you log on to the computer, just press the (S)elect button to enter the generated password
+- Remember to store a copy of the password in a backup location (like a password manager) in case the PT is lost or gets broken. 
 
 # Introduction
 
@@ -36,8 +37,8 @@ This user guide explains how to use your new Password Thing
 ## WARNING
 
 The Password Thing is a **convenience** device, **NOT** a security device. 
-It increases your security by removing the temptation to choose easily-remembered
-(and therefore easily guessable) master passwords.  It decreases your security
+It *increases* your security by removing the temptation to choose easily-remembered
+(and therefore easily guessable) master passwords.  It *decreases* your security
 by storing your master password unencrypted in a device that can be lost or 
 borrowed/stolen if you are not careful.  We recommend that you carry your PT 
 on a keychain together with your other important keys.  
@@ -73,7 +74,7 @@ configuration / debug mechanism.
 
 ### Threat model
 Think of the PT as an old-fashioned key.  You may own, lease or rent a car
-and/or a house which is secured by nothing more than a key.  If someoone
+and/or a house which is secured by nothing more than a key.  If someone
 really wants to take your car, they can steal your key, or beat you with a
 rubber hose until you give it to them.  Your only protection is the law. 
 
@@ -82,13 +83,10 @@ it is not immediately obvious what car or house the key belongs to.  If
 someone takes the key off your desk, they may know exactly where your car is
 parked or where you live.   
 
-The PT is the same, just for your computer.  If someone really wants to get
-into your computer, they could always beat you with a rubber hose until you
-give them the password.  
-
-If you lose a PT, chances are that nobody will know what it is or who it
-belongs to.  But if you walk away from your computer and leave the PT stuck
-in a USB port, you make a thief's life much easier.  
+The PT is the same, just for your computer.   If you lose a PT, chances are 
+that nobody will know what it is or who it belongs to.  But if you walk away 
+from your computer and leave the PT stuck in a USB port, you make a thief's 
+life much easier.  
 
 
 # Theory of operation
@@ -129,9 +127,10 @@ Sends the password stored in the current slot (if any) to the computer via
 the emulated keyboard interface. The password entry is followed by an emulated
 Enter key.  
 
-If there is a userid stored in the slot (see Configurationsection) then the
+If there is a userid stored in the slot (see Configuration section) then the
 PT will send the userid, followed by a Tab character, followed by the
-password, followed by Enter.  
+password, followed by Enter.  This is useful for logging in to a Windows
+computer connected to a corporate network. 
 
 ## Short press on Next or Long press on Select
 Advances to the next Slot.  The PT model A does not have a Next button, so

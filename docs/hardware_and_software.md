@@ -1,11 +1,13 @@
 # Circuit
 
 The circuit for the PT models U and a are shown below.  The microprocessor board 
-is a generic ATmega 32U4 "Leonardo" compatible board with a micro-usb (model U) or 
-USB A (model A) connector.  The boards are available from Aliexpress and other vendors.  
+is a generic ATmega 32U4 "Leonardo" compatible board with a micro-usb (model U) 
+or  USB A (model A) connector.  The Micro USB board is often called
+ProMicro, while some vendors call teh USB A board 'Beetle'. 
+The boards are available from Aliexpress and other vendors.
 
-Note that boards like Arduino Nano and similar, which use a 328P processor,
-will not work, since the operation of the project depends on the 32U4's
+Note that boards like Arduino Nano and similar, which use an Atmega 328P processor,
+will not work, since the operation of the project depends on the Atmega 32U4's
 ability to act as a USB HID device, emulating a keyboard. 
 
 ![PasswordThing Model U](img/PWT-U.png)
@@ -22,7 +24,7 @@ Here are the bare boards used for the U and A versions of the project.
 The peripheral components needed are:
 
 - A common-anode RGB LED (you can use common cathode, but then you need to adjust the wiring and code appropriately).
-- A 270 ohm resistor for the R, G and B led channels. The value nay be tweaked to change brightness. 
+- A 270 ohm resistor for each of the R, G and B led channels. The value nay be tweaked to change brightness. 
 - A monochrome LED, and another 270 ohm resistor for model U. 
 - Three momentary push button switches.  
 - An optional  128x32 I2C OLED display. 
