@@ -56,10 +56,18 @@ void Input::sendevent(byte button, byte event)
   {
     menu.pressinglong(button);
   }
+  else if (event == PRESSINGVLONG) // Pre-notify menu that button is being pressed a very long time
+  {
+    menu.pressingverylong(button);
+  }
   else // RELEASED
   {
     unsigned long d = getTime() - downtime[button];
-    if (d > LONGPRESS_T)
+    if (d > VLONGPRESS_T)
+    {
+      menu.verylongpress(button);
+    }
+    else if (d > LONGPRESS_T)
     {
       menu.longpress(button);
     }
@@ -108,6 +116,21 @@ void Input::vTaskDigitalRead()
     else if (bstate[i] != PRESSED)
     {
       lpnotify[i] = false;
+    }
+
+    // Send notification while pressing longer than VLONGPRESS_T to provide user feedback
+    if ( (bstate[i] == PRESSED) && (!vlpnotify[i]) )
+    {
+      unsigned long d = getTime() - downtime[i];
+      if (d > VLONGPRESS_T)
+      {
+        sendevent(i, PRESSINGVLONG);
+        vlpnotify[i] = true;
+      }
+    }
+    else if (bstate[i] != PRESSED)
+    {
+      vlpnotify[i] = false;
     }
   }
 }

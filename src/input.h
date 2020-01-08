@@ -20,10 +20,12 @@
 #define NOTPRESSED    0
 #define PRESSED       1
 #define PRESSINGLONG  2
+#define PRESSINGVLONG 3
 
 #define SHORTPRESS  0
 #define LONGPRESS   1
 #define LONGPRESS_T (TICKS_PERMS)*1000 
+#define VLONGPRESS_T (TICKS_PERMS)*3000 
 
 class Input {
   public:
@@ -38,6 +40,7 @@ class Input {
     byte bctr[NBUTTONS] =  {0,0,0};
     unsigned long downtime[NBUTTONS];
     bool lpnotify[NBUTTONS]={false, false, false};
+    bool vlpnotify[NBUTTONS]={false, false, false};
 
     Menu &menu;
 

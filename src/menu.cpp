@@ -232,6 +232,25 @@ void Menu::pressinglong(byte button)
   }
 }
 
+// Handle very long press of a button
+void Menu::verylongpress(byte button)
+{
+    // Set serial boot flag
+    eeprom.storevar(EESEM_SERMODE, 1);
+    disp.displaylarge((char *) "B-SERIAL"); 
+
+    displayleds(BLNK_FAST, COL_WHT, BLNK_ON);
+    // Spin for wdt timeout
+    while (1);
+}
+
+// Handle very long press pre-notification for a button
+void Menu::pressingverylong(byte button)
+{
+  displayleds(BLNK_FAST, COL_WHT, BLNK_ON);  
+}
+
+
 // Next function 
 void  Menu::next()
 {

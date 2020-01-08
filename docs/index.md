@@ -142,10 +142,22 @@ Sends the password in the current slot to the computer, but without sending
 an Enter key press.  This feature often comes in handy when changing
 passwords.  The userid is never sent. 
 
+## Long press on Next
+Shortcut to quickly return the PT to Slot 0.  The LED color will change
+after pressing the button for longer than 1 second to indicate that Long
+press is active, and releasing the button will return you to Slot 0.  
+
 ## Long press on Generate
 Generates a new password for the current slot.  By default, a 20 character
 alphanumeric password, including special characters, is generated. 
 
+## Very long press
+A press of longer that 3 seconds on any key will result in the PT rebooting
+into Serial (Configuration) mode.  See the Configuration section of the
+manual for details about this mode.   When button is pressed for 3 seconds,
+the LED color will change to white.  When the button is released, the PT
+will display 'B-Serial' and become unresponsive for up to 4 seconds, after 
+which it will boot into serial mode.  
 
 # LED indicators
 The PT has two indicator LEDs.  One is a monochrome led, which is only used to

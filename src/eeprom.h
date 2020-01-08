@@ -16,6 +16,7 @@
 #define EE_VARS    16
 #define EE_VARLOC (EE_SLOTLEN*EE_NUMSLOTS)
 #define EE_CRCLOC (EE_VARLOC+EE_VARS)
+#define EE_SEMALOC (EE_VARLOC+EE_VARS+4)
 
 struct eepw {
   byte uidlen;

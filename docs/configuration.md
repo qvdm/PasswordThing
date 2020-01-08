@@ -168,6 +168,9 @@ sequence at all.
 **Example:**  A sequence of **1123** means pressing the **Select** button twice, then 
 the **Next** button and then the **Generate** button.
 
+## Exit / Reboot 
+
+Press **'X'** to reboot the PT to normal operational mode. 
 
 
 ## Show EEPROM Variables, Dump EEPROM,  Zero EEPROM and Show Entropy

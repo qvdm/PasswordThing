@@ -419,6 +419,12 @@ void SerialUi::handle_cmd()
       SUIPROMPT;
       break;
 
+    case 'x' : // Reset
+      eeprom.storevar(EESEM_SERMODE, 0);
+      wdt_enable(WDTO_15MS);  
+      while (1);
+      break;
+
     case '\r' : // Ignore
       break;
 
@@ -442,7 +448,7 @@ void SerialUi::handle_cmd()
 void SerialUi::help(void)
 {
   // abcdefghijklmnopqrstuvwxyz
-  // xxxxxxxxxxxxxxxxxxxxxxx xx
+  // xxxxxxxxxxxxxxxxxxxxxxxxxx
   SUICRLF;
   Serial.println(F("? or h - help")); Serial.flush();
   Serial.println(F("s - Select (S)lot")); Serial.flush();
@@ -472,6 +478,7 @@ void SerialUi::help(void)
   Serial.println(F("z - (Z)ero EEPROM")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
   Serial.println(F("e - Show available (E)ntropy")); Serial.flush();
+  Serial.println(F("x - e(X)it / Reset")); Serial.flush();
 }
 
 // Toggle LED blink state

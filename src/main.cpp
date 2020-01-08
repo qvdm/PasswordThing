@@ -17,10 +17,8 @@
  * 
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
- *      Save and Restore
- *      Pwd revert - test
+ *      Save and Restore - complete Restore
  *      Merge display and LED timeouts
- *      
  * 
  * BUGS:
  * 
@@ -29,6 +27,7 @@
 #undef DBG_SERON
 
 #include <Arduino.h>
+#include <avr/wdt.h>
 
 #include <Wire.h>
 #include "SSD1306Ascii.h"
@@ -48,7 +47,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20010703";
+char Version[]="20010801";
 
 // Forward declare systick function
 void sysTick();
@@ -67,7 +66,7 @@ Menu cMenu(cLed, cDisp, cRandom, cEeprom);
 Input cInput(cMenu);
 
 // Global timers
-volatile unsigned long Time=0, wdTime=0;
+volatile unsigned long Time=0;
 
 // Global Mode
 byte kbmode = KM_KBD;
@@ -102,7 +101,7 @@ uint16_t getFreeSram() {
 void setup() 
 {
   // Initialize Serial if a button is pressed at startup, else initialise keyboard
-  if (cInput.anyPressed())
+  if ( cInput.anyPressed() )
   {
     delay(200); // Wait 200 ms to see if still pressed
     if (cInput.anyPressed())
@@ -111,9 +110,16 @@ void setup()
       kbmode = KM_SERIAL;
     }
   }
+  else if (cEeprom.getvar(EESEM_SERMODE) > 0)
+  {
+    cEeprom.storevar(EESEM_SERMODE, 0);
+    cSui.sio_menu_on();
+    kbmode = KM_SERIAL;
+  }
   else
   {
     cLed.ledcolor(COL_YEL, BLNK_ON);
+    wdt_enable(WDTO_4S);  
   }
 
 #ifdef DBG_SERON
@@ -173,11 +179,6 @@ void setup()
 void sysTick()
 {
   Time++;
-  
-  // Reset on watchdog timeout  TBD this does not work - need to use the WD timer with a better boot loader
-  //   also, not really needed for 32U4 / current implementation due to fast boot mechanism and cooperative multitasking
-//  if (++wdTime > WD_TIMEOUT)
-//    resetFunc(); 
 }
 
 // Retrieves current system time
@@ -190,14 +191,6 @@ unsigned long getTime()
   return T; 
 }
 
-// Kick watchdog
-void kickWdog()
-{
-  noInterrupts();
-  wdTime=0;
-  interrupts();
-}
-
 // Main processing loop
 void loop()
 {
@@ -206,12 +199,10 @@ void loop()
 
   // Measure loop start time
   loopstart = getTime();
-  
   loopcount++;
 
-  // Kick watchdog every 5 seconds
-  if ( (loopcount % (LOOPS_PERSEC*5)) == 0) 
-    kickWdog();
+  // Kick watchdog
+  wdt_reset();
 
   // Execute periodic 'Tasks' (naming convention remains from FreeRTOS days, now we just call them in sequence)
   cLed.vTaskManageLeds();      // LED manager

@@ -2,6 +2,7 @@
 #define SERIALUI_H
 
 #include <Arduino.h>
+#include <avr/wdt.h>
 #include "hardware.h"
 #include "tick.h"
 
