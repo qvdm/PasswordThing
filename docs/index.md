@@ -1,8 +1,8 @@
 # What is this thing?
-PasswordThing (PT) is a physical device for storing passwords.  When you plug it
-into a USB port on your computer, it pretends to be a keyboard, and when you
-press the right button, it 'types' a password (optionally preceded by a
-username).  
+PasswordThing (abbreviated as **PT** in the rest of this document) is a physical 
+device for storing passwords.  When you plug it into a USB port on your computer, 
+it pretends to be a keyboard, and when you press the right button, it 'types' a 
+password (optionally preceded by a username).  
 
 PT's main purpose is to allow you to set a long and complicated startup password on
 your computer, without having to remember it.  The secondary purpose is to
@@ -13,13 +13,16 @@ The downside is that you are now carrying a physical device that lets anyone
 with access to it (and who knows its purpose) to log into your computer and/or 
 password manager.  
 
-This is an example of the classic tradeof between security and convenience. 
+This is an example of the classic trade off between security and convenience,
+but when used properly, the PT is a reasonable convenience device - similar 
+to your house key.  Please read the Security section below for more 
+information.  
 
 # Quick start
 
-You should really read the rest of the manual at your earliest convenience, but to get started:
+You should read the rest of the manual at your earliest convenience, but to get started:
 
-- Plug your Password Thing (PT) into a USB port
+- Plug your Password Thing into a USB port
 - The first time, it may take a few seconds for your computer to install drivers and recognize the device
 - The Colour LED should be blinking red and the Display should say **"Slot 0 I"**
 - PT is now furiously generating entropy.  Give it about 10 seconds to do its thing
@@ -28,11 +31,14 @@ You should really read the rest of the manual at your earliest convenience, but 
 - Log into your computer and change the login password.  When prompted for the new password, press the (S)elect button on the PT
 - Next time you log on to the computer, just press the (S)elect button to enter the generated password
 - Remember to store a copy of the password in a backup location (like a password manager) in case the PT is lost or gets broken. 
-
+- To store usernames or flexible passwords, or to get rid of the annoying blinking LED, you need to use the Configuration interface:
+    * Press any button while plugging in the PT
+    * Connect to the configuration interface with a serial terminal emulator using settings **115200 N 8 1**
+    * Press **?** for help
+  
 # Introduction
 
 This user guide explains how to use your new Password Thing 
-(abbreviated as PT in the rest of this document).  
 
 ## WARNING
 
