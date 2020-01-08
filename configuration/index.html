@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
     
     
       
@@ -40,7 +40,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.0284f74d.css">
       
       
     
@@ -145,7 +145,7 @@
         
       
       
-      <main class="md-main" role="main">
+      <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -331,6 +331,16 @@ an option to turn off the LED after a period of time.  </p>
 <p>Press <strong>'J'</strong> to adjust the timeout.  Enter a value of 0 to disable.</p>
 <p>The timeout is stored in nonvolatile memory and survives unplugging or 
 restarting of the PT.  </p>
+<h2 id="password-revert">Password Revert</h2>
+<p>If you have one password that you use all the time (like for your password
+manager), it is often annoying to have to cycle back through the whole 
+slot sequence after selecting another password.  If the Password revert
+flag is set, the PT will return to Slot 0 when the display turns off due
+to a Privacy timeout. (The privacy timeout must be set to a nonzero value
+for the Revert feature to work).  </p>
+<p>Press <strong>'y'</strong> to adjust the timeout.  Enter a value of 0 to disable.</p>
+<p>The Revert status is stored in nonvolatile memory and survives unplugging or 
+restarting of the PT.  </p>
 <h2 id="flip-display">Flip display</h2>
 <p>The display of the PT model U may appear upside down depending on the
 orientation in which you use it. </p>
@@ -361,6 +371,8 @@ the <strong>'T'</strong> function described above, it will <strong>not</strong> 
 sequence at all.  </p>
 <p><strong>Example:</strong>  A sequence of <strong>1123</strong> means pressing the <strong>Select</strong> button twice, then 
 the <strong>Next</strong> button and then the <strong>Generate</strong> button.</p>
+<h2 id="exit-reboot">Exit / Reboot</h2>
+<p>Press <strong>'X'</strong> to reboot the PT to normal operational mode. </p>
 <h2 id="show-eeprom-variables-dump-eeprom-zero-eeprom-and-show-entropy">Show EEPROM Variables, Dump EEPROM,  Zero EEPROM and Show Entropy</h2>
 <p>These are diagnostic and repair functions.  Do not use unless directed  to
 do so by a customer service representative. </p>
@@ -433,7 +445,7 @@ do so by a customer service representative. </p>
       
     </div>
     
-      <script src="../assets/javascripts/application.c648116f.js"></script>
+      <script src="../assets/javascripts/application.245445c6.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       
