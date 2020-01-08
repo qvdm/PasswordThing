@@ -118,7 +118,8 @@ If you have one password that you use all the time (like for your password
 manager), it is often annoying to have to cycle back through the whole 
 slot sequence after selecting another password.  If the Password revert
 flag is set, the PT will return to Slot 0 when the display turns off due
-to a Privacy timeout. 
+to a Privacy timeout. (The privacy timeout must be set to a nonzero value
+for the Revert feature to work).  
 
 Press **'y'** to adjust the timeout.  Enter a value of 0 to disable.
 
