@@ -46,7 +46,6 @@ class Menu {
     void set_buttonmode(byte mode);
     void set_slotcolors(byte cols);
     void setprto(byte to);
-    void vTaskMenuTick();
 
   private:
     byte slot=0;

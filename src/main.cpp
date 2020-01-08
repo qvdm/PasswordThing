@@ -18,6 +18,7 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore
+ *      Pwd revert - 1/2 implemented
  *      
  * 
  * BUGS:
@@ -46,7 +47,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char *Version="2020010702";
+char Version[]="2020010702";
 
 // Forward declare systick function
 void sysTick();
@@ -69,6 +70,9 @@ volatile unsigned long Time=0, wdTime=0;
 
 // Global Mode
 byte kbmode = KM_KBD;
+
+// PWD revert hack
+bool pwrevert=false;
 
 // Security Sequence array (button presses to get out of LOCKED state)
 int Secseq[] = { 0,
@@ -209,7 +213,6 @@ void loop()
   // Execute periodic 'Tasks' (naming convention remains from FreeRTOS days, now we just call them in sequence)
   cLed.vTaskManageLeds();      // LED manager
   cDisp.vTaskManageDisplay();  // Display manager
-  cMenu.vTaskMenuTick();       // Menu tick
   cRandom.vTaskRandomGen();    // Random # entropy harvester
   
   if (kbmode == KM_SERIAL)

@@ -39,7 +39,6 @@ class Display {
     Eeprom &eeprom;
     unsigned long blanktime=0;
     byte privacy_timeout=10; //s
-
 };
 
 #endif 

@@ -17,7 +17,7 @@
 
 #include "display.h"
 
-extern char *Version;
+extern char Version[];
 
 Display::Display(SSD1306AsciiWire &rd, Eeprom &re) : oled(rd), eeprom(re)
 {
@@ -87,7 +87,6 @@ void Display::setflip(bool state)
 {
   oled.displayRemap(state);
 }
-
 
 void Display::vTaskManageDisplay()
 {

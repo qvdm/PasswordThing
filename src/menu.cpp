@@ -52,8 +52,6 @@ Menu::~Menu() { }
 void Menu::init(int sseq)
 {
   slot = -1; 
-  rtcount=0;
-  setprto(eeprom.getvar(EEVAR_PRTO));
 
   if (sseq == 0)
     next();
@@ -242,9 +240,6 @@ void  Menu::next()
 
   // Show where we are
   indicate_slot();
-
-  // reset revert count
-  rtcount=0; 
 }
 
 // Select function
@@ -406,34 +401,8 @@ void Menu::displayslot(struct pwvalid *v)
 void Menu::indicate_slot()
 {
   struct pwvalid v= eeprom.entryvalid(slot);
-  if (slot != prevslot)
-  {
-    displayslot(&v);
-    showslotled(&v);
-  }
+  displayslot(&v);
+  showslotled(&v);
   prevslot = slot;
 }
 
-// Set password revert timeout
-void Menu::setprto(byte to)
-{
-  if (to < (byte) MAXLTO)
-    prto = to * 10;
-  else
-    prto = MAXLTO * 10;
-}
-
-
-
-// Menu task - handles pw revert
-void Menu::vTaskMenuTick()
-{
-  unsigned long rt = (unsigned long) prto * 1000L / LOOP_MS;
-
-    if ( (prto > 0) && (++rtcount > rt) )
-  {
-    slot = -1; 
-    next();
-  }
-
-}

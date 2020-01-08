@@ -22,7 +22,7 @@
 
 extern unsigned long getTime(void);
 extern int Secseq[];
-
+extern bool pwrevert;
 
 // CTOR
 SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)
@@ -352,16 +352,14 @@ void SerialUi::handle_cmd()
       Serial.print(F("\nCLED Timeout (x 10s) [0-")); Serial.print(MAXPTO); Serial.print(F("] 0=None : ")); Serial.flush();
       break;
 
-    case 'y' : // Set pwd revert timeout
-      st_mode = SM_WAIT_DATA;
-      waitfor = WD_PRT;
-      st_ptr=0;
-      SUICRLF;
-      Serial.print(F("\nPWD Revert Timeout (x 10s) [0-")); Serial.print(MAXPTO); Serial.print(F("] 0=None : ")); Serial.flush();
-      break;
-
     case 'f' : // Toggle display flip
       toggle_flip();
+      SUICRLF;
+      SUIPROMPT; 
+      break;
+
+    case 'y' : // Toggle PWD revert
+      toggle_prto();
       SUICRLF;
       SUIPROMPT; 
       break;
@@ -464,9 +462,9 @@ void SerialUi::help(void)
   Serial.println(F("i - Set pr(I)vacy (display autoblank) timeout")); Serial.flush();
   Serial.println(F("j - Set colour led timeout")); Serial.flush();
   Serial.println(F("f - (F)lip display")); Serial.flush();
+  Serial.println(F("y - Toggle Password Revert")); Serial.flush();
   Serial.println(F("t - Reconfigure bu(T)tons")); Serial.flush();
   Serial.println(F("k - Set LED colors")); Serial.flush();
-  Serial.println(F("y - Set Pwd revert timeout")); Serial.flush();
   Serial.println(F("w - Set security sequence")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
   Serial.println(F("v - Show EEPROM (V)ariables")); Serial.flush();
@@ -490,15 +488,23 @@ void SerialUi::toggle_blink()
 // Toggle display flip state
 void SerialUi::toggle_flip()
 {
-      byte b = eeprom.getvar(EEVAR_DFLP);
-      bool flip = (bool) b;
+      bool flip = (bool) eeprom.getvar(EEVAR_DFLP);
       flip = !flip;
       disp.setflip(flip);
-      b &= 0xfe;
-      if (flip) b |= 0x01;
-      eeprom.storevar(EEVAR_DFLP, (byte) b);
+      eeprom.storevar(EEVAR_DFLP, (byte) flip);
       Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
 }
+
+// Toggle PWD revert state
+void SerialUi::toggle_prto()
+{
+  bool prto = eeprom.getvar(EEVAR_PRTO);
+  prto = !prto;
+  pwrevert = prto;
+  eeprom.storevar(EEVAR_PRTO, (byte) prto);
+  Serial.print(F("\nPWD Revert ")); if (prto) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
+}
+
 
 // Display button config menu
 void SerialUi::menu_buttonconfig()
@@ -533,6 +539,8 @@ void SerialUi::show_eevars()
   Serial.print(F("\nBlink ")); if (blnk) Serial.print("ON"); else Serial.print("OFF"); Serial.flush();
   bool flip = (bool) eeprom.getvar(EEVAR_DFLP) ;
   Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
+  bool prto = (bool) eeprom.getvar(EEVAR_PRTO) ;
+  Serial.print(F("\nPWD Revert ")); if (prto) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
   byte ss = eeprom.getvar(EEVAR_SEC) ;
   Serial.print(F("\nSecurity Seq: ")); if (ss > 0) Serial.print(Secseq[ss+1]); else Serial.print(F("None")); Serial.flush();
   byte priv = eeprom.getvar(EEVAR_OPRIV)  * 10;
@@ -683,18 +691,6 @@ void SerialUi::handle_data()
       if (get_string(2))
       {
         set_ledto();        
-        st_mode = SM_WAIT_CMD;
-        SUICRLF;
-        SUIPROMPT;
-      }
-    }
-    break;
-
-    case WD_PRT : // Expect 1-2 digit length between 0 and MAXLTO
-    {
-      if (get_string(2))
-      {
-        set_pwrto();        
         st_mode = SM_WAIT_CMD;
         SUICRLF;
         SUIPROMPT;
@@ -928,22 +924,6 @@ void SerialUi::set_ledto()
     byte priv = (byte) d;
     eeprom.storevar(EEVAR_LPRIV, priv);
     led.settimeout(priv);
-  }
-  else
-  {
-    SUICRLF;
-    Serial.print(F("Invalid timeout"));
-  }
-}
-
-// Set pwd revert timeout from string in buf
-void SerialUi::set_pwrto()
-{
-  int d = buf_to_int(0, MAXLTO);
-  if ( d >= 0 )
-  {            
-    byte prto = (byte) d;
-    eeprom.storevar(EEVAR_PRTO, prto);
   }
   else
   {

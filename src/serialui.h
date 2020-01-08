@@ -98,7 +98,7 @@ class SerialUi {
     void dup_slot(char s);
     void set_dispto(void);
     void set_ledto(void);
-    void set_pwrto(void);
+    void toggle_prto(void);
     void set_btnmode(char m);
     void set_colmode(char m);
     void set_secseq(void);

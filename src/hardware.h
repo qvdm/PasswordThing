@@ -93,7 +93,7 @@ typedef unsigned char byte;
 #define EEVAR_LPRIV   4 // LED  Privacy        - byte timeout in secs/10, 0 = none
 #define EEVAR_BUTSEQ  5 // Button seq          - byte index, see menu.h
 #define EEVAR_LEDSEQ  6 // LED seq             - byte index, see menu.h
-#define EEVAR_PRTO    7 // PWD Revert          - byte timeout in secs/10, 0 = none
+#define EEVAR_PRTO    7 // PWD Revert          - boolean
   
 // # of possible security seqs and seq length
 #define NSSEQ 81 
