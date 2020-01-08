@@ -18,7 +18,8 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore
- *      Pwd revert - 1/2 implemented
+ *      Pwd revert - test
+ *      Merge display and LED timeouts
  *      
  * 
  * BUGS:
@@ -47,7 +48,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="2020010702";
+char Version[]="20010703";
 
 // Forward declare systick function
 void sysTick();
@@ -71,8 +72,8 @@ volatile unsigned long Time=0, wdTime=0;
 // Global Mode
 byte kbmode = KM_KBD;
 
-// PWD revert hack
-bool pwrevert=false;
+// Global slot
+byte slot=0;
 
 // Security Sequence array (button presses to get out of LOCKED state)
 int Secseq[] = { 0,
@@ -140,6 +141,8 @@ void setup()
   cLed.settimeout(priv);
   byte flip = cEeprom.getvar(EEVAR_DFLP); // Display flip
   cDisp.setflip((bool) flip);
+  byte pwrevert = cEeprom.getvar(EEVAR_PRTO); // PW Revert
+  cDisp.setpwrevert((bool) pwrevert);
   byte sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq
   byte btnmode = cEeprom.getvar(EEVAR_BUTSEQ); // Button assignments
   cMenu.set_buttonmode(btnmode);

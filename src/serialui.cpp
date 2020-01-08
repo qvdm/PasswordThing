@@ -22,7 +22,6 @@
 
 extern unsigned long getTime(void);
 extern int Secseq[];
-extern bool pwrevert;
 
 // CTOR
 SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)
@@ -488,11 +487,11 @@ void SerialUi::toggle_blink()
 // Toggle display flip state
 void SerialUi::toggle_flip()
 {
-      bool flip = (bool) eeprom.getvar(EEVAR_DFLP);
-      flip = !flip;
-      disp.setflip(flip);
-      eeprom.storevar(EEVAR_DFLP, (byte) flip);
-      Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
+  bool flip = (bool) eeprom.getvar(EEVAR_DFLP);
+  flip = !flip;
+  disp.setflip(flip);
+  eeprom.storevar(EEVAR_DFLP, (byte) flip);
+  Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
 }
 
 // Toggle PWD revert state
@@ -500,7 +499,7 @@ void SerialUi::toggle_prto()
 {
   bool prto = eeprom.getvar(EEVAR_PRTO);
   prto = !prto;
-  pwrevert = prto;
+  disp.setpwrevert(prto);
   eeprom.storevar(EEVAR_PRTO, (byte) prto);
   Serial.print(F("\nPWD Revert ")); if (prto) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
 }

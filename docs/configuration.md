@@ -113,16 +113,16 @@ Press **'J'** to adjust the timeout.  Enter a value of 0 to disable.
 The timeout is stored in nonvolatile memory and survives unplugging or 
 restarting of the PT.  
 
-## Password Revert timeout
+## Password Revert
 If you have one password that you use all the time (like for your password
 manager), it is often annoying to have to cycle back through the whole 
 slot sequence after selecting another password.  If the Password revert
-timeout is set to a nonzero value, the PT will return to Slot 0 after
-the configured timeout.  
+flag is set, the PT will return to Slot 0 when the display turns off due
+to a Privacy timeout. 
 
 Press **'y'** to adjust the timeout.  Enter a value of 0 to disable.
 
-The timeout is stored in nonvolatile memory and survives unplugging or 
+The Revert status is stored in nonvolatile memory and survives unplugging or 
 restarting of the PT.  
 
 ## Flip display

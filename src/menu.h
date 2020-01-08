@@ -48,7 +48,7 @@ class Menu {
     void setprto(byte to);
 
   private:
-    byte slot=0;
+//    byte slot=0;
     byte prevslot=99;
     byte prto=0;
     unsigned long rtcount=0;

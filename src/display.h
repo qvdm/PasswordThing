@@ -32,6 +32,7 @@ class Display {
     void displaysmall(char *str1, char *str2, char *str3);
     void setprivacy(byte timeout);
     void setflip(bool state);
+    void setpwrevert(bool state);
     void vTaskManageDisplay();
 
   private:
@@ -39,6 +40,7 @@ class Display {
     Eeprom &eeprom;
     unsigned long blanktime=0;
     byte privacy_timeout=10; //s
+    bool pwrevert=false;
 };
 
 #endif 

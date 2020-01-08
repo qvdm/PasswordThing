@@ -37,7 +37,7 @@
 #include "menu.h"
 
 extern int Secseq[];
-
+extern byte slot;
 
 // Constructor
 Menu::Menu(Led& rl, Display& rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)

@@ -18,6 +18,7 @@
 #include "display.h"
 
 extern char Version[];
+extern byte slot;
 
 Display::Display(SSD1306AsciiWire &rd, Eeprom &re) : oled(rd), eeprom(re)
 {
@@ -88,6 +89,12 @@ void Display::setflip(bool state)
   oled.displayRemap(state);
 }
 
+void Display::setpwrevert(bool state)
+{
+  pwrevert = state;
+}
+
+
 void Display::vTaskManageDisplay()
 {
  // Blank display on timeout
@@ -96,6 +103,8 @@ void Display::vTaskManageDisplay()
     if (--blanktime == 0) 
     {
       oled.clear();
+      // Revert the pwd at the same time if flag set
+      if (pwrevert) slot = 0;
     }
   }
 }
