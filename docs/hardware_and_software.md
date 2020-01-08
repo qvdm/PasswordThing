@@ -1,3 +1,8 @@
+# Introduction
+All software, schematics, board layouts and mesh files can be found at 
+https://github.com/qvdm/PasswordThing
+
+
 # Circuit
 
 The circuit for the PT models U and a are shown below.  The microprocessor board 
