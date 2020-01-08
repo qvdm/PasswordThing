@@ -259,9 +259,9 @@ your computer, without having to remember it.  The secondary purpose is to
 allow you to set a long and complicated password on your password manager,
 without having to remember it.  </p>
 <p>The downside is that you are now carrying a physical device that lets anyone
-with access to it (and knows its purpose) to log into your computer and/or 
+with access to it (and who knows its purpose) to log into your computer and/or 
 password manager.  </p>
-<p>Classic tradeof between security and convenience. </p>
+<p>This is an example of the classic tradeof between security and convenience. </p>
 <h1 id="quick-start">Quick start</h1>
 <p>You should really read the rest of the manual at your earliest convenience, but to get started:</p>
 <ul>
@@ -273,14 +273,15 @@ password manager.  </p>
 <li>Now you have a random password in Slot 0, which will be entered via a virtual keyboard every time you press the (S)elect button</li>
 <li>Log into your computer and change the login password.  When prompted for the new password, press the (S)elect button on the PT</li>
 <li>Next time you log on to the computer, just press the (S)elect button to enter the generated password</li>
+<li>Remember to store a copy of the password in a backup location (like a password manager) in case the PT is lost or gets broken. </li>
 </ul>
 <h1 id="introduction">Introduction</h1>
 <p>This user guide explains how to use your new Password Thing 
 (abbreviated as PT in the rest of this document).  </p>
 <h2 id="warning">WARNING</h2>
 <p>The Password Thing is a <strong>convenience</strong> device, <strong>NOT</strong> a security device. 
-It increases your security by removing the temptation to choose easily-remembered
-(and therefore easily guessable) master passwords.  It decreases your security
+It <em>increases</em> your security by removing the temptation to choose easily-remembered
+(and therefore easily guessable) master passwords.  It <em>decreases</em> your security
 by storing your master password unencrypted in a device that can be lost or 
 borrowed/stolen if you are not careful.  We recommend that you carry your PT 
 on a keychain together with your other important keys.  </p>
@@ -307,19 +308,17 @@ be trivially bypassed through brute force or by using the serial port
 configuration / debug mechanism. </p>
 <h3 id="threat-model">Threat model</h3>
 <p>Think of the PT as an old-fashioned key.  You may own, lease or rent a car
-and/or a house which is secured by nothing more than a key.  If someoone
+and/or a house which is secured by nothing more than a key.  If someone
 really wants to take your car, they can steal your key, or beat you with a
 rubber hose until you give it to them.  Your only protection is the law. </p>
 <p>If you lose your key, there is a level of security afforded by the fact that 
 it is not immediately obvious what car or house the key belongs to.  If
 someone takes the key off your desk, they may know exactly where your car is
 parked or where you live.   </p>
-<p>The PT is the same, just for your computer.  If someone really wants to get
-into your computer, they could always beat you with a rubber hose until you
-give them the password.  </p>
-<p>If you lose a PT, chances are that nobody will know what it is or who it
-belongs to.  But if you walk away from your computer and leave the PT stuck
-in a USB port, you make a thief's life much easier.  </p>
+<p>The PT is the same, just for your computer.   If you lose a PT, chances are 
+that nobody will know what it is or who it belongs to.  But if you walk away 
+from your computer and leave the PT stuck in a USB port, you make a thief's 
+life much easier.  </p>
 <h1 id="theory-of-operation">Theory of operation</h1>
 <p>The PT has six 'slots' for storing passwords and optionally userids.  Each
 slot can store a userid and a password up to 30 characters in length.  </p>
@@ -347,9 +346,10 @@ time (less than one second) or longer than a second.  </p>
 <p>Sends the password stored in the current slot (if any) to the computer via
 the emulated keyboard interface. The password entry is followed by an emulated
 Enter key.  </p>
-<p>If there is a userid stored in the slot (see Configurationsection) then the
+<p>If there is a userid stored in the slot (see Configuration section) then the
 PT will send the userid, followed by a Tab character, followed by the
-password, followed by Enter.  </p>
+password, followed by Enter.  This is useful for logging in to a Windows
+computer connected to a corporate network. </p>
 <h2 id="short-press-on-next-or-long-press-on-select">Short press on Next or Long press on Select</h2>
 <p>Advances to the next Slot.  The PT model A does not have a Next button, so
 the only way to select a slot is via a long press on Select. </p>
