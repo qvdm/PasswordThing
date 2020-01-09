@@ -8,5 +8,6 @@
 void scani2c();
 void sleepcpu();
 bool recvWithEndMarker(char endMarker, int *maxLen, char receivedChars[]);
+byte hextobyte(char hex[]);
 
 #endif

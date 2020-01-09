@@ -341,9 +341,9 @@ void Eeprom::restore()
     l = EE_SLOTLEN*2;
     if (recvWithEndMarker('\n', &l, parsebuf))
     {
-      for (int j = 0 ;  j < l ; ++j)
+      for (int j = 0 ;  j < l ; j+=2)
       {
-//        sscanf(parsebuf+j, "%02X", &ee);
+        ee = hextobyte(parsebuf+j);
         EEPROM.updateByte(i*EE_SLOTLEN+j, ee);
       }
     }
@@ -359,7 +359,7 @@ void Eeprom::restore()
     l = 2;
     if (recvWithEndMarker('\n', &l, parsebuf))
     {
-//      sscanf(parsebuf, "%02X", &ee);
+      ee = hextobyte(parsebuf);
       EEPROM.updateByte(EE_VARLOC+v, ee);
     }
     else 
@@ -372,9 +372,9 @@ void Eeprom::restore()
   l = 8;
   if (recvWithEndMarker('\n', &l, parsebuf))
   {
-    for (int c = 0 ;  c < 4 ; ++c)
+    for (int c = 0 ;  c < 8 ; c+=2)
     {
-//      sscanf(parsebuf+c, "%02X", &ee);
+      ee = hextobyte(parsebuf+c);
       EEPROM.updateByte(EE_CRCLOC+c, ee);
     }
   }

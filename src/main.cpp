@@ -46,7 +46,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20010802";
+char Version[]="20010803";
 
 // Forward declare systick function
 void sysTick();

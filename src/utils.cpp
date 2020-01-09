@@ -84,5 +84,19 @@ bool recvWithEndMarker(char endMarker, int *maxLen, char receivedChars[])
       return true;
     }
   }
+  return false;
+}
+
+byte hextobyte(char hex[])
+{
+  byte v=0;
+  for (int i=0; i < 2 ; i++)
+  {
+    if (hex[i] >= '0' && hex[i] <= '9')
+      v = (v << 4) + (hex[i] - '0');
+    else if (hex[i] >= 'A' && hex[i] <= 'F')
+      v = (v << 4) + (hex[i] - 'A' + 10);
+  }
+  return(v);
 }
 
