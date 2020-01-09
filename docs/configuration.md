@@ -27,7 +27,9 @@ indicate configuration mode.
 
 Alternatively, you can enter configuration mode at any time by pressing any
 button on the PT for longer than 3 seconds.  The LED will change to white to 
-indicate configuration mode.
+indicate that the PT is ready to enter configuration mode and it will flash
+off-to-on approximately 4 seconds later to indicate that configuration mode
+is active and that you may connect your serial terminal.  
 
 When you enter Configuration mode and connect a serial terminal, you should
 see the prompt **Slot 0 >>** on the terminal. 

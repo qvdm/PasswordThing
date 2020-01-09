@@ -72,7 +72,7 @@ bool recvWithEndMarker(char endMarker, int *maxLen, char receivedChars[])
     if (rc != endMarker) 
     {
       receivedChars[ndx++] = rc;
-      if (ndx >= *maxLen) 
+      if (ndx > *maxLen) 
       {
         return false;
       }
@@ -80,7 +80,7 @@ bool recvWithEndMarker(char endMarker, int *maxLen, char receivedChars[])
     else 
     {
       receivedChars[ndx] = '\0'; // terminate the string
-      *maxLen = ndx;
+      *maxLen = ndx-1;
       return true;
     }
   }

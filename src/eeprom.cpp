@@ -33,6 +33,8 @@
 
 #include "eeprom.h"
 
+extern char eedVer[];
+
 Eeprom::Eeprom()
 {
 }
@@ -250,7 +252,6 @@ void Eeprom::dupslot(int source, int dest)
 void Eeprom::dump()
 {
   char buf[16];
-
   Serial.begin(115200);  while (!Serial);
   Serial.println("EEPROM Dump");
 
@@ -297,7 +298,7 @@ void Eeprom::backup()
 {
 
   Serial.begin(115200);  while (!Serial);
-  Serial.println("V03"); // Update every time format changes
+  Serial.println(eedVer); 
 
   for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
   {
@@ -329,18 +330,33 @@ void Eeprom::backup()
 
 void Eeprom::restore()
 {
+#ifdef EERESTORE  
   int l;
   byte ee;
 
-  // TMP shield
-  Serial.println(F("Broken"));
-  while (1);
+  while (Serial.available() == 0 ); // wait for input
+  l = 3;
+  if (recvWithEndMarker('\n', &l, parsebuf))
+  {
+    for (int j = 0 ;  j < 3 ; j++)
+    {
+      if (parsebuf[j] != eedVer[j])
+      {
+          Serial.println(F("Wrong Version"));
+          while (1);
+      }
+    }
+  }
+  Serial.println(F("VR OK"));
 
+  while (Serial.available() == 0 ); // wait for input
   for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
   {
     l = EE_SLOTLEN*2;
+    Serial.println(l);
     if (recvWithEndMarker('\n', &l, parsebuf))
     {
+      Serial.println(l);
       for (int j = 0 ;  j < l ; j+=2)
       {
         ee = hextobyte(parsebuf+j);
@@ -349,11 +365,14 @@ void Eeprom::restore()
     }
     else 
     {
-      Serial.println(F("Bad Restore"));
+      Serial.print("*"); Serial.print(l);
+      Serial.println(F(" Bad Restore"));
       while (1);
     }
   }
+  Serial.println(F("PW OK"));
 
+  while (Serial.available() == 0 ); // wait for input
   for (int v=0; v < EE_VARS; v++)
   {
     l = 2;
@@ -368,7 +387,9 @@ void Eeprom::restore()
       while (1);
     }
   }
+  Serial.println(F("VA OK"));
 
+  while (Serial.available() == 0 ); // wait for input
   l = 8;
   if (recvWithEndMarker('\n', &l, parsebuf))
   {
@@ -383,6 +404,10 @@ void Eeprom::restore()
     Serial.println(F("Bad Restore"));
     while (1);
   }
+  Serial.println(F("CS OK"));
 
   Serial.println(F("Restored"));
+#else
+  Serial.println(F("Not available"));
+#endif
 }

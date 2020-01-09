@@ -47,6 +47,7 @@
 #include "serialui.h"
 
 char Version[]="20010803";
+char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
 void sysTick();

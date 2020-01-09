@@ -400,12 +400,16 @@ void SerialUi::handle_cmd()
     case 'r' : // restore from backup
       SUICRLF;
       Serial.println(F("Paste backup : ")); Serial.flush();
+      while (Serial.available() > 0) 
+        Serial.read();
+
+      // Change serial timeout
+      Serial.setTimeout(30000); 
       eeprom.restore();
       st_mode = SM_WAIT_CMD;
       SUICRLF;
       SUIPROMPT;
       break;
-
     case 'z' : // zero eeprom
       eeprom.zero();
       SUIPROMPT;
