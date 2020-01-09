@@ -4,6 +4,7 @@
 #include <EEPROMex.h>
 #include <Arduino.h>
 #include "hardware.h"
+#include "utils.h"
 
 #define EE_PWLEN   30 // Max space for uid/pwd
 #define EE_SNLEN    8 // Slot name
@@ -63,7 +64,8 @@ class Eeprom {
     unsigned long calc_crc(void);
     void update_crc(void);
     union eeentry eee;
-
+    char parsebuf[EE_SLOTLEN*2+2];
+    byte vbuf[EE_SLOTLEN];
 };
 
 #endif 

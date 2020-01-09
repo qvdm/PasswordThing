@@ -310,7 +310,9 @@ void Eeprom::backup()
   }
 
   for (int v=0; v < EE_VARS; v++)
+  {
     Serial.print(EEPROM.readByte(EE_VARLOC+v), HEX);
+  }
   Serial.println("");
   Serial.flush();
 
@@ -323,19 +325,64 @@ void Eeprom::backup()
   Serial.flush();
 }
 
+
+
 void Eeprom::restore()
 {
-    int cr=0;
-    while (Serial.available() == 0) ;
-    while (Serial.available() > 0) 
+  int l;
+  byte ee;
+
+  // TMP shield
+  Serial.println(F("Broken"));
+  while (1);
+
+  for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
+  {
+    l = EE_SLOTLEN*2;
+    if (recvWithEndMarker('\n', &l, parsebuf))
     {
-      char inchar = Serial.read();
-      cr++;
-      if ( (inchar == 'q') && (cr < 3) ) // can only bail before writing 1st value to eeprom
-        return;
-      
-      Serial.write(inchar); Serial.flush();
+      for (int j = 0 ;  j < l ; ++j)
+      {
+//        sscanf(parsebuf+j, "%02X", &ee);
+        EEPROM.updateByte(i*EE_SLOTLEN+j, ee);
+      }
     }
-    while (1) ;
-    Serial.println(F("Restored (not really) - Please reconnect"));
+    else 
+    {
+      Serial.println(F("Bad Restore"));
+      while (1);
+    }
+  }
+
+  for (int v=0; v < EE_VARS; v++)
+  {
+    l = 2;
+    if (recvWithEndMarker('\n', &l, parsebuf))
+    {
+//      sscanf(parsebuf, "%02X", &ee);
+      EEPROM.updateByte(EE_VARLOC+v, ee);
+    }
+    else 
+    {
+      Serial.println(F("Bad Restore"));
+      while (1);
+    }
+  }
+
+  l = 8;
+  if (recvWithEndMarker('\n', &l, parsebuf))
+  {
+    for (int c = 0 ;  c < 4 ; ++c)
+    {
+//      sscanf(parsebuf+c, "%02X", &ee);
+      EEPROM.updateByte(EE_CRCLOC+c, ee);
+    }
+  }
+  else 
+  {
+    Serial.println(F("Bad Restore"));
+    while (1);
+  }
+
+  Serial.println(F("Restored"));
 }

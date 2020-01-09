@@ -17,7 +17,7 @@
  * 
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
- *      Save and Restore - complete Restore
+ *      Save and Restore - complete Restore (need to write our own hex parser since sscanf is too big)
  * 
  * BUGS:
  * 

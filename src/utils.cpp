@@ -58,3 +58,31 @@ void scani2c()
 
 }
 
+
+// Read chars from serial until end char found
+bool recvWithEndMarker(char endMarker, int *maxLen, char receivedChars[]) 
+{
+  static byte ndx = 0;
+  char rc;
+  
+  while (Serial.available() > 0 ) 
+  {
+    rc = Serial.read();
+
+    if (rc != endMarker) 
+    {
+      receivedChars[ndx++] = rc;
+      if (ndx >= *maxLen) 
+      {
+        return false;
+      }
+    }
+    else 
+    {
+      receivedChars[ndx] = '\0'; // terminate the string
+      *maxLen = ndx;
+      return true;
+    }
+  }
+}
+
