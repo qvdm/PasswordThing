@@ -47,7 +47,11 @@
 
 class SerialUi {
   public:
+#ifndef MAINT
     SerialUi(Led&, Display&, Random&, Eeprom&);
+#else
+    SerialUi(Led&, Eeprom&);
+#endif    
     ~SerialUi();
     void init(int sseq);
     void sio_menu_on();
@@ -72,14 +76,18 @@ class SerialUi {
 
 
     Led &led;
+#ifndef MAINT
     Display &disp;
     Random &rand;
+#endif    
     Eeprom &eeprom;
 
     void help(void);
     void printcurpw(void);
     void printcurname(void);
+#ifndef MAINT  
     void genpw(void);
+#endif
     void handle_input(void);
     void handle_cmd(void);
     void handle_data(void);
@@ -92,16 +100,18 @@ class SerialUi {
     void set_eeuid(void);
     void set_eepw(void);
     void set_eename(void);
-    void set_pwgmode(char m);
     int buf_to_int(int min, int max);
+#ifndef MAINT
+    void set_pwgmode(char m);
     void set_pwglen(void);
-    void set_slot(char s);
-    void dup_slot(char s);
     void set_dispto(void);
     void set_ledto(void);
-    void toggle_prto(void);
     void set_btnmode(char m);
     void set_colmode(char m);
+#endif
+    void set_slot(char s);
+    void dup_slot(char s);
+    void toggle_prto(void);
     void set_secseq(void);
     void get_initialpw(void);
 };

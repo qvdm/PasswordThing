@@ -24,11 +24,17 @@ extern unsigned long getTime(void);
 extern int Secseq[];
 
 // CTOR
+#ifndef MAINT
 SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)
 {
   pwgenlen = MAXPW;
   pwgenmode = PWM_SPEC;
 }
+#else
+SerialUi::SerialUi(Led& rl, Eeprom& ee) : led(rl), eeprom(ee)
+{
+}
+#endif
 
 SerialUi::~SerialUi() { }
 
@@ -45,7 +51,9 @@ void SerialUi::init(int sseq)
 void SerialUi::sio_menu_on()
 {
   menurunning = true;
+#ifndef MAINT  
   Keyboard.end(); // Turn off kbd
+#endif
   Serial.begin(115200);  while (!Serial); 
   SUICRLF;
 
@@ -53,16 +61,20 @@ void SerialUi::sio_menu_on()
   {
     SUIPROMPT;
   }
+#ifndef MAINT  
   else
     disp.displaylarge((char *) "LOCKED"); 
+#endif
 }
 
 // Turn SIO menu off
 void SerialUi::sio_menu_off()
 {
+#ifndef MAINT  
   menurunning = false;
   Serial.end();
   Keyboard.begin(); // Turn on kbd
+#endif
 }
 
 
@@ -120,6 +132,7 @@ void SerialUi::printcurpw()
 
 }
 
+#ifndef MAINT  
 // Generate a password
 void SerialUi::genpw()
 {
@@ -152,6 +165,8 @@ void SerialUi::genpw()
     SUICRLF;
   }
 }
+
+#endif
 
 // Print the name of the current slot
 void SerialUi::printcurname()
@@ -195,7 +210,9 @@ void SerialUi::vTaskSerialUi()
     led.ledcolor(COL_YEL, BLNK_MOST);
     if (!displck)
     {
+#ifndef MAINT  
       disp.displaylarge((char *) "LOCKED"); 
+#endif
       SUICRLF;
       Serial.print(F("Password: "));  Serial.flush();
       displck=true;
@@ -270,11 +287,13 @@ void SerialUi::handle_cmd()
       SUIPROMPT;
       break;
 
+#ifndef MAINT  
     case 'g' : // generate password 
       genpw();            
       SUICRLF;
       SUIPROMPT;
       break;
+#endif
 
     case 'u' : // enter uid
       st_mode = SM_WAIT_DATA;
@@ -300,6 +319,7 @@ void SerialUi::handle_cmd()
       Serial.print(F("Name for Slot ")); Serial.print(curslot); Serial.print(F(" [0-7 chars]: ")); Serial.flush();
       break;
 
+#ifndef MAINT  
     case 'm' : // generator mode
       st_mode = SM_WAIT_DATA;
       waitfor = WD_MODE;
@@ -314,6 +334,7 @@ void SerialUi::handle_cmd()
       SUICRLF;
       Serial.print(F("\nPassword length [4-")); Serial.print(EE_PWLEN-3); Serial.print(F("] : ")); Serial.flush();
       break;
+#endif
 
     case 'a' : // Duplicate slot
       st_mode = SM_WAIT_DATA;
@@ -329,6 +350,7 @@ void SerialUi::handle_cmd()
       SUIPROMPT;
       break;
 
+#ifndef MAINT  
     case 'b' : // Toggle loop blink
       toggle_blink();
       SUICRLF;
@@ -376,7 +398,7 @@ void SerialUi::handle_cmd()
       st_ptr=0;
       menu_ledconfig();
       break;
-
+#endif
     case 'w' : // security sequence
       st_mode = SM_WAIT_DATA;
       waitfor = WD_SECC;
@@ -384,6 +406,7 @@ void SerialUi::handle_cmd()
       Serial.print(F("\nSecurity Sequence (exactly 4 buttons, each labelled 1,2 or 3, e.g. '1231', 0 for None ) : ")); Serial.flush();
       break;
 
+#ifdef MAINT  
     case 'v' : // show eeprom variables
       show_eevars();
       SUICRLF;
@@ -415,6 +438,7 @@ void SerialUi::handle_cmd()
       SUIPROMPT;
       break;
 
+#else
     case 'e' : // show entropy
       e = rand.getEntropy();
       SUICRLF;
@@ -422,13 +446,12 @@ void SerialUi::handle_cmd()
       SUICRLF;
       SUIPROMPT;
       break;
-
     case 'x' : // Reset
       eeprom.storevar(EESEM_SERMODE, 0);
       wdt_enable(WDTO_15MS);  
       while (1);
       break;
-
+#endif
     case '\r' : // Ignore
       break;
 
@@ -460,13 +483,16 @@ void SerialUi::help(void)
   Serial.println(F("u - Enter (U)id")); Serial.flush();
   Serial.println(F("o - Enter (O)wn pwd")); Serial.flush();
   Serial.println(F("n - Set slot (N)ame")); Serial.flush();
+#ifndef MAINT  
   Serial.println(F("m - Set generator (M)ode")); Serial.flush();
   Serial.println(F("l - Set generator (L)ength")); Serial.flush();
   Serial.println(F("g - (G)enerate pwd")); Serial.flush();
+#endif
   Serial.println(F(" ")); Serial.flush();
   Serial.println(F("c - (C)lear Slot")); Serial.flush();
   Serial.println(F("a - duplic(A)te Slot")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
+#ifndef MAINT  
   Serial.println(F("b - Toggle (B)linking indicator")); Serial.flush();
   Serial.println(F("i - Set pr(I)vacy (display autoblank) timeout")); Serial.flush();
   Serial.println(F("j - Set colour led timeout")); Serial.flush();
@@ -474,17 +500,22 @@ void SerialUi::help(void)
   Serial.println(F("y - Toggle Password Revert")); Serial.flush();
   Serial.println(F("t - Reconfigure bu(T)tons")); Serial.flush();
   Serial.println(F("k - Set LED colors")); Serial.flush();
+#endif
   Serial.println(F("w - Set security sequence")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
+#ifdef MAINT  
   Serial.println(F("v - Show EEPROM (V)ariables")); Serial.flush();
   Serial.println(F("d - (D)ump / Backup EEPROM")); Serial.flush();
   Serial.println(F("r - (R)estore from Backup")); Serial.flush();
   Serial.println(F("z - (Z)ero EEPROM")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
+#else
   Serial.println(F("e - Show available (E)ntropy")); Serial.flush();
   Serial.println(F("x - e(X)it / Reset")); Serial.flush();
+#endif
 }
 
+#ifndef MAINT  
 // Toggle LED blink state
 void SerialUi::toggle_blink()
 {
@@ -541,7 +572,9 @@ void SerialUi::menu_ledconfig()
   Serial.print(F("\n6- B G Y R Cy Ma")); Serial.flush();
   Serial.print(F("\nChoice: ")); Serial.flush();
 }
+#endif
 
+#ifdef MAINT  
 // Display all EEprom variables
 void SerialUi::show_eevars()
 {
@@ -612,6 +645,7 @@ void SerialUi::show_eevars()
   }
   Serial.flush();
 }
+#endif
 
 // Process a data char
 void SerialUi::handle_data()
@@ -663,6 +697,7 @@ void SerialUi::handle_data()
     }
     break;
 
+#ifndef MAINT
     case WD_MODE : // Expect a single-key mode #
     {
       set_pwgmode(st_inchar);
@@ -707,6 +742,7 @@ void SerialUi::handle_data()
       }
     }
     break;
+#endif
 
     case WD_DUP : // Expect a single-key destination slot #
     {
@@ -717,6 +753,7 @@ void SerialUi::handle_data()
     }
     break;
 
+#ifndef MAINT
     case WD_BTTN : // Expect a single key button mode
     {
       set_btnmode(st_inchar);
@@ -734,6 +771,7 @@ void SerialUi::handle_data()
       SUIPROMPT;
     }
     break;
+#endif
 
     case WD_SECC : // Expect exactly 4 characters from '1' to '3'
     {
@@ -829,7 +867,7 @@ void SerialUi::set_eename()
   eeprom.storename(curslot, st_buf);
 }
 
-
+#ifndef MAINT  
 // Set pw generator mode
 void SerialUi::set_pwgmode(char m)
 {
@@ -853,6 +891,7 @@ void SerialUi::set_pwgmode(char m)
       break;
   }
 }
+#endif
 
 // Set current pw slot
 void SerialUi::set_slot(char s)
@@ -892,6 +931,7 @@ int SerialUi::buf_to_int(int min, int max)
     return -1;
 }
 
+#ifndef MAINT  
 // Set pw generator length from string in buf
 void SerialUi::set_pwglen()
 {
@@ -924,7 +964,6 @@ void SerialUi::set_dispto()
   }
 }
 
-
 // Set led timeout from string in buf
 void SerialUi::set_ledto()
 {
@@ -941,7 +980,6 @@ void SerialUi::set_ledto()
     Serial.print(F("Invalid timeout"));
   }
 }
-
 
 // Set button mode
 void SerialUi::set_btnmode(char m)
@@ -1002,7 +1040,7 @@ void SerialUi::set_colmode(char m)
   }
   eeprom.storevar(EEVAR_LEDSEQ, b);
 }
-
+#endif
 
 // Set led security button sequence
 void SerialUi::set_secseq()
@@ -1075,7 +1113,9 @@ void SerialUi::get_initialpw()
     if (ss == waitforseq)
     {
       waitforseq=0;
+#ifndef MAINT  
       disp.displaylarge((char *) "SERIAL"); 
+#endif
       st_mode = SM_WAIT_CMD;
       SUICRLF;
       SUIPROMPT;

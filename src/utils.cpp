@@ -3,6 +3,8 @@
 
 #include "utils.h"
 
+#ifndef MAINT
+
 // Scans the i2c bus for devices and dumps to the serial terminal
 // Not multitasking safe - call before creating tasks
 void scani2c()
@@ -58,6 +60,7 @@ void scani2c()
 
 }
 
+#endif
 
 // Read chars from serial until end char found
 bool recvWithEndMarker(char endMarker, int *maxLen, char receivedChars[]) 

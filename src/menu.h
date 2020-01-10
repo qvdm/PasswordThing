@@ -1,6 +1,8 @@
 #ifndef MENU_H
 #define MENU_H
 
+#ifndef MAINT
+
 #include <Arduino.h>
 
 #include "hardware.h"
@@ -27,10 +29,6 @@
 #define BDEF_NSG 3 // NXT SEL GEN
 #define BDEF_SGN 4 // SEL GEN NXT
 #define BDEF_SNG 5 // SEL NXT GEN
-
-// Maximums
-#define MAXSLOTS   6
-#define MAXPW      20 // Max generated PWD length
 
 // Keyboard Enter
 #define KENTER 176
@@ -81,4 +79,5 @@ class Menu {
     void indicate_slot(void);
 };
 
+#endif 
 #endif 

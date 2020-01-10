@@ -17,6 +17,8 @@
 
 #include "display.h"
 
+#ifndef MAINT
+
 extern char Version[];
 extern byte slot;
 
@@ -108,3 +110,5 @@ void Display::vTaskManageDisplay()
     }
   }
 }
+
+#endif

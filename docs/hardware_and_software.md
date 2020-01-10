@@ -8,7 +8,7 @@ https://github.com/qvdm/PasswordThing
 The circuit for the PT models U and a are shown below.  The microprocessor board 
 is a generic ATmega 32U4 "Leonardo" compatible board with a micro-usb (model U) 
 or  USB A (model A) connector.  The Micro USB board is often called
-ProMicro, while some vendors call teh USB A board 'Beetle'. 
+ProMicro, while some vendors call the USB A board 'Beetle'. 
 The boards are available from Aliexpress and other vendors.
 
 Note that boards like Arduino Nano and similar, which use an Atmega 328P processor,
@@ -34,7 +34,7 @@ The peripheral components needed are:
 - Three momentary push button switches.  
 - An optional  128x32 I2C OLED display. 
 
-Note  that you would typically not wire in an OLED display for a model A
+Note  that you would typically use an OLED display for a model A
 (although it is supported).  The buttons are connected to D9, D10 and D11 in
 model A, as opposed to D9, D8, D7 in the  model U.  You may wish to ommit 
 the middle ("Next") button on a model A, to allow the use of larger buttons, 
@@ -45,11 +45,10 @@ monochrome LED.
 
 
 # Assembly
-The project can be assembled many ways.  A custom 3D-printed case is probably
-the best solution in the long term.  
+## Rough and tough
 
 The photos below  show the front and back of two of my prototype model U and A
-assemblies.  The "sandwhich" construction of the model U shown is very compact and allows 
+assemblies.  The "sandwich" construction of the model U shown is very compact and allows 
 the unit to be glued to your keyboard for easy access.  (Only do this at home of 
 course - see the Security section in the documentation).
 
@@ -73,6 +72,15 @@ The images below show an example of an assembled model U board.
 ![Model U bot](img/uusb_back.JPG)
 *Model U back view*
 
+## Refined / Production
+I designed a small PCB for each model to make it easier to assemble the components.  
+
+The GIT repository includes Eagle schematic and pcb layout files, as well as Gerber files, ready to send to JLPCB or another vendor for manufacture. 
+
+The GIT repository also contains STL files for printing small enclosures for the project.  The photos below show the completed products.  
+
+TBD
+
 
 # Software Build
 The platformio platform is recommended for compiling the code.  Ensure that
@@ -81,6 +89,10 @@ support for the Arduino Leonardo board is installed.
 There is a separate build specification for each of the two board types. 
 Ensure that you build the correct one for your board, otherwise the 
 buttons and led will not work correctly. 
+
+There is also a MAINTenance build configuration for each model.  The maintenance build allows you to view, clear, backup and restore the contents of the EEPROM and offers a limited configuration capability.  
+
+**Note:** The EEPROM maintenance tools were originally part of the main software package, but were moved to a standalone build due to running out of flash space.  
 
 # Documentation
 This documentation was generated with mkdocs.  There is a yaml file in the root of 

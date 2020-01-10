@@ -102,4 +102,9 @@ typedef unsigned char byte;
 #define NSSEQ 81 
 #define SSEQL 4
 
+// Global maximums
+#define MAXSLOTS   6  // Max # of used PW slots
+#define MAXPW      20 // Max generated PWD length
+
+
 #endif

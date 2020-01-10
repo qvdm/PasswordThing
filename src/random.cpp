@@ -19,6 +19,8 @@
  * 
  */
 
+#ifndef MAINT  
+
 #include "random.h"
 
 Random::Random() 
@@ -151,3 +153,5 @@ void Random::vTaskRandomGen()
     q.enqueue(current_byte);
   }
 }
+
+#endif

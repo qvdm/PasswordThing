@@ -34,6 +34,8 @@
  *
  */
 
+#ifndef MAINT
+
 #include "menu.h"
 
 extern int Secseq[];
@@ -425,3 +427,4 @@ void Menu::indicate_slot()
   prevslot = slot;
 }
 
+#endif

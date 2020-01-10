@@ -1,6 +1,8 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
+#ifndef MAINT  
+
 #include <Arduino.h>
 #include "hardware.h"
 
@@ -32,3 +34,4 @@ class Random {
 
 
 #endif 
+#endif

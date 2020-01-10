@@ -1,5 +1,8 @@
 #ifndef QUEUE_H
 #define QUEUE_H
+
+#ifndef MAINT
+
 #include "hardware.h"
 
 // define default capacity of the queue
@@ -27,4 +30,5 @@ class Queue
 
 };
 
+#endif
 #endif

@@ -23,8 +23,6 @@
  * 
  */
 
-#undef DBG_SERON
-
 #include <Arduino.h>
 #include <avr/wdt.h>
 
@@ -46,24 +44,29 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20010803";
+char Version[]="20010902";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
 void sysTick();
 
-// Declare soft reset function
-void(* resetFunc) (void) = 0;
-
 // Create utility classes
+#ifndef MAINT
 SSD1306AsciiWire cOled;
 Random cRandom;
+#endif
 Eeprom cEeprom;
 Led cLed;
+#ifndef MAINT
 Display cDisp(cOled, cEeprom);
 SerialUi cSui(cLed, cDisp, cRandom, cEeprom);
+#else
+SerialUi cSui(cLed, cEeprom);
+#endif
+#ifndef MAINT
 Menu cMenu(cLed, cDisp, cRandom, cEeprom);
 Input cInput(cMenu);
+#endif
 
 // Global timers
 volatile unsigned long Time=0;
@@ -86,20 +89,13 @@ extern unsigned int __bss_end;
 extern unsigned int __heap_start;
 extern void *__brkval;
 
-uint16_t getFreeSram() {
-  uint8_t newVariable;
-  // heap is empty, use bss as start memory address
-  if ((uint16_t)__brkval == 0)
-    return (((uint16_t)&newVariable) - ((uint16_t)&__bss_end));
-  // use heap end as the start of the memory address
-  else
-    return (((uint16_t)&newVariable) - ((uint16_t)__brkval));
-};
-
-
 // "Initial Task"
 void setup() 
 {
+#ifdef MAINT
+  cSui.sio_menu_on();
+  kbmode = KM_SERIAL;
+#else
   // Initialize Serial if a button is pressed at startup, else initialise keyboard
   if ( cInput.anyPressed() )
   {
@@ -122,22 +118,15 @@ void setup()
     wdt_enable(WDTO_4S);  
   }
 
-#ifdef DBG_SERON
-  cLed.ledcolor(COL_BLU, BLNK_LEAST);
-  cSui.sio_menu_on();
-  kbmode = KM_SERIAL;
 #endif
 
-  // DEBUG: Scan the i2c bus 
-  // scani2c();
-
+#ifndef MAINT
   // Check EEPROM crc - if not valid, zero EEPROM
   if (!cEeprom.valid()) 
     cEeprom.zero(); 
 
   // Initialize Oled display
   cDisp.init(); 
-
   // Initialize EEPROM vars
   byte blnk = cEeprom.getvar(EEVAR_LBLINK); // Loop led blink
   cLed.ob_enable((bool) blnk);
@@ -168,6 +157,9 @@ void setup()
     cSui.init(0);
     cDisp.displaylarge((char *) "SERIAL"); 
   }
+#else
+  cSui.init(0);
+#endif
   
 
   // Initialize systick timer to generate an interrupt every 10us
@@ -206,13 +198,19 @@ void loop()
 
   // Execute periodic 'Tasks' (naming convention remains from FreeRTOS days, now we just call them in sequence)
   cLed.vTaskManageLeds();      // LED manager
+#ifndef MAINT
   cDisp.vTaskManageDisplay();  // Display manager
   cRandom.vTaskRandomGen();    // Random # entropy harvester
-  
+#endif
+
+#ifndef MAINT
   if (kbmode == KM_SERIAL)
     cSui.vTaskSerialUi();      // Serial UI
   else
     cInput.vTaskDigitalRead(); // Digital input
+#else
+  cSui.vTaskSerialUi();      // Serial UI
+#endif
 
   // Measure elapsed time
   loopend = getTime();
@@ -225,6 +223,7 @@ void loop()
   else
     delaytime = LOOP_MS-ldms;
 
+#ifndef MAINT
   // Harvest extra entropy during idle time when low, else just delay
   if ( (delaytime > 2) && (cRandom.getEntropy() < (MAXENTROPY/2) ) )
   {
@@ -235,6 +234,7 @@ void loop()
     }
   }
   else 
+#endif
     delay(delaytime);
 }
 

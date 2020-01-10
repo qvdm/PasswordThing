@@ -1,4 +1,3 @@
-
 /*
  * Name: Input.cpp
  * 
@@ -17,6 +16,8 @@
  */
 
 #include "input.h"
+
+#ifndef MAINT
 
 extern unsigned long getTime(void);
 
@@ -134,3 +135,4 @@ void Input::vTaskDigitalRead()
     }
   }
 }
+#endif

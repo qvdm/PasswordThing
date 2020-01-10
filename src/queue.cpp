@@ -17,6 +17,9 @@
  * 
  */
 
+#ifndef MAINT
+
+
 #include "queue.h"
 
 // CTOR
@@ -77,3 +80,4 @@ bool Queue::isFull()
 	return (size() == MAXQUEUE);
 }
 
+#endif
