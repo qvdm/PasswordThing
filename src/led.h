@@ -14,6 +14,11 @@
 #define BLNK_MOST  5 // 900ms on, 100ms off 
 #define BLNK_ON    6 // Always on
 
+// Config blink States
+#define CBLNK_OFF 0
+#define CBLNK_BLNK 1
+#define CBLNK_ON 2
+
 // Blink state to Time
 #define BT_SLOW LOOPS_PERSEC  
 #define BT_MED  (LOOPS_PERSEC)/2
@@ -53,7 +58,7 @@ class Led {
     void set_colmap(byte map);
     void ledcolor(byte colorcode, byte mode);
     void ledcolor(byte r, byte g, byte b, byte mode);
-    void ob_enable(bool state);
+    void ob_enable(byte state);
     void ob_blink(byte rate);
     void cl_blink(byte rate);
     void push(void);

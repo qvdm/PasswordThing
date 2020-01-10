@@ -49,11 +49,12 @@ the desired slot number*
 Pressing **'P'** prints the password (and userid, if there is one) stored in
 the current slot. 
 
-## Enter Userid
+## Set Userid
 Press **'U'** to enter a new Userid for the slot. The maximum length of a
-userid is 30 characters. 
+userid is 30 characters. If you put a <TAB> at the end of the userid, the PWD 
+will subsequently send <TAB> between the username and password instead of <ENTER>
 
-## Enter Password
+## Set Password
 Press **'O'** to enter a new password for the current slot.  The password
 may contain numbers, letters, spaces  and special characters.  Maximum length 
 is 30 characters. 

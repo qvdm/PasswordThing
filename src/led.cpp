@@ -88,9 +88,18 @@ void Led::pop()
 }
 
 // Toggle enable state of onboard loop blinky
-void Led::ob_enable(bool state)
+void Led::ob_enable(byte state)
 {
-  obenabled = state;
+  obenabled = false;
+  ob_blink(BLNK_OFF);
+  if (state != CBLNK_OFF) 
+  {
+    obenabled = true;
+    if (state == CBLNK_BLNK)
+      ob_blink(BLNK_MED);
+    else
+      ob_blink(BLNK_ON);
+  }
 }
 
 

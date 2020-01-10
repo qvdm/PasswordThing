@@ -45,12 +45,13 @@ class Menu {
     void pressingverylong(byte button);
     void set_buttonmode(byte mode);
     void set_slotcolors(byte cols);
-    void setprto(byte to);
+    void set_pwdisp(bool pd);
 
   private:
 //    byte slot=0;
     byte prevslot=99;
     byte prto=0;
+    bool pwdisp=false;
     unsigned long rtcount=0;
     struct eepw pwbuf;
     char dispbuf[64];

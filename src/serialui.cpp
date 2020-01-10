@@ -18,7 +18,6 @@
  */
 
 #include "serialui.h"
-#include "menu.h"
 
 extern unsigned long getTime(void);
 extern int Secseq[];
@@ -357,6 +356,12 @@ void SerialUi::handle_cmd()
       SUIPROMPT;
       break;
 
+    case 'd' : // Toggle pwd display
+      toggle_pwdisp();
+      SUICRLF;
+      SUIPROMPT;
+      break;
+
     case 'i' : // Set privacy timeout
       st_mode = SM_WAIT_DATA;
       waitfor = WD_TLEN;
@@ -406,12 +411,13 @@ void SerialUi::handle_cmd()
       Serial.print(F("\nSecurity Sequence (exactly 4 buttons, each labelled 1,2 or 3, e.g. '1231', 0 for None ) : ")); Serial.flush();
       break;
 
-#ifdef MAINT  
     case 'v' : // show eeprom variables
       show_eevars();
       SUICRLF;
       SUIPROMPT;
       break;
+
+#ifdef MAINT  
 
     case 'd' : // dump eeprom
       st_mode = SM_WAIT_DATA;
@@ -496,15 +502,16 @@ void SerialUi::help(void)
   Serial.println(F("b - Toggle (B)linking indicator")); Serial.flush();
   Serial.println(F("i - Set pr(I)vacy (display autoblank) timeout")); Serial.flush();
   Serial.println(F("j - Set colour led timeout")); Serial.flush();
-  Serial.println(F("f - (F)lip display")); Serial.flush();
+  Serial.println(F("d - Toggle password (D)isplay")); Serial.flush();
+ Serial.println(F("f - (F)lip display")); Serial.flush();
   Serial.println(F("y - Toggle Password Revert")); Serial.flush();
   Serial.println(F("t - Reconfigure bu(T)tons")); Serial.flush();
   Serial.println(F("k - Set LED colors")); Serial.flush();
 #endif
   Serial.println(F("w - Set security sequence")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
-#ifdef MAINT  
   Serial.println(F("v - Show EEPROM (V)ariables")); Serial.flush();
+#ifdef MAINT  
   Serial.println(F("d - (D)ump / Backup EEPROM")); Serial.flush();
   Serial.println(F("r - (R)estore from Backup")); Serial.flush();
   Serial.println(F("z - (Z)ero EEPROM")); Serial.flush();
@@ -519,11 +526,17 @@ void SerialUi::help(void)
 // Toggle LED blink state
 void SerialUi::toggle_blink()
 {
-  bool blnk = (bool) eeprom.getvar(EEVAR_LBLINK);
-  blnk = !blnk;
-  eeprom.storevar(EEVAR_LBLINK, (byte) blnk);
+  byte blnk = eeprom.getvar(EEVAR_LBLINK);
+  blnk++; if(blnk > CBLNK_ON) blnk=CBLNK_OFF;
+  eeprom.storevar(EEVAR_LBLINK, blnk);
   led.ob_enable(blnk);
-  Serial.print(F("\nBlink ")); if (blnk) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
+  Serial.print(F("\nLED ")); 
+  if (blnk == CBLNK_BLNK) 
+    Serial.print(F("Blink"));
+  else if (blnk == CBLNK_ON) 
+    Serial.print(F("ON")); 
+  else Serial.print(F("OFF")); 
+  Serial.flush();
 }
 
 // Toggle display flip state
@@ -534,6 +547,15 @@ void SerialUi::toggle_flip()
   disp.setflip(flip);
   eeprom.storevar(EEVAR_DFLP, (byte) flip);
   Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
+}
+
+// Toggle PWD display
+void SerialUi::toggle_pwdisp()
+{
+  bool pd = (bool) eeprom.getvar(EEVAR_PWDISP);
+  pd = !pd;
+  eeprom.storevar(EEVAR_PWDISP, (byte) pd);
+  Serial.print(F("\nPWD Display ")); if (pd) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
 }
 
 // Toggle PWD revert state
@@ -574,12 +596,17 @@ void SerialUi::menu_ledconfig()
 }
 #endif
 
-#ifdef MAINT  
 // Display all EEprom variables
 void SerialUi::show_eevars()
 {
   bool blnk = (bool) eeprom.getvar(EEVAR_LBLINK);
-  Serial.print(F("\nBlink ")); if (blnk) Serial.print("ON"); else Serial.print("OFF"); Serial.flush();
+  Serial.print(F("\nLED ")); 
+  if (blnk == CBLNK_BLNK) 
+    Serial.print(F("Blink"));
+  else if (blnk == CBLNK_ON) 
+    Serial.print(F("ON")); 
+  else
+    Serial.print(F("OFF")); 
   bool flip = (bool) eeprom.getvar(EEVAR_DFLP) ;
   Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
   bool prto = (bool) eeprom.getvar(EEVAR_PRTO) ;
@@ -645,7 +672,6 @@ void SerialUi::show_eevars()
   }
   Serial.flush();
 }
-#endif
 
 // Process a data char
 void SerialUi::handle_data()

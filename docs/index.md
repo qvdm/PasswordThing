@@ -134,9 +134,10 @@ the emulated keyboard interface. The password entry is followed by an emulated
 Enter key.  
 
 If there is a userid stored in the slot (see Configuration section) then the
-PT will send the userid, followed by a Tab character, followed by the
+PT will send the userid, followed by Enter, followed by the
 password, followed by Enter.  This is useful for logging in to a Windows
-computer connected to a corporate network. 
+computer connected to a corporate network.  If the userid ends with a Tab 
+character, Tab will be sent instead of Enter above.  
 
 ## Short press on Next or Long press on Select
 Advances to the next Slot.  The PT model A does not have a Next button, so

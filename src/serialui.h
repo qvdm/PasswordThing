@@ -10,6 +10,7 @@
 #include "display.h"
 #include "random.h"
 #include "eeprom.h"
+#include "menu.h"
 
 #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega16U4__) 
 #include <Keyboard.h>
@@ -93,6 +94,7 @@ class SerialUi {
     void handle_data(void);
     void toggle_blink(void);
     void toggle_flip(void);
+    void toggle_pwdisp(void);
     void menu_buttonconfig(void);
     void menu_ledconfig(void);
     void show_eevars(void);

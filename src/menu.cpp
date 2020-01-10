@@ -65,6 +65,11 @@ void Menu::init(int sseq)
   }
 }
 
+void Menu::set_pwdisp(bool pd)
+{
+  pwdisp = pd;
+}
+
 // Set the custom button assignments
 void Menu::set_buttonmode(byte mode)
 {
@@ -351,26 +356,28 @@ void Menu::sendpw(bool sndcr, bool snduid)
 
 
     // Display on OLED
-    pwbuf.pwd[pwbuf.pwdlen]=0;
-    if (pwbuf.pwdlen >= MAXPW) // long user entered pw - split
+    if (pwdisp)
     {
-      strcpy(dispbuf, (char *) &(pwbuf.pwd[MAXPW]));
-      pwbuf.pwd[MAXPW] = 0;
+      pwbuf.pwd[pwbuf.pwdlen]=0;
+      if (pwbuf.pwdlen >= MAXPW) // long user entered pw - split
+      {
+        strcpy(dispbuf, (char *) &(pwbuf.pwd[MAXPW]));
+        pwbuf.pwd[MAXPW] = 0;
+      }
+      if (s1) // UID exists
+      {
+        s2 = (char *) pwbuf.pwd;
+        if (pwbuf.pwdlen >= MAXPW)
+          s3 = dispbuf;
+      }
+      else 
+      {
+        s1 = (char *) pwbuf.pwd;
+        if (pwbuf.pwdlen >= MAXPW)
+          s2 = dispbuf;
+      }
+      disp.displaysmall(s1, s2, s3);
     }
-    if (s1) // UID exists
-    {
-      s2 = (char *) pwbuf.pwd;
-      if (pwbuf.pwdlen >= MAXPW)
-        s3 = dispbuf;
-    }
-    else 
-    {
-      s1 = (char *) pwbuf.pwd;
-      if (pwbuf.pwdlen >= MAXPW)
-        s2 = dispbuf;
-    }
-    disp.displaysmall(s1, s2, s3);
-
   }
 }
 

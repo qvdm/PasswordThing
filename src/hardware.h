@@ -94,6 +94,7 @@ typedef unsigned char byte;
 #define EEVAR_BUTSEQ  5 // Button seq          - byte index, see menu.h
 #define EEVAR_LEDSEQ  6 // LED seq             - byte index, see menu.h
 #define EEVAR_PRTO    7 // PWD Revert          - boolean
+#define EEVAR_PWDISP  8 // PWD Display         - boolean
 
 // EEPROM semaphore offset
 #define EESEM_SERMODE 0 // Reboot into serial mode

@@ -19,7 +19,8 @@
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
  *      Confirm destructive ops like slot delete
- *      Option to disable OLED pwd display
+ *      LED state not restored
+ *      UP TAB?
  * 
  * BUGS:
  * 
@@ -46,7 +47,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20010902";
+char Version[]="20011002";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
@@ -61,12 +62,12 @@ Eeprom cEeprom;
 Led cLed;
 #ifndef MAINT
 Display cDisp(cOled, cEeprom);
+Menu cMenu(cLed, cDisp, cRandom, cEeprom);
 SerialUi cSui(cLed, cDisp, cRandom, cEeprom);
 #else
 SerialUi cSui(cLed, cEeprom);
 #endif
 #ifndef MAINT
-Menu cMenu(cLed, cDisp, cRandom, cEeprom);
 Input cInput(cMenu);
 #endif
 
@@ -131,7 +132,7 @@ void setup()
   cDisp.init(); 
   // Initialize EEPROM vars
   byte blnk = cEeprom.getvar(EEVAR_LBLINK); // Loop led blink
-  cLed.ob_enable((bool) blnk);
+  cLed.ob_enable(blnk);
   byte priv = cEeprom.getvar(EEVAR_OPRIV); // Display timeout
   cDisp.setprivacy(priv);
   priv = cEeprom.getvar(EEVAR_LPRIV); // LED timeout
@@ -145,6 +146,8 @@ void setup()
   cMenu.set_buttonmode(btnmode);
   byte ledcols = cEeprom.getvar(EEVAR_LEDSEQ); // LED color assignments
   cMenu.set_slotcolors(ledcols);
+  bool pwdisp =  cEeprom.getvar(EEVAR_PWDISP); // Password display
+  cMenu.set_pwdisp(pwdisp);
 
   // Initialize button 'menu' or serial menu depending in global mode
   if (kbmode == KM_KBD)
