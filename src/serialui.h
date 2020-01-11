@@ -40,6 +40,7 @@
 #define WD_NAME  12 // Wait for slot name
 #define WD_EED   13 // Wait for eeprom dump type
 #define WD_PRT   14 // Wait for PWD revert timeout
+#define WD_CLS   15 // Wait for Clear Slot confirm
 
 
 #define SUIPROMPT  Serial.print(F("Slot ")); Serial.print(curslot); Serial.print(F(" >> "));  Serial.flush(); 

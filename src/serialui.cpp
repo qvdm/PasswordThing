@@ -251,7 +251,9 @@ void SerialUi::handle_input()
 // Process a command char
 void SerialUi::handle_cmd()
 {
+#ifndef MAINT  
   int e;
+#endif
 
   switch (st_inchar)
   {
@@ -344,9 +346,11 @@ void SerialUi::handle_cmd()
       break;
 
     case 'c' : // clear slot
-      eeprom.clearslot(curslot);
+      st_mode = SM_WAIT_DATA;
+      waitfor = WD_CLS;
+      st_ptr=0;
       SUICRLF;
-      SUIPROMPT;
+      Serial.print(F("\nPress C again to confirm clear"));
       break;
 
 #ifndef MAINT  
@@ -425,6 +429,7 @@ void SerialUi::handle_cmd()
       st_ptr=0;
       Serial.print(F("\nType (D)ebug or (B)ackup : ")); Serial.flush();
       break;
+
 
     case 'r' : // restore from backup
       SUICRLF;
@@ -527,7 +532,9 @@ void SerialUi::help(void)
 void SerialUi::toggle_blink()
 {
   byte blnk = eeprom.getvar(EEVAR_LBLINK);
-  blnk++; if(blnk > CBLNK_ON) blnk=CBLNK_OFF;
+  
+  if(++blnk > 2) 
+    blnk=0;
   eeprom.storevar(EEVAR_LBLINK, blnk);
   led.ob_enable(blnk);
   Serial.print(F("\nLED ")); 
@@ -599,7 +606,7 @@ void SerialUi::menu_ledconfig()
 // Display all EEprom variables
 void SerialUi::show_eevars()
 {
-  bool blnk = (bool) eeprom.getvar(EEVAR_LBLINK);
+  byte blnk = eeprom.getvar(EEVAR_LBLINK);
   Serial.print(F("\nLED ")); 
   if (blnk == CBLNK_BLNK) 
     Serial.print(F("Blink"));
@@ -797,6 +804,20 @@ void SerialUi::handle_data()
       SUIPROMPT;
     }
     break;
+
+    case WD_CLS : // Confirm clear with 'c'
+    {
+      if (st_inchar == 'c')
+      {
+        eeprom.clearslot(curslot);
+        Serial.print(F("\nCleared"));
+      }
+      st_mode = SM_WAIT_CMD;
+      SUICRLF;
+      SUIPROMPT;
+    }
+    break;
+
 #endif
 
     case WD_SECC : // Expect exactly 4 characters from '1' to '3'

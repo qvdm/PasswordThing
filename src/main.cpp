@@ -20,7 +20,7 @@
  *      Save and Restore - complete Restore 
  *      Confirm destructive ops like slot delete
  *      LED state not restored
- *      UP TAB?
+ *    
  * 
  * BUGS:
  * 
