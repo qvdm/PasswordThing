@@ -231,11 +231,11 @@ void Menu::pressinglong(byte button)
   if (( button == nxt_button) || (button == sel_button) )
   {
     nxts = (slot+1) % MAXSLOTS; 
-    displayleds(BLNK_SLOW, slotcolors[(int)nxts], BLNK_ON);  
+    displayleds(slotcolors[(int)nxts], BLNK_ON);  
   }
   else if (button == gen_button)
   {
-    displayleds(BLNK_SLOW, COL_WHT, BLNK_ON);  
+    displayleds(COL_WHT, BLNK_ON);  
   }
 }
 
@@ -246,7 +246,7 @@ void Menu::verylongpress(byte button)
     eeprom.storevar(EESEM_SERMODE, 1);
     disp.displaylarge((char *) "B-SERIAL"); 
 
-    displayleds(BLNK_FAST, COL_WHT, BLNK_ON);
+    displayleds(COL_WHT, BLNK_ON);
     // Spin for wdt timeout
     while (1);
 }
@@ -254,7 +254,7 @@ void Menu::verylongpress(byte button)
 // Handle very long press pre-notification for a button
 void Menu::pressingverylong(byte button)
 {
-  displayleds(BLNK_FAST, COL_WHT, BLNK_ON);  
+  displayleds(COL_WHT, BLNK_ON);  
 }
 
 
@@ -382,9 +382,8 @@ void Menu::sendpw(bool sndcr, bool snduid)
 }
 
 // Sets the color and blink state of the LEDs
-void Menu::displayleds(byte obmode, byte color, byte clmode)
+void Menu::displayleds(byte color, byte clmode)
 {
-  led.ob_blink(obmode);
   led.ledcolor(color, clmode);
 }
 
@@ -395,16 +394,16 @@ void Menu::showslotled(struct pwvalid *v)
   { 
     if (v->uidvalid)
     {
-      displayleds(BLNK_SLOW, slotcolors[(int)slot], BLNK_ON); 
+      displayleds(slotcolors[(int)slot], BLNK_ON); 
     }
     else
     {
-      displayleds(BLNK_SLOW, slotcolors[(int)slot], BLNK_ON); 
+      displayleds(slotcolors[(int)slot], BLNK_ON); 
     }
   }
   else
   {
-    displayleds(BLNK_SLOW, slotcolors[(int)slot], BLNK_FAST); 
+    displayleds(slotcolors[(int)slot], BLNK_FAST); 
   }
 }
 

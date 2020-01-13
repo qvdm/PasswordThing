@@ -86,7 +86,7 @@ typedef unsigned char byte;
 #define SDBG(S)   Serial.println(S); Serial.flush();
 
 // EEPROM var offsets
-#define EEVAR_LBLINK  0 // Onboard Led blink   - byte state, see serialui.h
+#define EEVAR_UNUSEED 0 // Unused
 #define EEVAR_DFLP    1 // Flip display        - boolean 
 #define EEVAR_SEC     2 // Security seq #      - byte seq
 #define EEVAR_OPRIV   3 // OLED  Privacy       - byte timeout in secs/10, 0 = none
@@ -95,6 +95,7 @@ typedef unsigned char byte;
 #define EEVAR_LEDSEQ  6 // LED seq             - byte index, see menu.h
 #define EEVAR_PRTO    7 // PWD Revert          - boolean
 #define EEVAR_PWDISP  8 // PWD Display         - boolean
+#define EEVAR_LOCK    9 // Autolock            - byte timeout in minutes/10, 0 = none
 
 // EEPROM semaphore offset
 #define EESEM_SERMODE 0 // Reboot into serial mode

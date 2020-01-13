@@ -76,7 +76,7 @@ class Menu {
     void sendpw(bool sndcr, bool snduid);
     void displayslot(struct pwvalid *v);
     void showslotled(struct pwvalid *v);
-    void displayleds(byte obmode, byte color, byte clmode);
+    void displayleds(byte color, byte clmode);
     void indicate_slot(void);
 };
 

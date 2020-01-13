@@ -41,6 +41,7 @@
 #define WD_EED   13 // Wait for eeprom dump type
 #define WD_PRT   14 // Wait for PWD revert timeout
 #define WD_CLS   15 // Wait for Clear Slot confirm
+#define WD_BLEN  16 // Wait for Lock timeout
 
 
 #define SUIPROMPT  Serial.print(F("Slot ")); Serial.print(curslot); Serial.print(F(" >> "));  Serial.flush(); 
@@ -109,6 +110,7 @@ class SerialUi {
     void set_pwglen(void);
     void set_dispto(void);
     void set_ledto(void);
+    void set_lockto(void);
     void set_btnmode(char m);
     void set_colmode(char m);
 #endif

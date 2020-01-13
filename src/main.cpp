@@ -18,7 +18,7 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
- *      LED state not restored - get rid of blink and implement lock after timeout
+ *      Implement lock timeout
  *    
  * 
  * BUGS:
@@ -46,7 +46,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011002";
+char Version[]="20011301";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
@@ -86,10 +86,8 @@ int Secseq[] = { 0,
       3111,3112,3113,3121,3122,3123,3131,3132,3133,3211,3212,3213,3221,3222,3223,3231,3232,3233,3311,3312,3313,3321,3322,3323,3331,3332,3333
     };
 
-// Memory measurement
-extern unsigned int __bss_end;
-extern unsigned int __heap_start;
-extern void *__brkval;
+unsigned long locktimeout=0;
+unsigned long lastkeypress=0;
 
 // "Initial Task"
 void setup() 
@@ -130,12 +128,12 @@ void setup()
   // Initialize Oled display
   cDisp.init(); 
   // Initialize EEPROM vars
-  byte blnk = cEeprom.getvar(EEVAR_LBLINK); // Loop led blink
-  cLed.ob_enable(blnk);
   byte priv = cEeprom.getvar(EEVAR_OPRIV); // Display timeout
   cDisp.setprivacy(priv);
   priv = cEeprom.getvar(EEVAR_LPRIV); // LED timeout
   cLed.settimeout(priv);
+  byte lck = cEeprom.getvar(EEVAR_LOCK); // LED timeout
+  locktimeout = (unsigned long) lck * 10L * 60L * 1000L / LOOP_MS;
   byte flip = cEeprom.getvar(EEVAR_DFLP); // Display flip
   cDisp.setflip((bool) flip);
   byte pwrevert = cEeprom.getvar(EEVAR_PRTO); // PW Revert
@@ -215,6 +213,10 @@ void loop()
 #else
   cSui.vTaskSerialUi();      // Serial UI
 #endif
+
+  // Check for lock timeout
+//  if ((getTime()-lastkeypress) > locktimeout)
+//    while (1); // Wait for wdog
 
   // Measure elapsed time
   loopend = getTime();

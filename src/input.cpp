@@ -20,6 +20,8 @@
 #ifndef MAINT
 
 extern unsigned long getTime(void);
+extern unsigned long lastkeypress;
+
 
 Input::Input(Menu &rm) : menu(rm)
 {
@@ -51,7 +53,7 @@ void Input::sendevent(byte button, byte event)
 {
   if (event == PRESSED)
   {
-    downtime[button]=getTime();
+    downtime[button] = lastkeypress = getTime();
   }
   else if (event == PRESSINGLONG) // Pre-notify menu that button is being pressed a long time, in order to give user feedback
   {

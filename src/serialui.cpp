@@ -354,12 +354,6 @@ void SerialUi::handle_cmd()
       break;
 
 #ifndef MAINT  
-    case 'b' : // Toggle loop blink
-      toggle_blink();
-      SUICRLF;
-      SUIPROMPT;
-      break;
-
     case 'd' : // Toggle pwd display
       toggle_pwdisp();
       SUICRLF;
@@ -380,6 +374,14 @@ void SerialUi::handle_cmd()
       st_ptr=0;
       SUICRLF;
       Serial.print(F("\nCLED Timeout (x 10s) [0-")); Serial.print(MAXPTO); Serial.print(F("] 0=None : ")); Serial.flush();
+      break;
+
+    case 'b' : // Set lock timeout
+      st_mode = SM_WAIT_DATA;
+      waitfor = WD_BLEN;
+      st_ptr=0;
+      SUICRLF;
+      Serial.print(F("\nLock Timeout (x 10min) [0-")); Serial.print(MAXPTO); Serial.print(F("] 0=None : ")); Serial.flush();
       break;
 
     case 'f' : // Toggle display flip
@@ -528,23 +530,6 @@ void SerialUi::help(void)
 }
 
 #ifndef MAINT  
-// Toggle LED blink state
-void SerialUi::toggle_blink()
-{
-  byte blnk = eeprom.getvar(EEVAR_LBLINK);
-  
-  if(++blnk > 2) 
-    blnk=0;
-  eeprom.storevar(EEVAR_LBLINK, blnk);
-  led.ob_enable(blnk);
-  Serial.print(F("\nLED ")); 
-  if (blnk == CBLNK_BLNK) 
-    Serial.print(F("Blink"));
-  else if (blnk == CBLNK_ON) 
-    Serial.print(F("ON")); 
-  else Serial.print(F("OFF")); 
-  Serial.flush();
-}
 
 // Toggle display flip state
 void SerialUi::toggle_flip()
@@ -606,14 +591,6 @@ void SerialUi::menu_ledconfig()
 // Display all EEprom variables
 void SerialUi::show_eevars()
 {
-  byte blnk = eeprom.getvar(EEVAR_LBLINK);
-  Serial.print(F("\nLED ")); 
-  if (blnk == CBLNK_BLNK) 
-    Serial.print(F("Blink"));
-  else if (blnk == CBLNK_ON) 
-    Serial.print(F("ON")); 
-  else
-    Serial.print(F("OFF")); 
   bool flip = (bool) eeprom.getvar(EEVAR_DFLP) ;
   Serial.print(F("\nDisplay Flip ")); if (flip) Serial.print(F("ON")); else Serial.print(F("OFF")); Serial.flush();
   bool prto = (bool) eeprom.getvar(EEVAR_PRTO) ;
@@ -624,6 +601,8 @@ void SerialUi::show_eevars()
   Serial.print(F("\nDisplay Timeout ")); Serial.print(priv); Serial.print(F("s")); Serial.flush();
   priv = eeprom.getvar(EEVAR_LPRIV) * 10;
   Serial.print(F("\nLED Timeout ")); Serial.print(priv); Serial.print(F("s")); Serial.flush();
+  byte lck = eeprom.getvar(EEVAR_LOCK)  * 10;
+  Serial.print(F("\nLock Timeout ")); Serial.print(lck); Serial.print(F("min")); Serial.flush();
   byte b = eeprom.getvar(EEVAR_BUTSEQ);
   Serial.print(F("\nButton assignment ")); 
   switch (b)
@@ -769,6 +748,18 @@ void SerialUi::handle_data()
       if (get_string(2))
       {
         set_ledto();        
+        st_mode = SM_WAIT_CMD;
+        SUICRLF;
+        SUIPROMPT;
+      }
+    }
+    break;
+
+    case WD_BLEN : // Expect 1-2 digit length between 0 and MAXLTO
+    {
+      if (get_string(2))
+      {
+        set_lockto();        
         st_mode = SM_WAIT_CMD;
         SUICRLF;
         SUIPROMPT;
@@ -1020,6 +1011,23 @@ void SerialUi::set_ledto()
     byte priv = (byte) d;
     eeprom.storevar(EEVAR_LPRIV, priv);
     led.settimeout(priv);
+  }
+  else
+  {
+    SUICRLF;
+    Serial.print(F("Invalid timeout"));
+  }
+}
+
+// Set lock timeout from string in buf
+void SerialUi::set_lockto()
+{
+  int d = buf_to_int(0, MAXLTO);
+  if ( d >= 0 )
+  {            
+    byte lck = (byte) d;
+    eeprom.storevar(EEVAR_LOCK, lck);
+    // Set lock to
   }
   else
   {

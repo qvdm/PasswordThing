@@ -6,7 +6,6 @@
  * Provides:
  *     vTaskManageLeds - Periodic Led management task - turns them on an off for blinking
  *     ledcolor - set color LED color as code or rgb and set blink rate
- *     ob_blink - set onboard LED blink rate
  *     cl_blink - set color LED blink rate
  *     push - save current led color
  *     pop - restore pushed color
@@ -32,9 +31,8 @@ Led::Led()
   pinMode(OLB_PIN, OUTPUT);
   pinMode(OLO_PIN, OUTPUT);
 
-  // Turn off onboard led and set to nonblinking
-  digitalWrite(OLO_PIN, LOW);
-  ob_blink(BLNK_SLOW);
+  // Turn on onboard led 
+  digitalWrite(OLO_PIN, HIGH);
 
   // Set colour led to white and set to nonblinking
   ledcolor(COL_GRN, BLNK_ON);
@@ -87,38 +85,6 @@ void Led::pop()
   ledcolor(slr, slg, slb, slk);
 }
 
-// Toggle enable state of onboard loop blinky
-void Led::ob_enable(byte state)
-{
-  obenabled = false;
-  ob_blink(BLNK_OFF);
-  if (state != CBLNK_OFF) 
-  {
-    obenabled = true;
-    if (state == CBLNK_BLNK)
-      ob_blink(BLNK_MED);
-    else
-      ob_blink(BLNK_ON);
-  }
-}
-
-
-// Set onboard led blink rate - switching managed by task
-void Led::ob_blink(byte rate)
-{
-  obmode=rate;
-  if (obmode == BLNK_FAST)
-    maxobcycle=BT_FAST;
-  else if (obmode == BLNK_MED)
-    maxobcycle=BT_MED;
-  else if (obmode == BLNK_SLOW)
-    maxobcycle=BT_SLOW;
-  else if (obmode == BLNK_MOST)
-    maxobcycle=BT_MOST;
-  else if (obmode == BLNK_LEAST)
-    maxobcycle=BT_LEAST;
-
-}
 
 // Set colour led blink rate - switching managed by task
 void Led::cl_blink(byte rate)
@@ -160,35 +126,7 @@ bool Led::isblank()
 void Led::vTaskManageLeds( )  
 {
   // cycle is a rough proxy for time elapsed - may stutter during eeprom write and so on
-  if (++obcycle > maxobcycle) {obcycle = 0; }
   if (++clcycle > maxclcycle) {clcycle = 0; }
-
-  // Onboard LED
-  switch (obmode)
-  {
-    case BLNK_OFF :
-      obstate = false;
-      break;
-    case BLNK_SLOW :
-    case BLNK_MED :
-    case BLNK_FAST :
-      if (obcycle < maxobcycle/2) obstate = true; else obstate = false; 
-      break;
-    case BLNK_LEAST :
-      if (obcycle < BT_LEAST_ON) obstate = true; else obstate = false; 
-      break;
-    case BLNK_MOST :
-      if (obcycle < BT_MOST_ON) obstate = true; else obstate = false; 
-      break;
-    case BLNK_ON :
-      obstate = true;
-      break;
-  }
-  // Write on/off state to pin every time
-  if (obenabled)
-    obstate ? digitalWrite(OLO_PIN, HIGH) : digitalWrite(OLO_PIN, LOW);
-  else
-    digitalWrite(OLO_PIN, LOW);
 
   // Colour LED
   switch (clmode)

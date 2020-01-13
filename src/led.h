@@ -14,10 +14,6 @@
 #define BLNK_MOST  5 // 900ms on, 100ms off 
 #define BLNK_ON    6 // Always on
 
-// Config blink States
-#define CBLNK_OFF 0
-#define CBLNK_BLNK 1
-#define CBLNK_ON 2
 
 // Blink state to Time
 #define BT_SLOW LOOPS_PERSEC  
@@ -58,8 +54,6 @@ class Led {
     void set_colmap(byte map);
     void ledcolor(byte colorcode, byte mode);
     void ledcolor(byte r, byte g, byte b, byte mode);
-    void ob_enable(byte state);
-    void ob_blink(byte rate);
     void cl_blink(byte rate);
     void push(void);
     void pop(void);
@@ -71,15 +65,10 @@ class Led {
   private:
     byte lr=BRI_OFF,lg=BRI_OFF,lb=BRI_OFF, lk=BLNK_OFF;  // Current RGB led color settings
     byte slr, slg, slb, slk;  // Saved RGB led color and blink settings
-    byte obcycle = 0;       // onboard blink cycle counter
-    byte maxobcycle=(LOOPS_PERSEC)*2;
     byte clcycle = 0;       // color blink cycle counter
     byte maxclcycle=(LOOPS_PERSEC)*2;
-    bool obstate=false; // onboard led state (on/off)
     bool clstate=false; // colour led state (on/off) 
-    byte obmode=BLNK_OFF; // onboard led blink mode
     byte clmode=BLNK_ON;  // colour led blink mode
-    byte obenabled=true;
     unsigned long blanktime=0;
     byte led_timeout=60; //s
 
