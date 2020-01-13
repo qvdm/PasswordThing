@@ -18,8 +18,7 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
- *      Confirm destructive ops like slot delete
- *      LED state not restored
+ *      LED state not restored - get rid of blink and implement lock after timeout
  *    
  * 
  * BUGS:
