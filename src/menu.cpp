@@ -7,8 +7,12 @@
  *    init - Initialize menu
  *    shortpress - handler for short button press
  *    longpress  - handler for long button press
- *    pressinglong - hanlder for long press pre-notification
+ *    pressinglong - handler for long press pre-notification
+ *    verylongpress - handler for very long button press
+ *    pressingverylong - handler for very long press pre-notification
  *    set_buttonmode - sets the custom button assignment
+ *    set_pwdisp - sets pw display mode
+ *    set_slotcolors - set slot color assignment
  * 
  * Private: 
  *    next - next key handler
@@ -21,7 +25,7 @@
  *    showslotled -  set led color according to slot
  *    displayleds - actual output to all leds
  *    indicate_slot - slot indicator
- *
+ * 
  * Operation:
  *   Handles short and long press on Next, Select and Generate buttons
  * 
@@ -144,8 +148,10 @@ void Menu::shortpress(byte button)
 {
   int i;
   
+  // Locked & waiting for security sequence?
   if (waitforseq > 0)
   {
+    //Translate button to seq
     if (button == B_GENERATE)
       seqbuf[seqptr++]='1';
     else if (button == B_NEXT)
@@ -153,6 +159,7 @@ void Menu::shortpress(byte button)
     else if (button == B_SELECT)
       seqbuf[seqptr++]='3';
 
+    // Check if sequence valid
     if (seqptr > (SSEQL-1))
     {
       seqbuf[seqptr]=0;

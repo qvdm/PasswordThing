@@ -5,10 +5,12 @@
  * 
  * Provides:
  *  init - post instantiation initialization
+ *  isblank - is the display currently blanked?
  *  displaylarge - display a string in large font
  *  displaysmall - display a string in small font
  *  setprivacy - sets pricacy timeout on oled
  *  setflip - flips the oled display
+ *  setpwrevert - sets pw mode to Revert
  *  void vTaskManageDisplay - periodic task
  * 
  * Operation: Utilizes the small ASCCI SSD1306 library to drive the OLED display.  Provides a periodic task for display timeout and so on

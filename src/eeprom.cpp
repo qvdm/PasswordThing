@@ -11,6 +11,8 @@
  *   getpw      - Get a PWD and optional UID
  *   storename  - Store a slot name
  *   getname    - Get slot name
+ *   storevar   - Store a value to Variables area
+ *   getvar     - Get a value from Variables area
  *   clearslot  - Clear specified PWD slot
  *   dupslot    - duplicate the content of a slot
  *   dump       - Debug: dump eeprom contents to Serial

@@ -15,6 +15,11 @@
  *   See "hardware.h" for physical description
  *   See documentation for user guide
  * 
+ * Functions:
+ * sysTick - Interrupt driven time counter
+ * setup - Arduino setup
+ * loop - Arduino loop
+ * 
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
@@ -45,7 +50,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011302";
+char Version[]="20011303";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
@@ -149,7 +154,7 @@ void setup()
   if (kbmode == KM_KBD)
   {
     cSui.sio_menu_off();
-    // Show first slot on display
+    // Show first slot (or Locked prompt) on display
     cMenu.init(sseq);  
   }
   else

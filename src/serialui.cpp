@@ -4,7 +4,8 @@
  * Purpose: Provides a UI via the serial port for entering UIDS and Passwords, or generating PWDs
  * 
  * Provides:
- *    toggle_sio_menu(); - Turn the Serial menu on or off
+ *    sio_menu_on/off; - Turn the Serial menu on or off
+ *    running - is serial menu running?
  *    vTaskSerialUi(); - Periodic task for processing serial input
  * 
  * Private: 
@@ -12,7 +13,33 @@
  *     kbd_on - return to keyboard mode
  *     kbd_off - turn off keyboard mode
  *     printcurpw - print pwd
- *     ... TBD rest
+ *     genpw - generate pwd
+ *     printcurname - print slot name
+ *     handle_input - input handler
+ *     handle_cmd - command handler
+ *     toggle_flip - toggle disp flip
+ *     toggle_pwdisp - toggle pw disp
+ *     toggle_prto - toggle disp timeout
+ *     menu_buttonconfig - get new button config
+ *     menu_ledconfig - get new led config
+ *     show_eevars - show ee vars
+ *     handle_data - handle command data
+ *     get_string - utility
+ *     set_eeuid 
+ *     set_eepw
+ *     set_eename
+ *     set_pwgmode
+ *     set_slot
+ *     dup_slot
+ *     buf_to_int
+ *     set_pwglen
+ *     set_dispto
+ *     set_ledto
+ *     set_lockto
+ *     set_btnmode
+ *     set_colmode
+ *     set_secseq
+ *     get_initialpw
  *
  * Operation:
  */
@@ -506,7 +533,7 @@ void SerialUi::help(void)
   Serial.println(F("a - duplic(A)te Slot")); Serial.flush();
   Serial.println(F(" ")); Serial.flush();
 #ifndef MAINT  
-  Serial.println(F("b - Toggle (B)linking indicator")); Serial.flush();
+  Serial.println(F("b - Set lock timeout")); Serial.flush();
   Serial.println(F("i - Set pr(I)vacy (display autoblank) timeout")); Serial.flush();
   Serial.println(F("j - Set colour led timeout")); Serial.flush();
   Serial.println(F("d - Toggle password (D)isplay")); Serial.flush();
