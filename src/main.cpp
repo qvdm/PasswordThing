@@ -18,7 +18,6 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
- *      Implement lock timeout
  *    
  * 
  * BUGS:
@@ -46,7 +45,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011301";
+char Version[]="20011302";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
@@ -133,7 +132,7 @@ void setup()
   priv = cEeprom.getvar(EEVAR_LPRIV); // LED timeout
   cLed.settimeout(priv);
   byte lck = cEeprom.getvar(EEVAR_LOCK); // LED timeout
-  locktimeout = (unsigned long) lck * 10L * 60L * 1000L / LOOP_MS;
+  locktimeout = (unsigned long) lck * 10L * 60L * 1000 * TICKS_PERMS;
   byte flip = cEeprom.getvar(EEVAR_DFLP); // Display flip
   cDisp.setflip((bool) flip);
   byte pwrevert = cEeprom.getvar(EEVAR_PRTO); // PW Revert
@@ -215,8 +214,8 @@ void loop()
 #endif
 
   // Check for lock timeout
-//  if ((getTime()-lastkeypress) > locktimeout)
-//    while (1); // Wait for wdog
+  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) )
+    while (1); // Wait for wdog
 
   // Measure elapsed time
   loopend = getTime();
@@ -228,6 +227,7 @@ void loop()
     delaytime = 1;
   else
     delaytime = LOOP_MS-ldms;
+
 
 #ifndef MAINT
   // Harvest extra entropy during idle time when low, else just delay
