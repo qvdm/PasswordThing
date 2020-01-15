@@ -60,6 +60,7 @@ class Led {
     void settimeout(byte timeout);
     void unblank(void);
     bool isblank(void);
+    void cledout(byte r, byte g, byte b);
     void vTaskManageLeds();
 
   private:
@@ -73,7 +74,6 @@ class Led {
     byte led_timeout=60; //s
 
 
-    void cledout(byte r, byte g, byte b);
 
 };
 

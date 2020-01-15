@@ -50,9 +50,9 @@ typedef unsigned char byte;
 
 // Button pins
 #ifdef USBA_32U4
-#define IB0_PIN 9
-#define IB1_PIN 10
-#define IB2_PIN 11
+#define IB0_PIN 10
+#define IB1_PIN 11
+#define IB2_PIN 9
 #endif
 
 #ifdef MICROUSB_32U4
@@ -63,9 +63,17 @@ typedef unsigned char byte;
 
 
 // RGB LED pins
+#ifdef USBA_32U4
+#define OLR_PIN A0
+#define OLG_PIN A1
+#define OLB_PIN A2
+#endif
+
+#ifdef MICROUSB_32U4
 #define OLR_PIN A2
 #define OLG_PIN A1
 #define OLB_PIN A0
+#endif
 
 // On board LED
 #ifdef MICROUSB_32U4

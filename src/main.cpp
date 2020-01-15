@@ -50,7 +50,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011303";
+char Version[]="20011402";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
@@ -119,7 +119,9 @@ void setup()
   else
   {
     cLed.ledcolor(COL_YEL, BLNK_ON);
+#ifndef TEST    
     wdt_enable(WDTO_4S);  
+#endif    
   }
 
 #endif
@@ -155,6 +157,10 @@ void setup()
   {
     cSui.sio_menu_off();
     // Show first slot (or Locked prompt) on display
+
+#ifdef TEST
+    testhw();
+#endif
     cMenu.init(sseq);  
   }
   else
@@ -200,7 +206,9 @@ void loop()
   loopcount++;
 
   // Kick watchdog
+#ifndef TEST
   wdt_reset();
+#endif  
 
   // Execute periodic 'Tasks' (naming convention remains from FreeRTOS days, now we just call them in sequence)
   cLed.vTaskManageLeds();      // LED manager
@@ -249,4 +257,33 @@ void loop()
     delay(delaytime);
 }
 
+// HW test
+void testhw(void)
+{
+  cLed.cledout(HIGH, HIGH, HIGH); // OFF
+  delay(1000);
+  cLed.cledout(LOW, HIGH, HIGH); // Red
+  delay(1000);
+  cLed.cledout(HIGH, LOW, HIGH); // Green
+  delay(1000);
+  cLed.cledout(HIGH, HIGH, LOW); //Blue
+  delay(1000);
+  cLed.cledout(LOW, HIGH, LOW); // Magenta
+  delay(1000);
+  cLed.cledout(LOW, LOW, HIGH); // Yellow
+  delay(1000);
+  cLed.cledout(HIGH, LOW, LOW); // Cyan
+  delay(1000);
+  cLed.cledout(LOW, LOW, LOW); // White
+  delay(1000);
 
+  while (1)
+  {
+    if (digitalRead(IB0_PIN) == LOW)
+      cLed.cledout(LOW, HIGH, HIGH); // Red
+    if (digitalRead(IB1_PIN) == LOW)
+      cLed.cledout(HIGH, LOW, HIGH); // Green
+    if (digitalRead(IB2_PIN) == LOW)
+      cLed.cledout(HIGH, HIGH, LOW); // Blue
+  }
+}
