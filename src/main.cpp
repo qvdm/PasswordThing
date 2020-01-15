@@ -23,6 +23,7 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
+ *      Autolock - implement semaphore
  *    
  * 
  * BUGS:
@@ -90,8 +91,10 @@ int Secseq[] = { 0,
       3111,3112,3113,3121,3122,3123,3131,3132,3133,3211,3212,3213,3221,3222,3223,3231,3232,3233,3311,3312,3313,3321,3322,3323,3331,3332,3333
     };
 
+// Lock variables
 unsigned long locktimeout=0;
 unsigned long lastkeypress=0;
+bool autolocked=false;
 
 // "Initial Task"
 void setup() 
@@ -227,8 +230,8 @@ void loop()
 #endif
 
   // Check for lock timeout
-  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) )
-    while (1); // Wait for wdog
+//  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) && !autolocked )
+//    while (1); // Wait for wdog to reset & lock us
 
   // Measure elapsed time
   loopend = getTime();

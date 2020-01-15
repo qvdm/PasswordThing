@@ -106,7 +106,8 @@ typedef unsigned char byte;
 #define EEVAR_LOCK    9 // Autolock            - byte timeout in minutes/10, 0 = none
 
 // EEPROM semaphore offset
-#define EESEM_SERMODE 0 // Reboot into serial mode
+#define EESEM_SERMODE  0 // Reboot into serial mode
+#define EESEM_AUTOLOCK 1 // Autolocked
   
 // # of possible security seqs and seq length
 #define NSSEQ 81 
