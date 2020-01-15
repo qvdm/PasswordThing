@@ -23,6 +23,7 @@
  * TBD  Regression tests
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
+ *      Autolock - implement semaphore
  *    
  * 
  * BUGS:
@@ -93,7 +94,7 @@ int Secseq[] = { 0,
 // Lock variables
 unsigned long locktimeout=0;
 unsigned long lastkeypress=0;
-bool locked=false;
+bool autolocked=false;
 
 // "Initial Task"
 void setup() 
@@ -157,8 +158,6 @@ void setup()
   {
     cSui.sio_menu_off();
     // Show first slot (or Locked prompt) on display
-    if (sseq != 0)
-      locked = true;
     cMenu.init(sseq);  
   }
   else
@@ -223,8 +222,8 @@ void loop()
 #endif
 
   // Check for lock timeout
-  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) && !locked )
-    while (1); // Wait for wdog to reset & lock us
+//  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) && !autolocked )
+//    while (1); // Wait for wdog to reset & lock us
 
   // Measure elapsed time
   loopend = getTime();
