@@ -24,6 +24,8 @@
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
  *      Autolock - implement semaphore
+ *      Very Long press on G only for Serial, Use S for lock
+ *      Show proper color for long press indication
  *    
  * 
  * BUGS:
