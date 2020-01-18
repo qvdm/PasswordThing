@@ -126,7 +126,7 @@ The function of the buttons can be re-assigned (See the Configuration section).
 The default functions are shown below.  
 
 Each button behaves differently depending on whether it was pressed a short
-time (less than one second) or longer than a second.  
+time (less than one second), longer than a second or longer then 3 seconds
 
 ## Short press on Select 
 Sends the password stored in the current slot (if any) to the computer via
@@ -158,12 +158,20 @@ Generates a new password for the current slot.  By default, a 20 character
 alphanumeric password, including special characters, is generated. 
 
 ## Very long press
-A press of longer that 3 seconds on any key will result in the PT rebooting
+A press of longer that 3 seconds on Generate or Next will result in the PT rebooting
 into Serial (Configuration) mode.  See the Configuration section of the
 manual for details about this mode.   When button is pressed for 3 seconds,
 the LED color will change to white.  When the button is released, the PT
 will display 'B-Serial' and become unresponsive for up to 4 seconds, after 
 which it will boot into serial mode.  
+
+A press of longer that 3 seconds on Select will result in the PT rebooting
+into normal (password) mode.  When button is pressed for 3 seconds,
+the LED color will change to yellow.  When the button is released, the PT
+will display 'Reset' and become unresponsive for up to 4 seconds, after 
+which it will reset.  If a lock code was configured, the PT will boot into
+the locked state. 
+
 
 # LED indicators
 The PT has two indicator LEDs.  One is a monochrome led, which is only used to

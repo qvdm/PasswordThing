@@ -235,10 +235,14 @@ void Menu::pressinglong(byte button)
 {
   byte nxts;
   
-  if (( button == nxt_button) || (button == sel_button) )
+  if (button == sel_button) 
   {
     nxts = (slot+1) % MAXSLOTS; 
     displayleds(slotcolors[(int)nxts], BLNK_ON);  
+  }
+  else if ( button == nxt_button)
+  {
+    displayleds(slotcolors[0], BLNK_ON);  
   }
   else if (button == gen_button)
   {
@@ -249,11 +253,19 @@ void Menu::pressinglong(byte button)
 // Handle very long press of a button
 void Menu::verylongpress(byte button)
 {
-    // Set serial boot flag
-    eeprom.storevar(EESEM_SERMODE, 1);
-    disp.displaylarge((char *) "B-SERIAL"); 
-
-    displayleds(COL_WHT, BLNK_ON);
+  if (button == sel_button) 
+  {
+     // Normal reboot
+     disp.displaylarge((char *) F("RESET")); 
+     displayleds(COL_YEL, BLNK_ON);
+  }
+  else
+  {
+     // Set serial boot flag
+     eeprom.storevar(EESEM_SERMODE, 1);
+     disp.displaylarge((char *) F("B-SERIAL")); 
+     displayleds(COL_WHT, BLNK_ON);
+  }
     // Spin for wdt timeout
     while (1);
 }
@@ -261,7 +273,10 @@ void Menu::verylongpress(byte button)
 // Handle very long press pre-notification for a button
 void Menu::pressingverylong(byte button)
 {
-  displayleds(COL_WHT, BLNK_ON);  
+  if (button == sel_button) 
+    displayleds(COL_YEL, BLNK_ON);  
+  else
+    displayleds(COL_WHT, BLNK_ON);  
 }
 
 

@@ -24,8 +24,6 @@
  *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
  *      Autolock - implement semaphore
- *      Very Long press on G only for Serial, Use S for lock
- *      Show proper color for long press indication
  *    
  * 
  * BUGS:
@@ -53,7 +51,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011402";
+char Version[]="20011701";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
