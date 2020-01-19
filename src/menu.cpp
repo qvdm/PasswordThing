@@ -238,15 +238,15 @@ void Menu::pressinglong(byte button)
   if (button == sel_button) 
   {
     nxts = (slot+1) % MAXSLOTS; 
-    displayleds(slotcolors[(int)nxts], BLNK_ON);  
+    displayleds(slotcolors[(int)nxts], BLNK_SLOW);  
   }
   else if ( button == nxt_button)
   {
-    displayleds(slotcolors[0], BLNK_ON);  
+    displayleds(slotcolors[0], BLNK_SLOW);  
   }
   else if (button == gen_button)
   {
-    displayleds(COL_WHT, BLNK_ON);  
+    displayleds(COL_WHT, BLNK_SLOW);  
   }
 }
 
@@ -258,6 +258,11 @@ void Menu::verylongpress(byte button)
      // Normal reboot
      disp.displaylarge((char *) F("RESET")); 
      displayleds(COL_YEL, BLNK_ON);
+  }
+  else if (button == gen_button) 
+  {
+     // Cancel Gen
+     displayleds(slotcolors[slot], BLNK_ON);
   }
   else
   {
@@ -274,9 +279,9 @@ void Menu::verylongpress(byte button)
 void Menu::pressingverylong(byte button)
 {
   if (button == sel_button) 
-    displayleds(COL_YEL, BLNK_ON);  
+    displayleds(COL_YEL, BLNK_FAST);  
   else
-    displayleds(COL_WHT, BLNK_ON);  
+    displayleds(COL_WHT, BLNK_FAST);  
 }
 
 
