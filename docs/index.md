@@ -160,9 +160,8 @@ alphanumeric password, including special characters, is generated.
 ## Very long press on Select
 A press of longer that 3 seconds on Select will result in the PT rebooting
 into normal (password) mode.  When button is pressed for 3 seconds,
-the LED color will change to flashing yellow.  When the button is released, the PT
-will display 'Reset' and become unresponsive for up to 4 seconds, after 
-which it will reset.  If a lock code was configured, the PT will boot into
+the LED color will change to flashing yellow.  When the button is released, 
+the PT will reset.  If a lock code was configured, the PT will boot into
 the locked state. 
 
 ## Very long press on Next
@@ -170,8 +169,7 @@ A press of longer that 3 seconds on Next will result in the PT rebooting
 into Serial (Configuration) mode.  See the Configuration section of the
 manual for details about this mode.   When button is pressed for 3 seconds,
 the LED color will change to flashing white.  When the button is released, the PT
-will display 'B-Serial' and become unresponsive for up to 4 seconds, after 
-which it will boot into serial mode.  
+will boot into serial mode.  
 
 ## Very long press on Generate
 A press of longer that 3 seconds on Generate will do nothing and just allow 

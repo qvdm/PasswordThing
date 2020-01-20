@@ -355,7 +355,7 @@ void Eeprom::restore()
       if (parsebuf[j] != eedVer[j])
       {
           Serial.println(F("Wrong Version"));
-          while (1);
+          return;
       }
     }
   }
@@ -379,7 +379,7 @@ void Eeprom::restore()
     {
       Serial.print("*"); Serial.print(l);
       Serial.println(F(" Bad Restore"));
-      while (1);
+      return;
     }
   }
   Serial.println(F("PW OK"));
@@ -396,7 +396,7 @@ void Eeprom::restore()
     else 
     {
       Serial.println(F("Bad Restore"));
-      while (1);
+      return;
     }
   }
   Serial.println(F("VA OK"));
@@ -414,7 +414,7 @@ void Eeprom::restore()
   else 
   {
     Serial.println(F("Bad Restore"));
-    while (1);
+    return;
   }
   Serial.println(F("CS OK"));
 

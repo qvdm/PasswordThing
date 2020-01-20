@@ -51,7 +51,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011901";
+char Version[]="20012001";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
@@ -236,7 +236,7 @@ void loop()
 
   // Check for lock timeout
 //  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) && !autolocked )
-//    while (1); // Wait for wdog to reset & lock us
+//    SWRESET;
 
   // Measure elapsed time
   loopend = getTime();

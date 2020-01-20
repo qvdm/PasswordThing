@@ -488,8 +488,7 @@ void SerialUi::handle_cmd()
       break;
     case 'x' : // Reset
       eeprom.storevar(EESEM_SERMODE, 0);
-      wdt_enable(WDTO_15MS);  
-      while (1);
+      SWRESET;
       break;
 #endif
     case '\r' : // Ignore

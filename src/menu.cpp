@@ -272,7 +272,7 @@ void Menu::verylongpress(byte button)
      displayleds(COL_WHT, BLNK_ON);
   }
     // Spin for wdt timeout
-    while (1);
+    SWRESET;
 }
 
 // Handle very long press pre-notification for a button
