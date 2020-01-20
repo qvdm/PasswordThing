@@ -54,8 +54,9 @@ void Input::sendevent(byte button, byte event)
   if (event == PRESSED)
   {
     downtime[button] = lastkeypress = getTime();
+    menu.pressing(button); // Pre-notify menu that button is being pressed, in order to give user feedback
   }
-  else if (event == PRESSINGLONG) // Pre-notify menu that button is being pressed a long time, in order to give user feedback
+  else if (event == PRESSINGLONG) // Pre-notify menu that button is being pressed a long time
   {
     menu.pressinglong(button);
   }
