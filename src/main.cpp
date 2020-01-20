@@ -51,7 +51,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011701";
+char Version[]="20011901";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
@@ -130,9 +130,14 @@ void setup()
 #endif
 
 #ifndef MAINT
-  // Check EEPROM crc - if not valid, zero EEPROM
-  if (!cEeprom.valid()) 
+  // Check EEPROM signature and crc - if not valid, zero EEPROM and write signature
+  if (!cEeprom.valid() || !cEeprom.check_signature()) 
+  {
+    cLed.ledcolor(COL_CYA, BLNK_ON);
     cEeprom.zero(); 
+    cEeprom.write_signature();
+    cLed.ledcolor(COL_BLU, BLNK_ON);
+  }
 
   // Initialize Oled display
   cDisp.init(); 

@@ -65,25 +65,35 @@ void Eeprom::update_crc()
   eevalid = true;
 }
 
+// Check signature
+bool Eeprom::check_signature()
+{
+   unsigned long sig;
+   unsigned long csig = EE_SIG;
+
+  sig = EEPROM.readLong (EE_SIGLOC);
+  return (sig == csig);
+}
+
+
+// Write signature
+void Eeprom::write_signature()
+{
+   unsigned long sig = EE_SIG;
+
+  EEPROM.updateLong(EE_SIGLOC, sig );
+}
+
+
+
 // Zero out the EEPROM and initialize the CRC - takes a long time 
 void Eeprom::zero()
 {
   int i;
-  char buf[16];
-
-  for (i = 0 ; i < EE_NUMSLOTS  ; i++)
-  {
-    sprintf(buf, "%04x", (i * (EE_SLOTLEN) ) );
-    SDBG(buf);
-
-    EEPROM.update( (i * (EE_SLOTLEN)    ), (byte) 0 );
-    EEPROM.update( (i * (EE_SLOTLEN) + 1), (byte) 0 );
-    EEPROM.update( (i * (EE_SLOTLEN) + 2), (byte) 0 );
-  }
   
-  for (i=0; i < EE_VARS; i++)
+  for (i = 0 ; i < EE_USED  ; i++)
   {
-    EEPROM.update((EE_VARLOC+i), (byte) 0 );
+    EEPROM.update(i, (byte) 0 );
   }
   
   update_crc();
