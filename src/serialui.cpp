@@ -42,6 +42,54 @@
  *     get_initialpw
  *
  * Operation:
+ *   Parses sequences in one of the followinf formats:
+ * <slot><cmd>[arg]
+ * 
+ * 1Opasswd - Set S1 pwd
+ * 1Uuserid - Set S1 uid
+ * 1Nname - Set S1 name
+ * 1P - Display S1 uid pwd name
+ * 1G Generate pwd for S1
+ * 1C Clear S1
+ * 1D2 - Duplicate S1 to S2
+ * 
+ * <group><cmd>[arg]
+ * 
+ * GM<A|N|L|S> - Generator Mode
+ * GM - Show generator mode
+ * GL<nn> : L10 - Pwd length
+ * GL - Show pwd length
+ * GE - show entropy
+ * 
+ * SD<0|1> : D0 - Turn pwd display off
+ * SD - show
+ * SF<0|1> : F0 - Turn display flip off
+ * SF - Show
+ * SR<0|1> : Y0 - Turn pwd revert off
+ * SR - show
+ * 
+ * TI<nnn> : I030 - Set display timeout to 30s
+ * TI - Show
+ * TJ<nnn> : J030 - Set LED timeout to 30s
+ * TJ - show
+ * TB<nnn> : B030 - set lock timeout to 30 mins
+ * TB - show
+ * 
+ * QB<bbb> : TSNG - Set button sequence to SNG
+ * QB - show
+ * QL<llllll> : TRGBCMY - Set LED sequence to RGBCMY
+ * QL - show
+ * QS<nnnn> : W1231 - Set security seq to 1231
+ * QS - show
+ * 
+ * ED - Dump eeprom in friendly mode
+ * EB - Dump eeprom in backup mode
+ * ER - Restore eeprom
+ * EZ - Zero eeprom
+ * 
+ * <cmd>
+ * X - Reset
+ * 
  */
 
 #include "serialui.h"
@@ -110,6 +158,80 @@ bool SerialUi::running()
   return menurunning;
 }
 
+void SerialUi::vTaskSerialUi()
+{
+
+  // flush the input if not running
+  if (!menurunning) 
+  {
+    if (Serial.available() > 0) 
+      Serial.read();
+    return;
+  }
+
+  // PW locked?  (not currently implemented)
+  if (waitforseq > 0)
+  {
+    led.ledcolor(COL_YEL, BLNK_MOST);
+    if (!displck)
+    {
+#ifndef MAINT  
+      disp.displaylarge((char *) "LOCKED"); 
+#endif
+      SUICRLF;
+      Serial.print(F("Password: "));  Serial.flush();
+      displck=true;
+    }
+  }
+  else
+  {
+    led.ledcolor(COL_WHT, BLNK_MOST);
+  }
+  
+
+  // Read input
+  if (Serial.available() > 0) 
+  {
+    st_inchar = Serial.read();
+    Serial.write(st_inchar); Serial.flush();
+
+    handle_input();
+  }
+}
+
+// Process a single menu input char
+void SerialUi::handle_input()
+{
+  if ( st_inchar == '\r' )
+  {
+    parse_input();
+    st_ptr=0;
+    SUIPROMPT;
+  }
+  else if ( ( (st_inchar >= 'A') && (st_inchar <= 'Z') ) || ( (st_inchar >= 'a') && (st_inchar <= 'z') ) || ( (st_inchar >= '0') && (st_inchar <= '9') )  )
+  {
+    st_buf[st_ptr++] = st_inchar;
+  }
+  
+}
+
+  
+
+void SerialUi::parse_input()
+{
+  if ( (st_buf[0] >= '0') && (st_buf[0] < '0' + MAXSLOTS) )
+  {
+    curslot = st_buf[0] - '0';
+  }
+  else
+  {
+    switch (st_buf[0])
+    {
+        !!! here
+    }
+  }
+}
+
 
 // Print pwd and/or UID
 void SerialUi::printcurpw()
@@ -125,7 +247,6 @@ void SerialUi::printcurpw()
     Serial.println("");
     Serial.flush();
   }
-  Serial.print(F("UID: "));
   if (ev.uidvalid)
   {
     Serial.write('\"');
@@ -143,7 +264,6 @@ void SerialUi::printcurpw()
   Serial.println("");
   Serial.flush();
   
-  Serial.print(F("PWD: "));
   if (ev.pwdvalid)
   {
     Serial.write('\"');
@@ -178,16 +298,14 @@ void SerialUi::genpw()
     }
     else
     {
-      SUICRLF;
-      Serial.print(F("Error generating password - maybe not enough entropy - try again later"));
+      Serial.print("E");
       SUICRLF;
     }
     
   }
   else
   {
-    SUICRLF;
-    Serial.print(F("Not enough entropy yet - try again later"));
+    Serial.print("E");
     SUICRLF;
   }
 }
@@ -198,15 +316,12 @@ void SerialUi::genpw()
 void SerialUi::printcurname()
 {
   eeprom.getname(curslot, st_buf);
-  Serial.print(F("Name: "));
   if (strlen(st_buf) > 0)
   {
-    Serial.write('\"');
     for (unsigned int i=0; i < strlen(st_buf); i++)
     {
       Serial.write(st_buf[i]);
     }
-    Serial.write('\"');
   }
   else
     Serial.print(F("None "));
@@ -217,97 +332,10 @@ void SerialUi::printcurname()
 
 
 // Main task
-void SerialUi::vTaskSerialUi()
-{
-
-  // flush the input if not running
-  if (!menurunning) 
-  {
-    if (Serial.available() > 0) 
-      Serial.read();
-    return;
-  }
-
-  // PW locked?  (not currently implemented)
-  if (waitforseq > 0)
-  {
-    st_mode = SM_WAIT_DATA;
-    waitfor = WD_SECP;
-    led.ledcolor(COL_YEL, BLNK_MOST);
-    if (!displck)
-    {
-#ifndef MAINT  
-      disp.displaylarge((char *) "LOCKED"); 
-#endif
-      SUICRLF;
-      Serial.print(F("Password: "));  Serial.flush();
-      displck=true;
-    }
-  }
-  else
-  {
-    led.ledcolor(COL_WHT, BLNK_MOST);
-  }
-  
-
-  // Read input
-  if (Serial.available() > 0) 
-  {
-    st_inchar = Serial.read();
-    Serial.write(st_inchar); Serial.flush();
-
-    handle_input();
-  }
-}
-
-// Process a single menu input char
-void SerialUi::handle_input()
-{
-
-  switch (st_mode) 
-  {
-    case SM_WAIT_CMD : // Waiting for a single-key command
-      handle_cmd();
-      break;
-    case SM_WAIT_DATA : // Waiting for user input / cmd argument
-      handle_data();
-      break;
-  }
-}
 
 // Process a command char
 void SerialUi::handle_cmd()
 {
-#ifndef MAINT  
-  int e;
-#endif
-
-  switch (st_inchar)
-  {
-    case '?' : // help
-    case 'h' : 
-      help();
-      SUICRLF;
-      SUIPROMPT;
-      break;
-
-    case 's' : // slot
-      st_mode = SM_WAIT_DATA;
-      waitfor = WD_SLOT;
-      Serial.print(F("\nSlot [0-")); Serial.print(MAXSLOTS-1); Serial.print(F("]: ")); Serial.flush();
-      break;
-
-    case '0' : // Select slot directly with numeric keys
-    case '1' :
-    case '2' :
-    case '3' :
-    case '4' :
-    case '5' :
-      curslot = st_inchar-'0';
-      SUICRLF;
-      SUIPROMPT;
-      break;
-
     case 'p' :
       SUICRLF;
       printcurpw();

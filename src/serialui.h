@@ -20,31 +20,11 @@
 #define KM_KBD    0
 #define KM_SERIAL 1
 
-// Serial UI Modes
-#define SM_WAIT_CMD  0
-#define SM_WAIT_DATA 1
+// Command length
+#define MAXCMD 64
 
-// Data modes
-#define WD_SLOT  0  // Wait for slot
-#define WD_UID   1 // Wait for UID
-#define WD_PWD   2 // Wait for PWD
-#define WD_MODE  3 // Wait for Mode
-#define WD_PLEN  4 // Wait for Pwd Length
-#define WD_TLEN  5 // Wait for OLED timeout length
-#define WD_DUP   6 // Wait for duplicate slot destination
-#define WD_BTTN  7 // Wait for button config
-#define WD_COL   8 // Wait for color config
-#define WD_LLEN  9 // Wait for LED timeout length
-#define WD_SECC  10 // Wait for security code
-#define WD_SECP  11 // Wait for password
-#define WD_NAME  12 // Wait for slot name
-#define WD_EED   13 // Wait for eeprom dump type
-#define WD_PRT   14 // Wait for PWD revert timeout
-#define WD_CLS   15 // Wait for Clear Slot confirm
-#define WD_BLEN  16 // Wait for Lock timeout
-
-
-#define SUIPROMPT  Serial.print(F("Slot ")); Serial.print(curslot); Serial.print(F(" >> "));  Serial.flush(); 
+// Macros
+#define SUIPROMPT  Serial.println(">"); Serial.flush()
 #define SUICRLF    Serial.println(" "); Serial.flush()
 #define SUICLS     Serial.write(0x1B); Serial.write('['); Serial.write('2'); Serial.write('J'); Serial.flush();
 
@@ -72,10 +52,9 @@ class SerialUi {
     int waitforseq=0;    
     bool displck=false;
 
-    byte st_mode=SM_WAIT_CMD;
     int  st_inchar;
     byte st_ptr=0;
-    char st_buf[EE_PWLEN];
+    char st_buf[MAXCMD];
 
 
     Led &led;
@@ -92,8 +71,7 @@ class SerialUi {
     void genpw(void);
 #endif
     void handle_input(void);
-    void handle_cmd(void);
-    void handle_data(void);
+    void parse_input(void);
     void toggle_blink(void);
     void toggle_flip(void);
     void toggle_pwdisp(void);
