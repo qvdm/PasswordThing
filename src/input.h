@@ -1,8 +1,6 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#ifndef MAINT
-
 #include <Arduino.h>
 #include "hardware.h"
 #include "tick.h"
@@ -50,5 +48,4 @@ class Input {
 
 };
 
-#endif
 #endif

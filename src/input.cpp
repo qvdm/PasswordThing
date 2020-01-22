@@ -17,8 +17,6 @@
 
 #include "input.h"
 
-#ifndef MAINT
-
 extern unsigned long getTime(void);
 extern unsigned long lastkeypress;
 
@@ -137,4 +135,3 @@ void Input::vTaskDigitalRead()
     }
   }
 }
-#endif

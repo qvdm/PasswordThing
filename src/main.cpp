@@ -21,10 +21,10 @@
  * loop - Arduino loop
  * 
  * TBD  Regression tests
- *      Debug serial Pwd + add eeprom clear sequence
  *      Save and Restore - complete Restore 
- *      Autolock - implement semaphore
- *    
+ *      Autolock
+ *      SUI cannot read all pwd characters
+ *      Implement button sel display    
  * 
  * BUGS:
  * 
@@ -51,29 +51,21 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20011701";
+char Version[]="20012101";
 char eedVer[]="V03"; // eeprom dump
 
 // Forward declare systick function
 void sysTick();
 
 // Create utility classes
-#ifndef MAINT
 SSD1306AsciiWire cOled;
 Random cRandom;
-#endif
 Eeprom cEeprom;
 Led cLed;
-#ifndef MAINT
 Display cDisp(cOled, cEeprom);
 Menu cMenu(cLed, cDisp, cRandom, cEeprom);
 SerialUi cSui(cLed, cDisp, cRandom, cEeprom);
-#else
-SerialUi cSui(cLed, cEeprom);
-#endif
-#ifndef MAINT
 Input cInput(cMenu);
-#endif
 
 // Global timers
 volatile unsigned long Time=0;
@@ -99,10 +91,6 @@ bool autolocked=false;
 // "Initial Task"
 void setup() 
 {
-#ifdef MAINT
-  cSui.sio_menu_on();
-  kbmode = KM_SERIAL;
-#else
   // Initialize Serial if a button is pressed at startup, else initialise keyboard
   if ( cInput.anyPressed() )
   {
@@ -127,9 +115,6 @@ void setup()
 #endif    
   }
 
-#endif
-
-#ifndef MAINT
   // Check EEPROM crc - if not valid, zero EEPROM
   if (!cEeprom.valid()) 
     cEeprom.zero(); 
@@ -152,8 +137,6 @@ void setup()
   cMenu.set_buttonmode(btnmode);
   byte ledcols = cEeprom.getvar(EEVAR_LEDSEQ); // LED color assignments
   cMenu.set_slotcolors(ledcols);
-  bool pwdisp =  cEeprom.getvar(EEVAR_PWDISP); // Password display
-  cMenu.set_pwdisp(pwdisp);
 
   // Initialize button 'menu' or serial menu depending in global mode
   if (kbmode == KM_KBD)
@@ -172,9 +155,6 @@ void setup()
     cSui.init(0);
     cDisp.displaylarge((char *) "SERIAL"); 
   }
-#else
-  cSui.init(0);
-#endif
   
 
   // Initialize systick timer to generate an interrupt every 10us
@@ -215,19 +195,13 @@ void loop()
 
   // Execute periodic 'Tasks' (naming convention remains from FreeRTOS days, now we just call them in sequence)
   cLed.vTaskManageLeds();      // LED manager
-#ifndef MAINT
   cDisp.vTaskManageDisplay();  // Display manager
   cRandom.vTaskRandomGen();    // Random # entropy harvester
-#endif
 
-#ifndef MAINT
   if (kbmode == KM_SERIAL)
     cSui.vTaskSerialUi();      // Serial UI
   else
     cInput.vTaskDigitalRead(); // Digital input
-#else
-  cSui.vTaskSerialUi();      // Serial UI
-#endif
 
   // Check for lock timeout
 //  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) && !autolocked )
@@ -245,7 +219,6 @@ void loop()
     delaytime = LOOP_MS-ldms;
 
 
-#ifndef MAINT
   // Harvest extra entropy during idle time when low, else just delay
   if ( (delaytime > 2) && (cRandom.getEntropy() < (MAXENTROPY/2) ) )
   {
@@ -256,7 +229,6 @@ void loop()
     }
   }
   else 
-#endif
     delay(delaytime);
 }
 

@@ -5,10 +5,7 @@
 
 #include "hardware.h"
 
-#ifndef MAINT
-void scani2c();
 void testhw();
-#endif
 void sleepcpu();
 bool recvWithEndMarker(char endMarker, int *maxLen, char receivedChars[]);
 byte hextobyte(char hex[]);

@@ -1,8 +1,6 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#ifndef MAINT
-
 #include <Arduino.h>
 #include <Wire.h>
 #include "SSD1306Ascii.h"
@@ -46,4 +44,3 @@ class Display {
 };
 
 #endif
-#endif 

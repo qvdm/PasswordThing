@@ -23,18 +23,15 @@
 // Command length
 #define MAXCMD 64
 
+// Min
+#define MINPW 6 // min pw length
+
 // Macros
-#define SUIPROMPT  Serial.println(">"); Serial.flush()
-#define SUICRLF    Serial.println(" "); Serial.flush()
-#define SUICLS     Serial.write(0x1B); Serial.write('['); Serial.write('2'); Serial.write('J'); Serial.flush();
+#define SUIPROMPT  Serial.println(" "); Serial.print(">"); Serial.flush()
 
 class SerialUi {
   public:
-#ifndef MAINT
     SerialUi(Led&, Display&, Random&, Eeprom&);
-#else
-    SerialUi(Led&, Eeprom&);
-#endif    
     ~SerialUi();
     void init(int sseq);
     void sio_menu_on();
@@ -44,12 +41,9 @@ class SerialUi {
 
   private:
     bool menurunning=false;
-    byte waitfor;
     byte curslot=0;
     byte pwgenlen;
     byte pwgenmode;
-    int mem;
-    int waitforseq=0;    
     bool displck=false;
 
     int  st_inchar;
@@ -58,23 +52,29 @@ class SerialUi {
 
 
     Led &led;
-#ifndef MAINT
     Display &disp;
     Random &rand;
-#endif    
     Eeprom &eeprom;
 
-    void help(void);
+    void reset(void);
     void printcurpw(void);
-    void printcurname(void);
-#ifndef MAINT  
+    void showentropy(void);
     void genpw(void);
-#endif
     void handle_input(void);
     void parse_input(void);
-    void toggle_blink(void);
+
+    void handle_slot(void);
+    void handle_gen(void);
+    void handle_set(void);
+    void handle_to(void); 
+    void handle_seq(void);
+    void handle_eep(void);
+    void handle_cmd(void);
+
     void toggle_flip(void);
-    void toggle_pwdisp(void);
+    void show_flip(void);
+    void toggle_prto(void);
+    void show_prto(void);
     void menu_buttonconfig(void);
     void menu_ledconfig(void);
     void show_eevars(void);
@@ -82,21 +82,23 @@ class SerialUi {
     void set_eeuid(void);
     void set_eepw(void);
     void set_eename(void);
-    int buf_to_int(int min, int max);
-#ifndef MAINT
+    int buf_to_int(int start, int min, int max);
     void set_pwgmode(char m);
     void set_pwglen(void);
     void set_dispto(void);
+    void show_dispto(void);
     void set_ledto(void);
+    void show_ledto(void);
     void set_lockto(void);
-    void set_btnmode(char m);
-    void set_colmode(char m);
-#endif
+    void show_lockto(void);
+    void set_butseq(void);
+    void show_butseq(void);
+    void set_ledseq(void);
+    void show_ledseq(void);
+    void set_lockseq(void);
+    void show_lockseq(void);
     void set_slot(char s);
     void dup_slot(char s);
-    void toggle_prto(void);
-    void set_secseq(void);
-    void get_initialpw(void);
 };
 
 

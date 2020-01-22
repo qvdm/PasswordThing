@@ -17,8 +17,6 @@
  * 
  */
 
-#ifndef MAINT
-
 
 #include "queue.h"
 
@@ -80,4 +78,3 @@ bool Queue::isFull()
 	return (size() == MAXQUEUE);
 }
 
-#endif

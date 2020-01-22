@@ -11,7 +11,6 @@
  *    verylongpress - handler for very long button press
  *    pressingverylong - handler for very long press pre-notification
  *    set_buttonmode - sets the custom button assignment
- *    set_pwdisp - sets pw display mode
  *    set_slotcolors - set slot color assignment
  * 
  * Private: 
@@ -38,7 +37,6 @@
  *
  */
 
-#ifndef MAINT
 
 #include "menu.h"
 
@@ -67,11 +65,6 @@ void Menu::init(int sseq)
     disp.displaylarge((char *) "LOCKED"); 
     disp.setprivacy(0);
   }
-}
-
-void Menu::set_pwdisp(bool pd)
-{
-  pwdisp = pd;
 }
 
 // Set the custom button assignments
@@ -146,8 +139,7 @@ void Menu::set_slotcolors(byte cols)
 // Handle short press of a button
 void Menu::shortpress(byte button)
 {
-  int i;
-  
+ 
   // Locked & waiting for security sequence?
   if (waitforseq > 0)
   {
@@ -167,7 +159,7 @@ void Menu::shortpress(byte button)
       byte secok=false;
       if (s > 0)
       {
-        for (i=1; i < NSSEQ+1; i++)
+        for (int i=1; i < NSSEQ+1; i++)
         {
           if (Secseq[i] == s)
           {
@@ -233,11 +225,10 @@ void Menu::longpress(byte button)
 // Handle long press pre-notification for a button
 void Menu::pressinglong(byte button)
 {
-  byte nxts;
-  
+ 
   if (button == sel_button) 
   {
-    nxts = (slot+1) % MAXSLOTS; 
+    byte nxts = (slot+1) % MAXSLOTS; 
     displayleds(slotcolors[(int)nxts], BLNK_ON);  
   }
   else if ( button == nxt_button)
@@ -332,7 +323,6 @@ void  Menu::generate()
 void Menu::sendpw(bool sndcr, bool snduid)
 {
   byte lastc;
-  char *s1=NULL, *s2=NULL, *s3=NULL;
 
   // Get PWD and UID validity
   struct pwvalid v=eeprom.entryvalid(slot);
@@ -344,7 +334,6 @@ void Menu::sendpw(bool sndcr, bool snduid)
     {
       // Valid UID - send it
       pwbuf.uid[pwbuf.uidlen]=0;
-      s1 = (char *) pwbuf.uid;
       for (int i=0; i < pwbuf.uidlen; i++)
       {
         Keyboard.write(pwbuf.uid[i]);
@@ -374,31 +363,6 @@ void Menu::sendpw(bool sndcr, bool snduid)
       delay(50);
       Keyboard.release(KEY_RETURN);
       delay(50);
-    }
-
-
-    // Display on OLED
-    if (pwdisp)
-    {
-      pwbuf.pwd[pwbuf.pwdlen]=0;
-      if (pwbuf.pwdlen >= MAXPW) // long user entered pw - split
-      {
-        strcpy(dispbuf, (char *) &(pwbuf.pwd[MAXPW]));
-        pwbuf.pwd[MAXPW] = 0;
-      }
-      if (s1) // UID exists
-      {
-        s2 = (char *) pwbuf.pwd;
-        if (pwbuf.pwdlen >= MAXPW)
-          s3 = dispbuf;
-      }
-      else 
-      {
-        s1 = (char *) pwbuf.pwd;
-        if (pwbuf.pwdlen >= MAXPW)
-          s2 = dispbuf;
-      }
-      disp.displaysmall(s1, s2, s3);
     }
   }
 }
@@ -455,4 +419,3 @@ void Menu::indicate_slot()
   prevslot = slot;
 }
 
-#endif

@@ -60,7 +60,7 @@ class Eeprom {
 
 
   private:
-    bool eevalid;
+    bool eevalid=false;
     unsigned long calc_crc(void);
     void update_crc(void);
     union eeentry eee;

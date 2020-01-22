@@ -102,9 +102,9 @@ unsigned long Eeprom::calc_crc(void)
 
 
   unsigned long crc = ~0L;
-  byte eebyte;
+  
   for (int index = 0 ; index < EE_CRCLOC  ; ++index) {
-    eebyte = EEPROM.readByte(index);
+    byte eebyte = EEPROM.readByte(index);
      
     crc = crc_table[(crc ^ eebyte) & 0x0f] ^ (crc >> 4);
     crc = crc_table[(crc ^ (eebyte >> 4)) & 0x0f] ^ (crc >> 4);
