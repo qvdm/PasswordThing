@@ -337,9 +337,8 @@ void SerialUi::genpw()
 
 void SerialUi::reset()
 {
-  eeprom.storevar(EESEM_SERMODE, 0);
-  wdt_enable(WDTO_15MS);  
-  while (1);
+  eeprom.storevar(EESEM_SERMODE, 0); // get out of wserial mode after reset
+  WDRESET;
 }
 
 

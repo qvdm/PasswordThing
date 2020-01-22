@@ -244,28 +244,32 @@ void Menu::pressinglong(byte button)
 // Handle very long press of a button
 void Menu::verylongpress(byte button)
 {
-  if (button == sel_button) 
+  if (button == sel_button) // Reset
   {
-     // Normal reboot
      disp.displaylarge((char *) F("RESET")); 
      displayleds(COL_YEL, BLNK_ON);
+     WDRESET;
   }
-  else
+  else if (button == gen_button) // Cancel Gen
+  {
+  }
+  else // next - reset to Serial mode
   {
      // Set serial boot flag
      eeprom.storevar(EESEM_SERMODE, 1);
      disp.displaylarge((char *) F("B-SERIAL")); 
      displayleds(COL_WHT, BLNK_ON);
+     WDRESET;
   }
-    // Spin for wdt timeout
-    while (1);
 }
 
-2// Handle very long press pre-notification for a button
+// Handle very long press pre-notification for a button
 void Menu::pressingverylong(byte button)
 {
   if (button == sel_button) 
     displayleds(COL_YEL, BLNK_ON);  
+  else if (button == gen_button) 
+    displayleds(slotcolors[slot], BLNK_ON);  
   else
     displayleds(COL_WHT, BLNK_ON);  
 }
