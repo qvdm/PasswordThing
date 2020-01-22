@@ -16,9 +16,18 @@
 #define EE_PWOFS    (EE_HDRLEN+EE_PWLEN)
 #define EE_NUMSLOTS 8
 #define EE_VARS    16
-#define EE_VARLOC (EE_SLOTLEN*EE_NUMSLOTS)
-#define EE_CRCLOC (EE_VARLOC+EE_VARS)
-#define EE_SEMALOC (EE_CRCLOC+4)
+#define EE_CRCLEN   4
+#define EE_SEMAS    8
+#define EE_SIGLEN   4
+#define EE_VARLOC  (EE_SLOTLEN*EE_NUMSLOTS)
+#define EE_CRCLOC  (EE_VARLOC+EE_VARS)
+#define EE_SEMALOC (EE_CRCLOC+EE_CRCLEN)
+#define EE_SIGLOC  (EE_SEMALOC+EE_SEMAS)
+
+#define EE_SIG     0xDEADBEEF
+
+#define EE_USED    (EE_SIGLOC+EE_SIGLEN)
+
 
 struct eepw {
   byte uidlen;
@@ -58,6 +67,8 @@ class Eeprom {
     void dump();
     void backup();
     void restore();
+    bool check_signature();
+    void write_signature();
 
 
   private:

@@ -39,6 +39,7 @@ class Menu {
     void shortpress(byte button);
     void longpress(byte button);
     void verylongpress(byte button);
+    void pressing(byte button);
     void pressinglong(byte button);
     void pressingverylong(byte button);
     void set_buttonmode(byte mode);

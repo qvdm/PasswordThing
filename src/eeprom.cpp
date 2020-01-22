@@ -18,6 +18,8 @@
  *   dump       - Debug: dump eeprom contents to Serial
  *   backup     - Dump contents in backup format to Serial
  *   restore    - Restore from backup dump via serial
+ *   check_signature
+ *   write_signature
  * 
  * Private: 
  *   calc_crc
@@ -293,9 +295,19 @@ void Eeprom::dump()
   Serial.flush();
 
   Serial.println(F("SEMAS"));
-  for (int m= 0 ; m < 4  ; ++m)
+  for (int m= 0 ; m < EE_SEMAS  ; ++m)
   {
-    sprintf(eo_buf, "%02X ", EEPROM.readByte(EE_CRCLOC+4+m));
+    sprintf(eo_buf, "%02X ", EEPROM.readByte(EE_SEMALOC+m));
+    Serial.print(eo_buf);
+    Serial.flush();
+  }
+  Serial.println("");
+  Serial.flush();
+
+  Serial.println(F("SIGNATURE"));
+  for (int n= 0 ; n < EE_SIGLEN  ; ++n)
+  {
+    sprintf(eo_buf, "%02X ", EEPROM.readByte(EE_SIGLOC+n));
     Serial.print(eo_buf);
     Serial.flush();
   }
@@ -381,7 +393,7 @@ void Eeprom::restore()
     {
       Serial.print("*"); Serial.print(l);
       Serial.println(F(" Bad Restore"));
-      WDRESET;
+      return;
     }
   }
   Serial.println(F("PW OK"));
@@ -398,7 +410,7 @@ void Eeprom::restore()
     else 
     {
       Serial.println(F("Bad Restore"));
-      WDRESET;
+      return;
     }
   }
   Serial.println(F("VA OK"));
@@ -416,9 +428,30 @@ void Eeprom::restore()
   else 
   {
     Serial.println(F("Bad Restore"));
-    WDRESET;
+    return;
   }
   Serial.println(F("CS OK"));
 
   Serial.println(F("Restored"));
 }
+
+// Check signature
+bool Eeprom::check_signature()
+{
+   unsigned long sig;
+   unsigned long csig = EE_SIG;
+
+  sig = EEPROM.readLong (EE_SIGLOC);
+  return (sig == csig);
+}
+
+
+// Write signature
+void Eeprom::write_signature()
+{
+   unsigned long sig = EE_SIG;
+
+  EEPROM.updateLong(EE_SIGLOC, sig );
+}
+
+

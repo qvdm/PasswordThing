@@ -136,6 +136,20 @@ void Menu::set_slotcolors(byte cols)
   }
 }
 
+// Handle press pre-notification for a button
+void Menu::pressing(byte button)
+{
+  if (waitforseq > 0)
+    return;
+
+  if (button == nxt_button)
+    disp.displaylarge("Nxt|Rvt|Ser"); 
+  else if(button == sel_button)
+    disp.displaylarge("UP|Nxt|Rst"); 
+  else if (button == gen_button)  
+    disp.displaylarge("Pwd|Gen|X"); 
+}
+
 // Handle short press of a button
 void Menu::shortpress(byte button)
 {
@@ -179,7 +193,7 @@ void Menu::shortpress(byte button)
       if (!secok)
       {
         disp.displaylarge((char *) "INVALID"); 
-        for (;;);
+        WDRESET;
       }
     }
   }

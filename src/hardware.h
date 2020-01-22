@@ -102,7 +102,7 @@ typedef unsigned char byte;
 #define EEVAR_BUTSEQ  5 // Button seq          - byte index, see menu.h
 #define EEVAR_LEDSEQ  6 // LED seq             - byte index, see menu.h
 #define EEVAR_PRTO    7 // PWD Revert          - boolean
-#define EEVAR_UNUSED1 8 // PWD Display         - boolean
+#define EEVAR_UNUSED1 8 // Unused
 #define EEVAR_LOCK    9 // Autolock            - byte timeout in minutes/10, 0 = none
 
 // EEPROM semaphore offset
@@ -118,7 +118,7 @@ typedef unsigned char byte;
 #define MAXPW      20 // Max generated PWD length
 
 // Reset
-#define WDRESET wdt_enable(WDTO_15MS);  while (1)
+#define WDRESET cli(); wdt_enable(WDTO_15MS);  while (1)
 
 
 #endif
