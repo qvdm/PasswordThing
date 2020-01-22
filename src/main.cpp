@@ -20,11 +20,9 @@
  * setup - Arduino setup
  * loop - Arduino loop
  * 
- * TBD  Regression tests
+ * TBD
  *      Save and Restore - complete Restore 
  *      Autolock
- *      SUI cannot read all pwd characters
- *      Implement button sel display    
  * 
  * BUGS:
  * 
@@ -51,8 +49,8 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="20012101";
-char eedVer[]="V03"; // eeprom dump
+char Version[]="V5B20012202";
+char eedVer[]="V04"; // eeprom dump
 
 // Forward declare systick function
 void sysTick();

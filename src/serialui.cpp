@@ -145,7 +145,7 @@ void SerialUi::vTaskSerialUi()
   // Read input
   if (Serial.available() > 0) 
   {
-    st_inchar = toupper(Serial.read());
+    st_inchar = Serial.read();
     Serial.write(st_inchar); Serial.flush();
     handle_input();
   }
@@ -156,11 +156,20 @@ void SerialUi::handle_input()
 {
   if ( st_inchar == '\r' )
   {
+    SUICRLF;
     parse_input();
     st_ptr=0;
     SUIPROMPT;
   }
-  else if ( ( (st_inchar >= 'A') && (st_inchar <= 'Z') ) || ( (st_inchar >= '0') && (st_inchar <= '9') )  )
+  else if (st_inchar == '\b')
+  {
+    if (st_ptr > 0) 
+    {
+      Serial.write(" \b"); Serial.flush();
+      st_ptr--;
+    }
+  }
+  else if ((st_inchar >= ' ') && (st_inchar <= '~') ) 
   {
     st_buf[st_ptr++] = st_inchar;
   }
@@ -176,7 +185,7 @@ void SerialUi::parse_input()
   }
   else
   {
-    switch (st_buf[0])
+    switch (toupper(st_buf[0]))
     {
         case 'G' : handle_gen(); break;
         case 'S' : handle_set(); break;
@@ -191,24 +200,40 @@ void SerialUi::parse_input()
 void SerialUi::handle_slot()
 {
 
-  switch (st_buf[1])
+  switch (toupper(st_buf[1]))
   {
-    case 'O' : if ((st_ptr > MINPW+2) && (st_ptr < EE_PWLEN+2)) set_eepw(); break;
-    case 'U' : if ((st_ptr > 3) && (st_ptr < EE_PWLEN+2)) set_eeuid(); break;
-    case 'N' : if ((st_ptr > 3) && (st_ptr < EE_PWLEN+2)) set_eename(); break;
-
+    case 'O' : if ((st_ptr > MINPW+2) && (st_ptr < EE_PWLEN+2)) 
+               { 
+                 set_eepw(); 
+                 printcurpw(); 
+               }
+               else Serial.println("LENGTH");
+               break;
+    case 'U' : if ((st_ptr > 3) && (st_ptr < EE_PWLEN+2)) 
+               { 
+                 set_eeuid(); 
+                 printcurpw(); 
+               }
+               else Serial.println("LENGTH");
+               break;
+    case 'N' : if ((st_ptr > 3) && (st_ptr < EE_PWLEN+2)) 
+               { 
+                 set_eename(); 
+                 printcurpw(); 
+               }
+               else Serial.println("LENGTH");
+               break;
     case 'P' : printcurpw(); break;
-    case 'G' : genpw(); break;
-    case 'C' : eeprom.clearslot(curslot); break;
-
-    case 'D' : if ( (st_buf[2] >= '0') && (st_buf[2] < '0' + MAXSLOTS) ) dup_slot(st_buf[2]); break;
+    case 'G' : genpw(); printcurpw(); break;
+    case 'C' : eeprom.clearslot(curslot); printcurpw();break;
+    case 'D' : if ( (st_buf[2] >= '0') && (st_buf[2] < '0' + MAXSLOTS) ) dup_slot(st_buf[2]); printcurpw(); break;
     
   }
 }
 
 void SerialUi::handle_gen()
 {
-  switch (st_buf[1])
+  switch (toupper(st_buf[1]))
   {
     case 'M' : if (st_ptr > 1) set_pwgmode(st_buf[2]); break;
     case 'L' : if (st_ptr > 1) set_pwglen(); break;
@@ -218,38 +243,38 @@ void SerialUi::handle_gen()
 
 void SerialUi::handle_set()
 {
-  switch (st_buf[1])
+  switch (toupper(st_buf[1]))
   {
-    case 'F' : if ( (st_ptr > 1) && (st_buf[2] == 'T') ) toggle_flip(); else show_flip(); break;
-    case 'R' : if ( (st_ptr > 1) && (st_buf[2] == 'T') ) toggle_prto(); else show_prto(); break;
+    case 'F' : if ( (st_ptr > 1) && (toupper(st_buf[2]) == 'T') ) toggle_flip(); show_flip(); break;
+    case 'R' : if ( (st_ptr > 1) && (toupper(st_buf[2]) == 'T') ) toggle_prto(); show_prto(); break;
   }
 }
 
 void SerialUi::handle_to() 
 {
-  switch (st_buf[1])
+  switch (toupper(st_buf[1]))
   {
-    case 'D' : if (st_ptr > 1) set_dispto(); else show_dispto(); break;
-    case 'I' : if (st_ptr > 1) set_ledto(); else show_ledto(); break;
-    case 'L' : if (st_ptr > 1) set_lockto(); else show_lockto(); break;
+    case 'D' : if (st_ptr > 2) set_dispto(); show_dispto(); break;
+    case 'I' : if (st_ptr > 2) set_ledto(); show_ledto(); break;
+    case 'L' : if (st_ptr > 2) set_lockto(); show_lockto(); break;
   }
 
 }
 
 void SerialUi::handle_seq()
 {
-  switch (st_buf[1])
+  switch (toupper(st_buf[1]))
   {
-    case 'B' : if (st_ptr > 1) set_butseq(); else show_butseq(); break;
-    case 'L' : if (st_ptr > 1) set_ledseq(); else show_ledseq(); break;
-    case 'S' : if (st_ptr > 1) set_lockseq(); else show_lockseq(); break;
+    case 'B' : if (st_ptr > 2) set_butseq(); show_butseq(); break;
+    case 'L' : if (st_ptr > 2) set_ledseq(); show_ledseq(); break;
+    case 'S' : if (st_ptr > 2) set_lockseq(); show_lockseq(); break;
   }
 }
 
 void SerialUi::handle_eep()
 {
 
-  switch (st_buf[1])
+  switch (toupper(st_buf[1]))
   {
     case 'D' : eeprom.dump(); break;
     case 'B' : eeprom.backup(); break;
@@ -260,7 +285,7 @@ void SerialUi::handle_eep()
 
 void SerialUi::handle_cmd() 
 {
-  switch (st_buf[1])
+  switch (toupper(st_buf[1]))
   {
     case 'X' : reset(); break;
   }
@@ -306,7 +331,6 @@ void SerialUi::printcurpw()
   }
   else
     Serial.print(F("None "));
-
 }
 
 void SerialUi::showentropy()
@@ -330,7 +354,6 @@ void SerialUi::genpw()
 
       // Store generated password in EEprom
       eeprom.storepw(curslot, &pw);
-      printcurpw();
     }
   }
 }
@@ -415,19 +438,23 @@ void SerialUi::set_eename()
 // Set pw generator mode
 void SerialUi::set_pwgmode(char m)
 {
-  switch (m)
+  switch (toupper(m))
   {
-    case 'a' : // Alpha
+    case 'A' : // Alpha
       pwgenmode = PWM_ALPHA;
+      Serial.println("Alpha");
       break;
-    case 'n' : // Numeric
+    case 'N' : // Numeric
       pwgenmode = PWM_NUM;
+      Serial.println("Num");
       break;
-    case 'l' : // Alphanumeric
+    case 'L' : // Alphanumeric
       pwgenmode = PWM_ANUM;
+      Serial.println("Anum");
       break;
-    case 's' : // Special
+    case 'S' : // Special
       pwgenmode = PWM_SPEC;
+      Serial.println("Special");
       break;
   }
 }
@@ -462,7 +489,7 @@ void SerialUi::set_pwglen()
   {            
     pwgenlen = d;
   }
-
+  Serial.println(pwgenlen);
 }
 
 // Set display timeout from string in buf
@@ -481,7 +508,6 @@ void SerialUi::show_dispto()
 {
   byte priv = eeprom.getvar(EEVAR_OPRIV);
   Serial.print((int) priv * 10 );
-
 }
 
 // Set led timeout from string in buf
@@ -526,12 +552,12 @@ void SerialUi::set_butseq()
   char *s = st_buf+2;
   byte b=0;
 
-  if (strcmp(s, "GNS") == 0) b=0;
-  else if (strcmp(s, "GSN") == 0) b=1;
-  else if (strcmp(s, "NGS") == 0) b=2;
-  else if (strcmp(s, "NSG") == 0) b=3;
-  else if (strcmp(s, "SGN") == 0) b=4;
-  else if (strcmp(s, "SNG") == 0) b=5;
+  if (strcmp(strupr(s), "GNS") == 0) b=0;
+  else if (strcmp(strupr(s), "GSN") == 0) b=1;
+  else if (strcmp(strupr(s), "NGS") == 0) b=2;
+  else if (strcmp(strupr(s), "NSG") == 0) b=3;
+  else if (strcmp(strupr(s), "SGN") == 0) b=4;
+  else if (strcmp(strupr(s), "SNG") == 0) b=5;
 
   eeprom.storevar(EEVAR_BUTSEQ, b);
 }
@@ -557,12 +583,12 @@ void SerialUi::set_ledseq()
   char *s = st_buf+2;
   byte b=0;
 
-  if (strcmp(s, "RYGMBC") == 0) b=0;
-  else if (strcmp(s, "YRGMBC") == 0) b=1;
-  else if (strcmp(s, "MRBYGC") == 0) b=2;
-  else if (strcmp(s, "CBMGYR") == 0) b=3;
-  else if (strcmp(s, "RYGBMC") == 0) b=4;
-  else if (strcmp(s, "BGYRCM") == 0) b=5;
+  if (strcmp(strupr(s), "RYGMBC") == 0) b=0;
+  else if (strcmp(strupr(s), "YRGMBC") == 0) b=1;
+  else if (strcmp(strupr(s), "MRBYGC") == 0) b=2;
+  else if (strcmp(strupr(s), "CBMGYR") == 0) b=3;
+  else if (strcmp(strupr(s), "RYGBMC") == 0) b=4;
+  else if (strcmp(strupr(s), "BGYRCM") == 0) b=5;
 
   eeprom.storevar(EEVAR_LEDSEQ, b);
 }
@@ -585,21 +611,17 @@ void SerialUi::show_ledseq()
 // Set security button sequence
 void SerialUi::set_lockseq()
 {
-  int i;
-
   bool ok=true;
-  if (st_ptr < SSEQL)
-  {
+  if (st_ptr < SSEQL+2)
     ok=false;
-  }
-  for (i=2; i < st_ptr+2; i++)
+  for (int i=2; i < st_ptr; i++)
     if ( (st_buf[i] < '1') || (st_buf[i] > '3') )
       ok=false;
   if (ok)
   {
     int d = atoi(st_buf+2);
     int ss=NSSEQ+1;
-    for (i=1; i < NSSEQ+1; i++)
+    for (int i=1; i < NSSEQ+1; i++)
     {
       if (Secseq[i] == d)
       {

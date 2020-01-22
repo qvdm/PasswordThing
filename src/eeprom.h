@@ -3,6 +3,7 @@
 
 #include <EEPROMex.h>
 #include <Arduino.h>
+#include <avr/wdt.h>
 #include "hardware.h"
 #include "utils.h"
 
@@ -17,7 +18,7 @@
 #define EE_VARS    16
 #define EE_VARLOC (EE_SLOTLEN*EE_NUMSLOTS)
 #define EE_CRCLOC (EE_VARLOC+EE_VARS)
-#define EE_SEMALOC (EE_VARLOC+EE_VARS+4)
+#define EE_SEMALOC (EE_CRCLOC+4)
 
 struct eepw {
   byte uidlen;
@@ -66,6 +67,8 @@ class Eeprom {
     union eeentry eee;
     char parsebuf[EE_SLOTLEN*2+2];
     byte vbuf[EE_SLOTLEN];
+    char eo_buf[16];
+
 };
 
 #endif 

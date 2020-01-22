@@ -28,6 +28,7 @@
 
 // Macros
 #define SUIPROMPT  Serial.println(" "); Serial.print(">"); Serial.flush()
+#define SUICRLF  Serial.println(" "); Serial.flush()
 
 class SerialUi {
   public:

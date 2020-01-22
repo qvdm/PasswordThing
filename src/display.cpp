@@ -57,8 +57,22 @@ void Display::displaylarge(char *str)
   oled.set2X();
   oled.clear();
   oled.setRow(1);       
-  oled.print(str); 
+  oled.println(str); 
 
+  // Display bottom help string
+  oled.set1X();
+
+  byte b=  eeprom.getvar(EEVAR_BUTSEQ);
+  switch (b) 
+  {
+    case 0 : oled.print("P N S  G R N  X S R"); break;
+    case 1 : oled.print("P S N  G N R  X R S"); break;
+    case 2 : oled.print("N P S  R G N  S X R"); break;
+    case 3 : oled.print("N S P  R N G  S R X"); break;
+    case 4 : oled.print("S P N  N G R  R X S"); break;
+    case 5 : oled.print("S N P  N R G  R S X"); break;
+  }
+  
   // set up for blanking after PTO s
   blanktime = (unsigned long) privacy_timeout * 1000L / LOOP_MS;
 }
