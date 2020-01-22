@@ -251,7 +251,7 @@ void Menu::verylongpress(byte button)
      displayleds(COL_YEL, BLNK_ON);
   }
   else
-  {2
+  {
      // Set serial boot flag
      eeprom.storevar(EESEM_SERMODE, 1);
      disp.displaylarge((char *) F("B-SERIAL")); 
