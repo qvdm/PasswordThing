@@ -36,7 +36,6 @@ class SerialUi {
     void init(int sseq);
     void sio_menu_on();
     void sio_menu_off();
-    bool running();
     void vTaskSerialUi();
 
   private:

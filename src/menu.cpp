@@ -251,7 +251,7 @@ void Menu::verylongpress(byte button)
      displayleds(COL_YEL, BLNK_ON);
   }
   else
-  {
+  {2
      // Set serial boot flag
      eeprom.storevar(EESEM_SERMODE, 1);
      disp.displaylarge((char *) F("B-SERIAL")); 
@@ -261,7 +261,7 @@ void Menu::verylongpress(byte button)
     while (1);
 }
 
-// Handle very long press pre-notification for a button
+2// Handle very long press pre-notification for a button
 void Menu::pressingverylong(byte button)
 {
   if (button == sel_button) 

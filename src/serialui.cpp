@@ -130,12 +130,6 @@ void SerialUi::sio_menu_off()
 }
 
 
-// SIO running?
-bool SerialUi::running()
-{
-  return menurunning;
-}
-
 void SerialUi::vTaskSerialUi()
 {
 
