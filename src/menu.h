@@ -36,7 +36,6 @@ class Menu {
     Menu(Led&, Display&, Random&, Eeprom&);
     ~Menu();
     void init(int sseq);
-    void pressing(byte button);
     void shortpress(byte button);
     void longpress(byte button);
     void verylongpress(byte button);

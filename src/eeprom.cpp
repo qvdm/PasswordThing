@@ -86,8 +86,6 @@ void Eeprom::write_signature()
   EEPROM.updateLong(EE_SIGLOC, sig );
 }
 
-
-
 // Zero out the EEPROM and initialize the CRC - takes a long time 
 void Eeprom::zero()
 {
@@ -443,25 +441,6 @@ void Eeprom::restore()
   Serial.println(F("CS OK"));
 
   Serial.println(F("Restored"));
-}
-
-// Check signature
-bool Eeprom::check_signature()
-{
-   unsigned long sig;
-   unsigned long csig = EE_SIG;
-
-  sig = EEPROM.readLong (EE_SIGLOC);
-  return (sig == csig);
-}
-
-
-// Write signature
-void Eeprom::write_signature()
-{
-   unsigned long sig = EE_SIG;
-
-  EEPROM.updateLong(EE_SIGLOC, sig );
 }
 
 

@@ -213,16 +213,6 @@ void Menu::shortpress(byte button)
   }
 }
 
-// Handle press pre-notification for a button
-void Menu::pressing(byte button)
-{
-  if (waitforseq > 0)
-    return;
-
-  // Later use
-}
-
-
 // Handle long press of a button
 void Menu::longpress(byte button)
 {
