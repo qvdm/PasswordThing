@@ -208,7 +208,7 @@ void loop()
 
   // Check for lock timeout
 //  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) && !autolocked )
-//    SWRESET;
+//    WDRESET;
 
   // Measure elapsed time
   loopend = getTime();
