@@ -274,7 +274,7 @@ void Menu::verylongpress(byte button)
   else // next - reset to Serial mode
   {
      // Set serial boot flag
-     eeprom.storevar(EESEM_SERMODE, 1);
+     eeprom.storesema(EESEM_SERMODE, 1);
      disp.displaylarge((char *) "R-SERIAL"); 
      displayleds(COL_WHT, BLNK_ON);
      WDRESET;

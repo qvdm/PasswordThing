@@ -25,19 +25,19 @@ port.  The LED will be solid white until the terminal emulator connects
 (asserts DTR/RTS) and then the LED will blink off briefly once a second to
 indicate configuration mode. 
 
-Alternatively, you can enter configuration mode at any time by pressing any
+Alternatively, you can enter configuration mode at any time by pressing the Next
 button on the PT for longer than 3 seconds.  The LED will change to white to 
-indicate that the PT is ready to enter configuration mode and it will flash
-off-to-on approximately 4 seconds later to indicate that configuration mode
-is active and that you may connect your serial terminal.  
+indicate that the PT is in configuration mode.  
 
 When you enter Configuration mode and connect a serial terminal, you should
-see the prompt **Slot 0 >>** on the terminal. 
+see the prompt **>** on the terminal. 
 
 # Commands
 
 ## Help
 You can press **'?'** or **'h'** at any Slot prompt to get a list of available commands.  
+
+!!! TBD update for new terminal cmds
 
 ## Slot number
 The serial terminal shows a prompt with the current Slot number (0 at statup).  

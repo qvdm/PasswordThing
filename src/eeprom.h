@@ -61,6 +61,8 @@ class Eeprom {
     void getname(byte slot, char* name);
     void storevar(int var, byte value);
     byte getvar(int var);
+    void storesema(int sema, byte value);
+    byte getsema(int sema);
     void clearslot(int slot);
     void dupslot(int source, int dest);
     void dump();

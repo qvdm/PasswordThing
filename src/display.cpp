@@ -65,12 +65,12 @@ void Display::displaylarge(char *str)
   byte b=  eeprom.getvar(EEVAR_BUTSEQ);
   switch (b) 
   {
-    case 0 : oled.print("P N S  G R N  X S R"); break;
-    case 1 : oled.print("P S N  G N R  X R S"); break;
-    case 2 : oled.print("N P S  R G N  S X R"); break;
-    case 3 : oled.print("N S P  R N G  S R X"); break;
-    case 4 : oled.print("S P N  N G R  R X S"); break;
-    case 5 : oled.print("S N P  N R G  R S X"); break;
+    case 0 : oled.print("P-G-X   N-0-S   S-N-R]"); break; 
+    case 1 : oled.print("P-G-X   S-N-R   N-0-S]"); break; 
+    case 2 : oled.print("N-0-S   P-G-X   S-N-R]"); break; 
+    case 3 : oled.print("N-0-S   S-N-R   P-G-X]"); break; 
+    case 4 : oled.print("S-N-R   P-G-X   N-0-S]"); break; 
+    case 5 : oled.print("S-N-R   N-0-S   P-G-X]"); break; 
   }
   
   // set up for blanking after PTO s

@@ -108,6 +108,7 @@ typedef unsigned char byte;
 // EEPROM semaphore offset
 #define EESEM_SERMODE  0 // Reboot into serial mode
 #define EESEM_AUTOLOCK 1 // Autolocked
+#define EESEM_AYB      2 // Display ayb
   
 // # of possible security seqs and seq length
 #define NSSEQ 81 

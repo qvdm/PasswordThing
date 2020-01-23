@@ -221,7 +221,7 @@ void Eeprom::getname(byte slot, char* name)
   }
 }
 
-// Store a variable (#0-3) in the EEPROM variable space
+// Store a variable in the EEPROM variable space
 void Eeprom::storevar(int var, byte value)
 {
   int addr = EE_VARLOC+var;
@@ -230,13 +230,30 @@ void Eeprom::storevar(int var, byte value)
   update_crc();
 }
 
-// Read a variable (#0-3) from the EEPROM variable space
+// Read a variable from the EEPROM variable space
 byte Eeprom::getvar(int var)
 {
   int addr = EE_VARLOC+var;
 
   return EEPROM.readByte(addr);
 }
+
+// Store a semaphore in the EEPROM semaphore space
+void Eeprom::storesema(int sema, byte value)
+{
+  int addr = EE_SEMALOC+sema;
+ 
+  EEPROM.updateByte(addr, value);
+}
+
+// Read a semaphore from the EEPROM semaphore space
+byte Eeprom::getsema(int sema)
+{
+  int addr = EE_SEMALOC+sema;
+
+  return EEPROM.readByte(addr);
+}
+
 
 
 // Clears a UID/PWD slot

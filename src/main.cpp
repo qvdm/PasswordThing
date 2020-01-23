@@ -49,7 +49,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="V5B20012205";
+char Version[]="V5B20012206";
 char eedVer[]="V04"; // eeprom dump
 
 // Forward declare systick function
@@ -99,9 +99,9 @@ void setup()
       kbmode = KM_SERIAL;
     }
   }
-  else if (cEeprom.getvar(EESEM_SERMODE) > 0)
+  else if (cEeprom.getsema(EESEM_SERMODE) > 0)
   {
-    cEeprom.storevar(EESEM_SERMODE, 0);
+    cEeprom.storesema(EESEM_SERMODE, 0);
     cSui.sio_menu_on();
     kbmode = KM_SERIAL;
   }
@@ -141,6 +141,11 @@ void setup()
   byte ledcols = cEeprom.getvar(EEVAR_LEDSEQ); // LED color assignments
   cMenu.set_slotcolors(ledcols);
 
+  if (cEeprom.getsema(EESEM_AYB) == 0)
+  {
+    cDisp.displaylarge("ayb.ca/pwt");
+    delay(1000);
+  }
   // Initialize button 'menu' or serial menu depending in global mode
   if (kbmode == KM_KBD)
   {
