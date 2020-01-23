@@ -86,7 +86,8 @@
  * EZ - Zero eeprom
  * 
  * <cmd>
- * RX - Reset
+ * MR - Reset
+ * ML - Toggle logo display at startup
  * 
  */
 
@@ -95,6 +96,7 @@
 // External refs
 extern unsigned long getTime(void);
 extern int Secseq[];
+extern char Version[];;
 
 // CTOR
 SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)
@@ -118,6 +120,7 @@ void SerialUi::sio_menu_on()
   menurunning = true;
   Keyboard.end(); // Turn off kbd
   Serial.begin(115200);  while (!Serial); 
+  Serial.println((char *) Version);
   SUIPROMPT;
 }
 
@@ -192,9 +195,9 @@ void SerialUi::parse_input()
         case 'T' : handle_to(); break;
         case 'Q' : handle_seq(); break;
         case 'E' : handle_eep(); break;
-        case 'R' : handle_cmd(); break;
+        case 'M' : handle_cmd(); break;
         case 'H' :
-        case '?' : Serial.println("#GSTQER");
+        case '?' : Serial.println("#GSTQEM");
      }
   }
 }
@@ -301,7 +304,8 @@ void SerialUi::handle_cmd()
 {
   switch (toupper(st_buf[1]))
   {
-    case 'X' : reset(); break;
+    case 'R' : reset(); break;
+    case 'L' : toggle_logo(); break;
     case 'H' :
     case '?' : Serial.println("X");
   }
@@ -413,6 +417,15 @@ void SerialUi::show_prto()
 {
   bool prto = (bool) eeprom.getvar(EEVAR_PRTO);
   if (prto) Serial.print(F("ON")); else Serial.print(F("OFF")); 
+}
+
+
+// Toggle logo display state
+void SerialUi::toggle_logo()
+{
+  bool logo = (bool) eeprom.getsema(EESEM_AYB);
+  logo = !logo;
+  eeprom.storesema(EESEM_AYB, (byte) logo);
 }
 
 

@@ -75,6 +75,7 @@ class SerialUi {
     void show_flip(void);
     void toggle_prto(void);
     void show_prto(void);
+    void toggle_logo(void);
     void menu_buttonconfig(void);
     void menu_ledconfig(void);
     void show_eevars(void);

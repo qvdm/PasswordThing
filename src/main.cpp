@@ -22,7 +22,7 @@
  * 
  * TBD
  *      Save and Restore - complete Restore 
- *      Autolock
+ *      Implement Autolock again
  * 
  * BUGS:
  * 
@@ -143,8 +143,8 @@ void setup()
 
   if (cEeprom.getsema(EESEM_AYB) == 0)
   {
-    cDisp.displaylarge("ayb.ca/pwt");
-    delay(1000);
+    cDisp.displaylarge((char *) "ayb.ca/pwt");
+    delay(2000);
   }
   // Initialize button 'menu' or serial menu depending in global mode
   if (kbmode == KM_KBD)

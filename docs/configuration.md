@@ -2,182 +2,86 @@
 
 The Password Thing (PT) provides a **"configuration"** interface to allow you to use
 extended functionality that would be difficult to implement using just the
-three (or two) buttons on the device.  
+three (or two) buttons on the device.  Specifically it allows you to adjust 
+user interface settings and to enter your own usernames and passwords
 
 # Software
 
-To access Configuration mode, you need a Serial Terminal Emulator, since the PT emulates a
-serial port.  CoolTerm is one option that works fine, but you can use any
-terminal emulator that supports USB serial ports.  
+To access Configuration mode, you need a the companion configuration software.  
+Binaries for Windows, MacOs and Linux are available.  
+
 
 # Settings
 
-The connection settings are: **115200 N 8 1** (115,200 baud, no parity, 8
-data bits, 1 stop bit).
-
-The terminal emulator should also be configured to assert DTR and RTS on
-startup.  
-
-# Entering Configuration mode
-
-To enter configuration mode, press any button while plugging the PT into a USB
-port.  The LED will be solid white until the terminal emulator connects
-(asserts DTR/RTS) and then the LED will blink off briefly once a second to
-indicate configuration mode. 
-
-Alternatively, you can enter configuration mode at any time by pressing the Next
-button on the PT for longer than 3 seconds.  The LED will change to white to 
-indicate that the PT is in configuration mode.  
-
-When you enter Configuration mode and connect a serial terminal, you should
-see the prompt **>** on the terminal. 
-
-# Commands
-
 ## Help
-You can press **'?'** or **'h'** at any Slot prompt to get a list of available commands.  
+Use the Help function or hover your cursor over a field for help
 
-!!! TBD update for new terminal cmds
+## Set Slot Name, Userid and Pasword
+The GUI provides an area for setting the Name, UserId and Password for each slot.  
+Length and format limits are enforced by the UI.  Fields left blank are not set 
+to any value.  Select Update to store the entered values in the PT's Eeprom memory. 
 
-## Slot number
-The serial terminal shows a prompt with the current Slot number (0 at statup).  
-You can press **'S'** followed by a slot number in the range 0-5 to change
-the current slot.  *Shortcut: just press the numeric key corresponding to
-the desired slot number*
-
-## Print password
-Pressing **'P'** prints the password (and userid, if there is one) stored in
-the current slot. 
-
-## Set Userid
-Press **'U'** to enter a new Userid for the slot. The maximum length of a
-userid is 30 characters. If you put a <TAB> at the end of the userid, the PWD 
-will subsequently send <TAB> between the username and password instead of <ENTER>
-
-## Set Password
-Press **'O'** to enter a new password for the current slot.  The password
-may contain numbers, letters, spaces  and special characters.  Maximum length 
-is 30 characters. 
-
-## Name a slot
-Press **'N'** to enter a name for the current slot.  0-7 letters or digits. 
-The name is displayed on the OLED when the slot is selected
-
-## Display a slot name
-Press **'R'** to display the name assigned to the current slot
-
-## Set password generator Mode
-Press **'M'** to set the mode for subsequent generated passwords.  The
-options are Alphabetic, Numeric, Alphanumeric and Special (allow special
-characters)
-
-The mode only applies to passwords generated via the configuration interface,
-and a mode change only lasts for the current serial terminal sesssion.  
-
-## Set password generator Length
-Press **'L'** to set the length of subsequent generated passwords.  
-
-The length only applies to passwords generated via the configuration interface,
-and a length change only lasts for the current serial terminal sesssion.  
+## Password generator Mode and Length
+The options for the password Generator mode are applicable only to the current 
+configuration session and are :Alphabetic, Numeric, Alphanumeric and Special (allow special
+characters) for the Mode. 
 
 ## Generate password
-Press **'G'** to generate a new password for the currently selected slot. 
-The Mode and Length selected above will determine the nature of the
-generated password.  
+Select **'G'** at the end of the Slot area to generate a new password for a slot, 
+using the settings defined in the previous secton. 
 
 ## Clear slot
-Press **'C'** to remove the userid and password stored in the current slot
+Select **'C'** to clear the contents of a slot
 
-## Duplicate  slot
-Press **'A'** to copy the userid and password stored in the current slot to
-another slot.  This may be useful when changing your password on a site. 
  
-## Toggle running indicator
-By default the PT has a red flashing led to indicate that the software is
-running. If this indicator is too distracting, you can press **'B'** to
-disable it.  
-
-The status of the indicator is stored in nonvolatile memory and survives 
-unplugging or restarting of the PT.  
-
-## Privacy timeout
-The PT model U displays passwords on the OLED display when they are
-generated to entered.  For security / privacy reasons, the display blanks
-after 10 seconds by default.  
-
-Press **'I'** to adjust the pre-blank timeout.  Enter a value of 0 to
-disable blanking completely. 
-
-The timeout is stored in nonvolatile memory and survives unplugging or 
-restarting of the PT.  
+## Display timeout
+Adjust the time before the display blanks.  Enter a value of 0 to
+disable blanking.
 
 ## Colour LED timeout
-Some users find the bright colour LED on the PT distracting. There is 
-an option to turn off the LED after a period of time.  
-
-Press **'J'** to adjust the timeout.  Enter a value of 0 to disable.
-
-The timeout is stored in nonvolatile memory and survives unplugging or 
-restarting of the PT.  
+Adjust the time before the LED blanks
 
 ## Password Revert
 If you have one password that you use all the time (like for your password
 manager), it is often annoying to have to cycle back through the whole 
 slot sequence after selecting another password.  If the Password revert
 flag is set, the PT will return to Slot 0 when the display turns off due
-to a Privacy timeout. (The privacy timeout must be set to a nonzero value
+to a display timeout. (The display timeout must be set to a nonzero value
 for the Revert feature to work).  
-
-Press **'y'** to toggle Password Revert. 
-
-The Revert status is stored in nonvolatile memory and survives unplugging or 
-restarting of the PT.  
 
 ## Flip display
 The display of the PT model U may appear upside down depending on the
 orientation in which you use it. 
 
-Press **'F'** to flip the display around.  
-
-The flip value is stored in nonvolatile memory and survives unplugging or 
-restarting of the PT.  
+Select Flip to flip the display around.  
 
 ## Reconfigure buttons
 Depending on the orientation in which you use your PT model U or the side of
 the computer where you plug in your model A, the default button layout may
-be awkward to use.  You can press **'T'** to move the key assignments around.  
-
-The button assignment is stored in nonvolatile memory and survives unplugging or 
-restarting of the PT.  
+be awkward to use.  You can select an alternative key assignment. 
 
 ## Reconfigure LED colours
 The sequence of colours indicating the various slots may be adjusted.  
 
-Press **'K'** to change to colour assignment.  
-
-The colour assignment is stored in nonvolatile memory and survives unplugging or 
-restarting of the PT.  
 
 ## Set security sequence
 To provide protection against casual unathorized use of the PT, it may be
 configured to require the user to press a button sequence before it will
 start operating.  
 
-Press **'W'** to set the security sequence.  
-
 A security sequence is entered as a set of exactly four digits, with **'1'**, **'2'** 
 and **'3'** being the only digits allowed.   **'1'** refers to the **Select** button, 
 **'2'** to the **Next** button and **'3'** to the **Generate** button.  (Note that 
 these are the original button definitions.  If you remap the button function through 
 the **'T'** function described above, it will **not** affect the security button 
-sequence at all.  
+sequence. 
 
 **Example:**  A sequence of **1123** means pressing the **Select** button twice, then 
 the **Next** button and then the **Generate** button.
 
 ## Exit / Reboot 
 
-Press **'X'** to reboot the PT to normal operational mode. 
+Select **Exit** to end the confguration session and restart the PWT in normal mode
 
 
 ## Show EEPROM Variables, Dump EEPROM,  Zero EEPROM and Show Entropy
