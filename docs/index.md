@@ -160,23 +160,21 @@ alphanumeric password, including special characters, is generated.
 ## Very long press on Select
 A press of longer that 3 seconds on Select will result in the PT rebooting
 into normal (password) mode.  When button is pressed for 3 seconds,
-the LED color will change to flashing yellow.  When the button is released, 
+the LED color will change to flashing yellow.  When the button is released,
 the PT will reset.  If a lock code was configured, the PT will boot into
-the locked state. 
+the locked state.
 
 ## Very long press on Next
 A press of longer that 3 seconds on Next will result in the PT rebooting
 into Serial (Configuration) mode.  See the Configuration section of the
 manual for details about this mode.   When button is pressed for 3 seconds,
 the LED color will change to flashing white.  When the button is released, the PT
-will boot into serial mode.  
+will boot into serial mode.
 
 ## Very long press on Generate
-A press of longer that 3 seconds on Generate will do nothing and just allow 
+A press of longer that 3 seconds on Generate will do nothing and just allow
 the PT to return to normal mode.  Use this to avoid overwriting a stored
 password when Generate was pressed by mistake.
-
-
 
 # LED indicators
 The PT has two indicator LEDs.  One is a monochrome led, which is only used to
@@ -214,7 +212,7 @@ otherwise it blinks at a fast rate.
 # OLED display
 
 The OLED display on the Model U shows the current Slot number and indicates if the slot contains a 
-**U**serid, **P**assword or both (**UP**).  Invalid / uninitialized slots are indicated by **I**. 
+**U**serid, **P**assword or both (**UP**).  Invalid / uninitialized slots are indicated by **Invalid**. 
 
 If the slot was named (See Configuration), the name will be displayed instead of the slot number.
 

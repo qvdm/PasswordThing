@@ -18,6 +18,8 @@
  *   dump       - Debug: dump eeprom contents to Serial
  *   backup     - Dump contents in backup format to Serial
  *   restore    - Restore from backup dump via serial
+ *   check_signature
+ *   write_signature
  * 
  * Private: 
  *   calc_crc
@@ -112,9 +114,9 @@ unsigned long Eeprom::calc_crc(void)
 
 
   unsigned long crc = ~0L;
-  byte eebyte;
+  
   for (int index = 0 ; index < EE_CRCLOC  ; ++index) {
-    eebyte = EEPROM.readByte(index);
+    byte eebyte = EEPROM.readByte(index);
      
     crc = crc_table[(crc ^ eebyte) & 0x0f] ^ (crc >> 4);
     crc = crc_table[(crc ^ (eebyte >> 4)) & 0x0f] ^ (crc >> 4);
@@ -263,21 +265,20 @@ void Eeprom::dupslot(int source, int dest)
 // Utility function to dump entire EEPROM to Serial
 void Eeprom::dump()
 {
-  char buf[16];
   Serial.begin(115200);  while (!Serial);
   Serial.println("EEPROM Dump");
-
+  Serial.println("SLOTS");
   for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
   {
-    sprintf(buf, "%04x", (i*EE_SLOTLEN));
-    Serial.println(buf);
+    sprintf(eo_buf, "S%dUPL %04x", i, (i*EE_SLOTLEN));
+    Serial.println(eo_buf);
     Serial.flush();
     for (int j=0; j < EE_SLOTLEN; j++)
     {
       if ( (j==EE_HDRLEN) || (j==EE_PWOFS) )
         Serial.println("");
-      Serial.print(EEPROM.readByte(i*EE_SLOTLEN+j), HEX);
-      Serial.print(" ");
+      sprintf(eo_buf, "%02X ", EEPROM.readByte(i*EE_SLOTLEN+j));
+      Serial.print(eo_buf);
       Serial.flush();
     }
     Serial.println("");
@@ -287,8 +288,8 @@ void Eeprom::dump()
   Serial.println(F("VARS"));
   for (int k = 0 ; k < EE_VARS  ; ++k)
   {
-    Serial.print(EEPROM.readByte(EE_VARLOC+k), HEX);
-    Serial.print(" ");
+    sprintf(eo_buf, "%02X ", EEPROM.readByte(EE_VARLOC+k));
+    Serial.print(eo_buf);
     Serial.flush();
   }
   Serial.println("");
@@ -296,10 +297,32 @@ void Eeprom::dump()
   Serial.println(F("CRC"));
   for (int l = 0 ; l < 4  ; ++l)
   {
-    Serial.print(EEPROM.readByte(EE_CRCLOC+l), HEX);
-    Serial.print(" ");
+    sprintf(eo_buf, "%02X ", EEPROM.readByte(EE_CRCLOC+l));
+    Serial.print(eo_buf);
     Serial.flush();
   }
+  Serial.println("");
+  Serial.flush();
+
+  Serial.println(F("SEMAS"));
+  for (int m= 0 ; m < EE_SEMAS  ; ++m)
+  {
+    sprintf(eo_buf, "%02X ", EEPROM.readByte(EE_SEMALOC+m));
+    Serial.print(eo_buf);
+    Serial.flush();
+  }
+  Serial.println("");
+  Serial.flush();
+
+  Serial.println(F("SIGNATURE"));
+  for (int n= 0 ; n < EE_SIGLEN  ; ++n)
+  {
+    sprintf(eo_buf, "%02X ", EEPROM.readByte(EE_SIGLOC+n));
+    Serial.print(eo_buf);
+    Serial.flush();
+  }
+
+
   Serial.println("");
   Serial.println("");
   Serial.flush();
@@ -308,7 +331,6 @@ void Eeprom::dump()
 // Utility function to dump entire EEPROM to Serial in backup format
 void Eeprom::backup()
 {
-
   Serial.begin(115200);  while (!Serial);
   Serial.println(eedVer); 
 
@@ -316,7 +338,8 @@ void Eeprom::backup()
   {
     for (int j=0; j < EE_SLOTLEN; j++)
     {
-      Serial.print(EEPROM.readByte(i*EE_SLOTLEN+j), HEX);
+      sprintf(eo_buf, "%02X", EEPROM.readByte(i*EE_SLOTLEN+j));
+      Serial.print(eo_buf);
     }
     Serial.println("");
     Serial.flush();
@@ -324,14 +347,16 @@ void Eeprom::backup()
 
   for (int v=0; v < EE_VARS; v++)
   {
-    Serial.print(EEPROM.readByte(EE_VARLOC+v), HEX);
+    sprintf(eo_buf, "%02X", EEPROM.readByte(EE_VARLOC+v));
+    Serial.print(eo_buf);
   }
   Serial.println("");
   Serial.flush();
 
   for (int c = 0 ; c < 4  ; c++)
   {
-    Serial.print(EEPROM.readByte(EE_CRCLOC+c), HEX);
+    sprintf(eo_buf, "%02X", EEPROM.readByte(EE_CRCLOC+c));
+    Serial.print(eo_buf);
   }
   Serial.println("");
   Serial.println("");
@@ -342,7 +367,6 @@ void Eeprom::backup()
 
 void Eeprom::restore()
 {
-#ifdef EERESTORE  
   int l;
   byte ee;
 
@@ -419,7 +443,25 @@ void Eeprom::restore()
   Serial.println(F("CS OK"));
 
   Serial.println(F("Restored"));
-#else
-  Serial.println(F("Not available"));
-#endif
 }
+
+// Check signature
+bool Eeprom::check_signature()
+{
+   unsigned long sig;
+   unsigned long csig = EE_SIG;
+
+  sig = EEPROM.readLong (EE_SIGLOC);
+  return (sig == csig);
+}
+
+
+// Write signature
+void Eeprom::write_signature()
+{
+   unsigned long sig = EE_SIG;
+
+  EEPROM.updateLong(EE_SIGLOC, sig );
+}
+
+

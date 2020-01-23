@@ -1,8 +1,6 @@
 #ifndef MENU_H
 #define MENU_H
 
-#ifndef MAINT
-
 #include <Arduino.h>
 
 #include "hardware.h"
@@ -42,17 +40,16 @@ class Menu {
     void shortpress(byte button);
     void longpress(byte button);
     void verylongpress(byte button);
+    void pressing(byte button);
     void pressinglong(byte button);
     void pressingverylong(byte button);
     void set_buttonmode(byte mode);
     void set_slotcolors(byte cols);
-    void set_pwdisp(bool pd);
 
   private:
 //    byte slot=0;
     byte prevslot=99;
     byte prto=0;
-    bool pwdisp=false;
     unsigned long rtcount=0;
     struct eepw pwbuf;
     char dispbuf[64];
@@ -81,5 +78,4 @@ class Menu {
     void indicate_slot(void);
 };
 
-#endif 
 #endif 

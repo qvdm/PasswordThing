@@ -1,0 +1,57 @@
+ S - uid/pwd OK
+ LS - next OK
+ LLS - Reset OK
+ 
+ N - next OK
+ LN - revert OK
+ LLN - serial mode  OK
+ 
+ G - pwd OK
+ LG - generate OK
+ LLG - nothing OK
+ 
+ 
+ 1Opasswd - Set S1 pwd FAIL
+ 1Uuserid - Set S1 uid OK
+ 1Nname - Set S1 name OK
+ 1P - Display S1 uid pwd name OK
+ 1G Generate pwd for S1 OK
+ 1C Clear S1 OK
+ 1D2 - Duplicate S1 to S2 OK, should print
+ 
+ <group><cmd>[arg]
+ 
+ GM<A|N|L|S> - Generator Mode FAIL, should display
+ GM - Show generator mode
+ GL<nn> : L10 - Pwd length
+ GL - Show pwd length OK
+ GE - show entropy OK
+ 
+ SFT - Toggle display flip FAIL
+ SF - Show OK , overwrites input
+ SRT - Toggle pwd revert FAIL
+ SR - show OK, iverwrite
+ 
+ TD<nnn> : D030 - Set display timeout to 30s ???
+ TD - Show F
+ TI<nnn> : I030 - Set LED timeout to 30s
+ TI - show F
+ TL<nnn> : L030 - set lock timeout to 30 mins
+ TL - show F
+ 
+ QB<bbb> : TSNG - Set button sequence to SNG
+ QB - show
+ QL<llllll> : TRGBCMY - Set LED sequence to RGBCMY
+ QL - show
+ QS<nnnn> : W1231 - Set security seq to 1231
+ QS - show
+ 
+ implement BSP
+ 
+ ED - Dump eeprom in friendly mode - tbd show semas
+ EB - Dump eeprom in backup mode - tbs shwo semas
+ ER - Restore eeprom
+ EZ - Zero eeprom
+ 
+ <cmd>
+ RX - Reset OK

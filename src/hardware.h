@@ -94,7 +94,7 @@ typedef unsigned char byte;
 #define SDBG(S)   Serial.println(S); Serial.flush();
 
 // EEPROM var offsets
-#define EEVAR_UNUSEED 0 // Unused
+#define EEVAR_UNUSED0 0 // Unused
 #define EEVAR_DFLP    1 // Flip display        - boolean 
 #define EEVAR_SEC     2 // Security seq #      - byte seq
 #define EEVAR_OPRIV   3 // OLED  Privacy       - byte timeout in secs/10, 0 = none
@@ -102,7 +102,7 @@ typedef unsigned char byte;
 #define EEVAR_BUTSEQ  5 // Button seq          - byte index, see menu.h
 #define EEVAR_LEDSEQ  6 // LED seq             - byte index, see menu.h
 #define EEVAR_PRTO    7 // PWD Revert          - boolean
-#define EEVAR_PWDISP  8 // PWD Display         - boolean
+#define EEVAR_UNUSED1 8 // Unused
 #define EEVAR_LOCK    9 // Autolock            - byte timeout in minutes/10, 0 = none
 
 // EEPROM semaphore offset
@@ -117,7 +117,8 @@ typedef unsigned char byte;
 #define MAXSLOTS   6  // Max # of used PW slots
 #define MAXPW      20 // Max generated PWD length
 
-// Reset fn
-#define SWRESET cli(); wdt_enable(WDTO_15MS);  while(1)
+// Reset
+#define WDRESET cli(); wdt_enable(WDTO_15MS);  while (1)
+
 
 #endif

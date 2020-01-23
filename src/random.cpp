@@ -19,8 +19,6 @@
  * 
  */
 
-#ifndef MAINT  
-
 #include "random.h"
 
 Random::Random() 
@@ -50,7 +48,7 @@ byte Random::getbyte()
 // Get bytes from the entropy pool and create a password according to the selected rules
 bool Random::genPw(char *buf, byte len, byte mode)
 {
-  byte range, irange, startc, eneeded, b;
+  byte range, irange, startc, eneeded;
   int numchars=0, numbytes=0, i;
   
   switch (mode)
@@ -91,7 +89,7 @@ bool Random::genPw(char *buf, byte len, byte mode)
   {
     if (numbytes > e)
       return false;  // Entropy exhausted
-    b = getbyte();  // Get a byte from the entropy queue
+    byte b = getbyte();  // Get a byte from the entropy queue
     numbytes++;
 
     if (b < irange) // Check if byte in needed range
@@ -154,4 +152,3 @@ void Random::vTaskRandomGen()
   }
 }
 
-#endif

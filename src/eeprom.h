@@ -3,6 +3,7 @@
 
 #include <EEPROMex.h>
 #include <Arduino.h>
+#include <avr/wdt.h>
 #include "hardware.h"
 #include "utils.h"
 
@@ -69,14 +70,15 @@ class Eeprom {
     void write_signature();
 
 
-
   private:
-    bool eevalid;
+    bool eevalid=false;
     unsigned long calc_crc(void);
     void update_crc(void);
     union eeentry eee;
     char parsebuf[EE_SLOTLEN*2+2];
     byte vbuf[EE_SLOTLEN];
+    char eo_buf[16];
+
 };
 
 #endif 

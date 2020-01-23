@@ -20,83 +20,61 @@
 #define KM_KBD    0
 #define KM_SERIAL 1
 
-// Serial UI Modes
-#define SM_WAIT_CMD  0
-#define SM_WAIT_DATA 1
+// Command length
+#define MAXCMD 64
 
-// Data modes
-#define WD_SLOT  0  // Wait for slot
-#define WD_UID   1 // Wait for UID
-#define WD_PWD   2 // Wait for PWD
-#define WD_MODE  3 // Wait for Mode
-#define WD_PLEN  4 // Wait for Pwd Length
-#define WD_TLEN  5 // Wait for OLED timeout length
-#define WD_DUP   6 // Wait for duplicate slot destination
-#define WD_BTTN  7 // Wait for button config
-#define WD_COL   8 // Wait for color config
-#define WD_LLEN  9 // Wait for LED timeout length
-#define WD_SECC  10 // Wait for security code
-#define WD_SECP  11 // Wait for password
-#define WD_NAME  12 // Wait for slot name
-#define WD_EED   13 // Wait for eeprom dump type
-#define WD_PRT   14 // Wait for PWD revert timeout
-#define WD_CLS   15 // Wait for Clear Slot confirm
-#define WD_BLEN  16 // Wait for Lock timeout
+// Min
+#define MINPW 6 // min pw length
 
-
-#define SUIPROMPT  Serial.print(F("Slot ")); Serial.print(curslot); Serial.print(F(" >> "));  Serial.flush(); 
-#define SUICRLF    Serial.println(" "); Serial.flush()
-#define SUICLS     Serial.write(0x1B); Serial.write('['); Serial.write('2'); Serial.write('J'); Serial.flush();
+// Macros
+#define SUIPROMPT  Serial.println(" "); Serial.print(">"); Serial.flush()
+#define SUICRLF  Serial.println(" "); Serial.flush()
 
 class SerialUi {
   public:
-#ifndef MAINT
     SerialUi(Led&, Display&, Random&, Eeprom&);
-#else
-    SerialUi(Led&, Eeprom&);
-#endif    
     ~SerialUi();
     void init(int sseq);
     void sio_menu_on();
     void sio_menu_off();
-    bool running();
     void vTaskSerialUi();
 
   private:
     bool menurunning=false;
-    byte waitfor;
     byte curslot=0;
     byte pwgenlen;
     byte pwgenmode;
-    int mem;
-    int waitforseq=0;    
     bool displck=false;
 
-    byte st_mode=SM_WAIT_CMD;
     int  st_inchar;
     byte st_ptr=0;
-    char st_buf[EE_PWLEN];
+    char st_buf[MAXCMD];
 
 
     Led &led;
-#ifndef MAINT
     Display &disp;
     Random &rand;
-#endif    
     Eeprom &eeprom;
 
-    void help(void);
+    void reset(void);
     void printcurpw(void);
-    void printcurname(void);
-#ifndef MAINT  
+    void showentropy(void);
     void genpw(void);
-#endif
     void handle_input(void);
+    void parse_input(void);
+
+    void handle_slot(void);
+    void handle_gen(void);
+    void handle_set(void);
+    void handle_to(void); 
+    void handle_seq(void);
+    void handle_eep(void);
     void handle_cmd(void);
-    void handle_data(void);
-    void toggle_blink(void);
+
     void toggle_flip(void);
-    void toggle_pwdisp(void);
+    void show_flip(void);
+    void toggle_prto(void);
+    void show_prto(void);
     void menu_buttonconfig(void);
     void menu_ledconfig(void);
     void show_eevars(void);
@@ -104,21 +82,23 @@ class SerialUi {
     void set_eeuid(void);
     void set_eepw(void);
     void set_eename(void);
-    int buf_to_int(int min, int max);
-#ifndef MAINT
+    int buf_to_int(int start, int min, int max);
     void set_pwgmode(char m);
     void set_pwglen(void);
     void set_dispto(void);
+    void show_dispto(void);
     void set_ledto(void);
+    void show_ledto(void);
     void set_lockto(void);
-    void set_btnmode(char m);
-    void set_colmode(char m);
-#endif
+    void show_lockto(void);
+    void set_butseq(void);
+    void show_butseq(void);
+    void set_ledseq(void);
+    void show_ledseq(void);
+    void set_lockseq(void);
+    void show_lockseq(void);
     void set_slot(char s);
     void dup_slot(char s);
-    void toggle_prto(void);
-    void set_secseq(void);
-    void get_initialpw(void);
 };
 
 

@@ -65,7 +65,7 @@ class Led {
 
   private:
     byte lr=BRI_OFF,lg=BRI_OFF,lb=BRI_OFF, lk=BLNK_OFF;  // Current RGB led color settings
-    byte slr, slg, slb, slk;  // Saved RGB led color and blink settings
+    byte slr=0, slg=0, slb=0, slk=0;  // Saved RGB led color and blink settings
     byte clcycle = 0;       // color blink cycle counter
     byte maxclcycle=(LOOPS_PERSEC)*2;
     bool clstate=false; // colour led state (on/off) 
