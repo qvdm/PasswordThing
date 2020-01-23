@@ -143,11 +143,11 @@ void Menu::pressing(byte button)
     return;
 
   if (button == nxt_button)
-    disp.displaylarge("Nxt|Rvt|Ser"); 
+    disp.displaylarge((char *) "Nxt|Rvt|Ser"); 
   else if(button == sel_button)
-    disp.displaylarge("UP|Nxt|Rst"); 
+    disp.displaylarge((char *) "UP|Nxt|Rst"); 
   else if (button == gen_button)  
-    disp.displaylarge("Pwd|Gen|X"); 
+    disp.displaylarge((char *) "Pwd|Gen|X"); 
 }
 
 // Handle short press of a button
@@ -244,14 +244,17 @@ void Menu::pressinglong(byte button)
   {
     byte nxts = (slot+1) % MAXSLOTS; 
     displayleds(slotcolors[(int)nxts], BLNK_ON);  
+    disp.displaylarge((char *) "Nxt|Rst"); 
   }
   else if ( button == nxt_button)
   {
     displayleds(slotcolors[0], BLNK_ON);  
+    disp.displaylarge((char *) "Rvt|Ser"); 
   }
   else if (button == gen_button)
   {
     displayleds(COL_WHT, BLNK_ON);  
+    disp.displaylarge((char *) "Gen|X"); 
   }
 }
 
@@ -266,12 +269,13 @@ void Menu::verylongpress(byte button)
   }
   else if (button == gen_button) // Cancel Gen
   {
+    indicate_slot();
   }
   else // next - reset to Serial mode
   {
      // Set serial boot flag
      eeprom.storevar(EESEM_SERMODE, 1);
-     disp.displaylarge((char *) F("B-SERIAL")); 
+     disp.displaylarge((char *) "B-SERIAL"); 
      displayleds(COL_WHT, BLNK_ON);
      WDRESET;
   }
@@ -281,12 +285,22 @@ void Menu::verylongpress(byte button)
 void Menu::pressingverylong(byte button)
 {
   if (button == sel_button) 
+  {
     displayleds(COL_YEL, BLNK_ON);  
+    disp.displaylarge((char *) "Reset"); 
+  }
   else if (button == gen_button) 
+  {
     displayleds(slotcolors[slot], BLNK_ON);  
+    disp.displaylarge((char *) "Cancel"); 
+  }
   else
+  {
     displayleds(COL_WHT, BLNK_ON);  
+    disp.displaylarge((char *) "Serial"); 
+  }
 }
+
 
 
 // Next function 
@@ -304,6 +318,7 @@ void  Menu::select()
 {
   // Send the password
   sendpw(true, true);
+  indicate_slot();
 }
 
 void  Menu::generate()
@@ -320,8 +335,7 @@ void  Menu::generate()
       eeprom.storepw(slot, &pwbuf);
       pwbuf.pwd[MAXPW]=0;
 
-      // Show PW on Oled
-      disp.displaysmall((char *) pwbuf.pwd, NULL, NULL);
+      indicate_slot();
     }
     else
     {
@@ -383,6 +397,7 @@ void Menu::sendpw(bool sndcr, bool snduid)
       delay(50);
     }
   }
+  indicate_slot();
 }
 
 // Sets the color and blink state of the LEDs
