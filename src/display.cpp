@@ -91,41 +91,6 @@ void Display::displaysmall(char *str1, char *str2, char *str3)
   blanktime = (unsigned long) privacy_timeout * 1000L / LOOP_MS;
 }
 
-// Display large and small chars on Oled
-void Display::displaylargesmall(char *lstr, char *sstr0, char *sstr1, char *sstr2)
-{
-  oled.set2X();
-  oled.clear();
-  oled.setRow(1);       
-  oled.println(lstr); 
-  oled.set1X();
-  oled.setRow(4);       
-
-  oled.print(sstr0[0]); 
-  oled.print(" "); 
-  oled.print(sstr0[1]); 
-  oled.print(" "); 
-  oled.print(sstr0[2]); 
-  oled.print("   "); 
-
-  oled.print(sstr1[0]); 
-  oled.print(" "); 
-  oled.print(sstr1[1]); 
-  oled.print(" "); 
-  oled.print(sstr1[2]); 
-  oled.print("   "); 
-
-  oled.print(sstr2[0]); 
-  oled.print(" "); 
-  oled.print(sstr2[1]); 
-  oled.print(" "); 
-  oled.print(sstr2[2]); 
-  oled.print("   "); 
-
-
-  // set up for blanking after PTO s
-  blanktime = (unsigned long) privacy_timeout * 1000L / LOOP_MS;
-}
 
 void Display::setprivacy(byte timeout)
 {

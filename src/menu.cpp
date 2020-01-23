@@ -431,9 +431,6 @@ void Menu::showslotled(struct pwvalid *v)
 // Display slot # and info on OLED
 void Menu::displayslot(struct pwvalid *v)
 {
-#ifdef ZARF
-  char keybuf0[3], keybuf1[3], keybuf2[3];
-#endif
   eeprom.getname(slot, snbuf);
   if (strlen(snbuf) > 0)
     sprintf(dispbuf, "%s", snbuf);
@@ -443,46 +440,6 @@ void Menu::displayslot(struct pwvalid *v)
   else if (v->uidvalid) strcat(dispbuf, " UP");
   else strcat(dispbuf, " P");
 
-#ifdef ZARF
-  byte b = eeprom.getvar(EEVAR_BUTSEQ);
-  switch (b)
-  {
-    case 0 : // GNS
-      strcpy(keybuf0, "GNS"); 
-      strcpy(keybuf1, "NRG"); 
-      strcpy(keybuf1, "RSX"); 
-      break;
-    case 1 : // GSN
-      strcpy(keybuf0, "GSN"); 
-      strcpy(keybuf1, "NGR"); 
-      strcpy(keybuf1, "RXS"); 
-      break;
-    case 2 : // NGS
-      strcpy(keybuf0, "NGS"); 
-      strcpy(keybuf1, "RNG"); 
-      strcpy(keybuf1, "SRX"); 
-      break;
-    case 3 : // NSG
-      strcpy(keybuf0, "NSG"); 
-      strcpy(keybuf1, "RGN"); 
-      strcpy(keybuf1, "SXR"); 
-      break;
-    case 4 : // SGN
-      strcpy(keybuf0, "SGN"); 
-      strcpy(keybuf1, "GNR"); 
-      strcpy(keybuf1, "XRS"); 
-      break;
-    case 5 : // SNG
-      strcpy(keybuf0, "SNG"); 
-      strcpy(keybuf1, "GNR"); 
-      strcpy(keybuf1, "XRS"); 
-      break;
-    default : 
-      strcpy(keybuf0, ""); 
-      break;
-  }
-  disp.displaylargesmall(dispbuf, keybuf0, keybuf1, keybuf2);
-#endif
   disp.displaylarge(dispbuf);
 
 }

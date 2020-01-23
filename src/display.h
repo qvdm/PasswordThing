@@ -30,7 +30,6 @@ class Display {
     bool isblank();
     void displaylarge(char *str);
     void displaysmall(char *str1, char *str2, char *str3);
-    void displaylargesmall(char *lstr, char *sstr0, char *sstr1, char *sstr2);
     void setprivacy(byte timeout);
     void setflip(bool state);
     void setpwrevert(bool state);
