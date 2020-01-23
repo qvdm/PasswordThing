@@ -49,7 +49,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="V5B20012204";
+char Version[]="V5B20012205";
 char eedVer[]="V04"; // eeprom dump
 
 // Forward declare systick function

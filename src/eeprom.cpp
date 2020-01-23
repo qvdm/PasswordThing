@@ -5,7 +5,7 @@
  * 
  * Provides:
  *   valid?     - Eeprom CRC valid?
- *   zero       - Zero EEPROM (just the counters)
+ *   zero       - Zero EEPROM 
  *   entryvalid - Specific entry valid?
  *   storepw    - Store a PWD and optional UID
  *   getpw      - Get a PWD and optional UID

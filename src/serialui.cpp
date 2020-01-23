@@ -193,7 +193,9 @@ void SerialUi::parse_input()
         case 'Q' : handle_seq(); break;
         case 'E' : handle_eep(); break;
         case 'R' : handle_cmd(); break;
-    }
+        case 'H' :
+        case '?' : Serial.println("#GSTQER");
+     }
   }
 }
 
@@ -227,6 +229,8 @@ void SerialUi::handle_slot()
     case 'G' : genpw(); printcurpw(); break;
     case 'C' : eeprom.clearslot(curslot); printcurpw();break;
     case 'D' : if ( (st_buf[2] >= '0') && (st_buf[2] < '0' + MAXSLOTS) ) dup_slot(st_buf[2]); printcurpw(); break;
+    case 'H' :
+    case '?' : Serial.println("OUNPGCD");
     
   }
 }
@@ -238,6 +242,8 @@ void SerialUi::handle_gen()
     case 'M' : if (st_ptr > 1) set_pwgmode(st_buf[2]); break;
     case 'L' : if (st_ptr > 1) set_pwglen(); break;
     case 'E' : showentropy(); break;
+    case 'H' :
+    case '?' : Serial.println("MLE");
   }
 }
 
@@ -247,6 +253,8 @@ void SerialUi::handle_set()
   {
     case 'F' : if ( (st_ptr > 1) && (toupper(st_buf[2]) == 'T') ) toggle_flip(); show_flip(); break;
     case 'R' : if ( (st_ptr > 1) && (toupper(st_buf[2]) == 'T') ) toggle_prto(); show_prto(); break;
+    case 'H' :
+    case '?' : Serial.println("FR");
   }
 }
 
@@ -257,6 +265,8 @@ void SerialUi::handle_to()
     case 'D' : if (st_ptr > 2) set_dispto(); show_dispto(); break;
     case 'I' : if (st_ptr > 2) set_ledto(); show_ledto(); break;
     case 'L' : if (st_ptr > 2) set_lockto(); show_lockto(); break;
+    case 'H' :
+    case '?' : Serial.println("DIL");
   }
 
 }
@@ -268,6 +278,8 @@ void SerialUi::handle_seq()
     case 'B' : if (st_ptr > 2) set_butseq(); show_butseq(); break;
     case 'L' : if (st_ptr > 2) set_ledseq(); show_ledseq(); break;
     case 'S' : if (st_ptr > 2) set_lockseq(); show_lockseq(); break;
+    case 'H' :
+    case '?' : Serial.println("BLS");
   }
 }
 
@@ -280,6 +292,8 @@ void SerialUi::handle_eep()
     case 'B' : eeprom.backup(); break;
     case 'R' : Serial.setTimeout(30000); eeprom.restore(); break;
     case 'Z' : eeprom.zero(); break;
+    case 'H' :
+    case '?' : Serial.println("DBRZ");
   }
 }
 
@@ -288,6 +302,8 @@ void SerialUi::handle_cmd()
   switch (toupper(st_buf[1]))
   {
     case 'X' : reset(); break;
+    case 'H' :
+    case '?' : Serial.println("X");
   }
 }
 
