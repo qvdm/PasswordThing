@@ -23,6 +23,7 @@
  * TBD
  *      Save and Restore - complete Restore 
  *      Implement Autolock again
+ *      Create desktop configuration sw with upload facility
  * 
  * BUGS:
  * 
