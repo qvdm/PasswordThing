@@ -172,7 +172,7 @@ void SerialUi::handle_input()
       st_ptr--;
     }
   }
-  else if ((st_inchar >= ' ') && (st_inchar <= '~') ) 
+  else if ( ((st_inchar >= ' ') && (st_inchar <= '~') )  || (st_inchar == '\t') )
   {
     st_buf[st_ptr++] = st_inchar;
   }
@@ -307,7 +307,7 @@ void SerialUi::handle_cmd()
     case 'R' : reset(); break;
     case 'L' : toggle_logo(); break;
     case 'H' :
-    case '?' : Serial.println("X");
+    case '?' : Serial.println("RL");
   }
 }
 

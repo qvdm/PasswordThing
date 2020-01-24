@@ -260,8 +260,9 @@ byte Eeprom::getsema(int sema)
 void Eeprom::clearslot(int slot)
 {
   int addr = slot*EE_SLOTLEN;
-  EEPROM.updateByte(addr, 0);
-  EEPROM.updateByte(addr+1, 0);
+  EEPROM.updateByte(addr, 0); // zero uid length
+  EEPROM.updateByte(addr+1, 0); // zero pwd length
+  EEPROM.updateByte(addr+EE_ULLEN+EE_PLLEN, 0); // clear name
   update_crc();
 }
 

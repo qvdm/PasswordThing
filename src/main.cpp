@@ -39,6 +39,7 @@
 #include <TimerOne.h>
 
 // Class headers
+#include "version.h"
 #include "hardware.h"
 #include "tick.h"
 #include "utils.h"
@@ -50,7 +51,7 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]="V5B20012206";
+char Version[]=VERSION_SHORT;
 char eedVer[]="V04"; // eeprom dump
 
 // Forward declare systick function
