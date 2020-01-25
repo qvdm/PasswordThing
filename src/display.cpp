@@ -56,11 +56,11 @@ void Display::displaylarge(char *str)
 {
   oled.set2X();
   oled.clear();
-  oled.setRow(1);       
   oled.println(str); 
-
+  
   // Display bottom help string
   oled.set1X();
+  oled.println(""); 
 
   byte b=  eeprom.getvar(EEVAR_BUTSEQ);
   switch (b) 
