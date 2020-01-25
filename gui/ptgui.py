@@ -68,8 +68,15 @@ class MyApplication(pygubu.TkApplication):
             messagebox.showinfo('File', 'You clicked Quit menuitem. Byby')
             self.quit();
 
+    def on_mtools_item_clicked(self, itemid):
+        if itemid == 'mtools_dump':
+            messagebox.showinfo('File', 'You clicked Dump menuitem')
 
-    def on_about_clicked(self):
+    def on_mtools_item_clicked(self, itemid):
+        if itemid == 'mtools_clear':
+            messagebox.showinfo('File', 'You clicked Clear menuitem')
+
+pygu    def on_about_clicked(self):
         messagebox.showinfo('About', 'You clicked About menuitem')
 
 
