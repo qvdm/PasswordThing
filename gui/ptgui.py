@@ -36,10 +36,6 @@ def serial_ports():
     return result
 
 
-if __name__ == '__main__':
-    print(serial_ports())
-
-
 class MyApplication(pygubu.TkApplication):
 
     def _create_ui(self):
@@ -76,12 +72,13 @@ class MyApplication(pygubu.TkApplication):
         if itemid == 'mtools_clear':
             messagebox.showinfo('File', 'You clicked Clear menuitem')
 
-pygu    def on_about_clicked(self):
+    def on_about_clicked(self):
         messagebox.showinfo('About', 'You clicked About menuitem')
 
 
 if __name__ == '__main__':
-    print(serial_ports())
+    ports = serial_ports()
+    print(ports)
     root = tk.Tk()
     app = MyApplication(root)
     app.run()

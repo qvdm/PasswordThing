@@ -110,9 +110,6 @@ void setup()
   else
   {
     cLed.ledcolor(COL_YEL, BLNK_ON);
-#ifndef TEST    
-    wdt_enable(WDTO_4S);  
-#endif    
   }
 
   // Check EEPROM signature and crc - if not valid, zero EEPROM and write signature
@@ -156,7 +153,10 @@ void setup()
 
 #ifdef TEST
     testhw();
-#endif
+#else
+    wdt_enable(WDTO_4S);  
+#endif    
+
     cMenu.init(sseq);  
   }
   else
