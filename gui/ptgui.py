@@ -67,9 +67,7 @@ class MyApplication(pygubu.TkApplication):
     def on_mtools_item_clicked(self, itemid):
         if itemid == 'mtools_dump':
             messagebox.showinfo('File', 'You clicked Dump menuitem')
-
-    def on_mtools_item_clicked(self, itemid):
-        if itemid == 'mtools_clear':
+        elif itemid == 'mtools_clear':
             messagebox.showinfo('File', 'You clicked Clear menuitem')
 
     def on_about_clicked(self):
@@ -78,7 +76,6 @@ class MyApplication(pygubu.TkApplication):
 
 if __name__ == '__main__':
     ports = serial_ports()
-    print(ports)
     root = tk.Tk()
     app = MyApplication(root)
     app.run()
