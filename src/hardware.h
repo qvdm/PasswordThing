@@ -115,6 +115,8 @@ typedef unsigned char byte;
 // Global maximums
 #define MAXSLOTS   6  // Max # of used PW slots
 #define MAXPW      20 // Max generated PWD length
+#define MAXLOCKTO  144 // 1440 min
+
 
 // Reset
 #define WDRESET cli(); wdt_enable(WDTO_15MS);  while (1)

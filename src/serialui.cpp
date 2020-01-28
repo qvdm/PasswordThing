@@ -562,7 +562,7 @@ void SerialUi::show_ledto()
 // Set lock timeout from string in buf
 void SerialUi::set_lockto()
 {
-  int d = buf_to_int(2, 0, MAXLTO*10);
+  int d = buf_to_int(2, 0, MAXLOCKTO*10);
   Serial.println(d );
   if ( d >= 0 )
   {            
