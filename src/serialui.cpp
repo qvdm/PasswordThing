@@ -423,9 +423,10 @@ void SerialUi::show_prto()
 // Toggle logo display state
 void SerialUi::toggle_logo()
 {
-  bool logo = (bool) eeprom.getsema(EESEM_AYB);
+  bool logo = (bool) eeprom.getvar(EEVAR_AYB);
   logo = !logo;
-  eeprom.storesema(EESEM_AYB, (byte) logo);
+  eeprom.storevar(EEVAR_AYB, (byte) logo);
+  if (logo) Serial.print(F("OFF")); else Serial.print(F("ON")); 
 }
 
 
@@ -562,6 +563,7 @@ void SerialUi::show_ledto()
 void SerialUi::set_lockto()
 {
   int d = buf_to_int(2, 0, MAXLTO*10);
+  Serial.println(d );
   if ( d >= 0 )
   {            
     byte lck = (byte) (d/10);

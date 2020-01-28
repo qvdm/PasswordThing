@@ -37,6 +37,7 @@ void Display::init()
   // Initialize display
   oled.begin(&Adafruit128x32, I2C_OLED_ADDRESS);
   oled.setFont(Adafruit5x7);
+  oled.setScrollMode(SCROLL_MODE_AUTO);
   oled.set2X();
   oled.clear();
 

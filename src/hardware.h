@@ -94,7 +94,7 @@ typedef unsigned char byte;
 #define SDBG(S)   Serial.println(S); Serial.flush();
 
 // EEPROM var offsets
-#define EEVAR_UNUSED0 0 // Unused
+#define EEVAR_AYB     0 // Display logo at startup - boolean, 0-yes, other=no
 #define EEVAR_DFLP    1 // Flip display        - boolean 
 #define EEVAR_SEC     2 // Security seq #      - byte seq
 #define EEVAR_OPRIV   3 // OLED  Privacy       - byte timeout in secs/10, 0 = none
@@ -107,8 +107,6 @@ typedef unsigned char byte;
 
 // EEPROM semaphore offset
 #define EESEM_SERMODE  0 // Reboot into serial mode
-#define EESEM_AUTOLOCK 1 // Autolocked
-#define EESEM_AYB      2 // Display ayb
   
 // # of possible security seqs and seq length
 #define NSSEQ 81 

@@ -76,7 +76,7 @@ class MyApplication(pygubu.TkApplication):
         if itemid == 'mtools_clear':
             messagebox.showinfo('File', 'You clicked Clear menuitem')
 
-pygu    def on_about_clicked(self):
+    def on_about_clicked(self):
         messagebox.showinfo('About', 'You clicked About menuitem')
 
 
