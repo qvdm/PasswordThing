@@ -147,7 +147,7 @@ void Menu::pressing(byte button)
   else if(button == sel_button)
     disp.displaylarge((char *) "UP|Nxt|Rst", false); 
   else if (button == gen_button)  
-    disp.displaylarge((char *) "Pwd|Gen|X", false); 
+    disp.displaylarge((char *) "Pwd|Gen|VP", false); 
 }
 
 // Handle short press of a button
@@ -254,7 +254,7 @@ void Menu::pressinglong(byte button)
   else if (button == gen_button)
   {
     displayleds(COL_WHT, BLNK_ON);  
-    disp.displaylarge((char *) "Gen|X", false); 
+    disp.displaylarge((char *) "Gen|View", false); 
   }
 }
 
@@ -267,9 +267,10 @@ void Menu::verylongpress(byte button)
      displayleds(COL_YEL, BLNK_ON);
      WDRESET;
   }
-  else if (button == gen_button) // Cancel Gen
+  else if (button == gen_button) // View Pwd
   {
-    indicate_slot();
+    //indicate_slot();
+    displaypw();
   }
   else // next - reset to Serial mode
   {
@@ -292,7 +293,7 @@ void Menu::pressingverylong(byte button)
   else if (button == gen_button) 
   {
     displayleds(slotcolors[slot], BLNK_ON);  
-    disp.displaylarge((char *) "Cancel", false); 
+    disp.displaylarge((char *) "View", false); 
   }
   else
   {
@@ -453,3 +454,27 @@ void Menu::indicate_slot()
   prevslot = slot;
 }
 
+// Display pwd on OLED
+void Menu::displaypw()
+{
+  struct eepw pw;
+  eeprom.getpw(slot, &pw);
+
+  if (pw.pwdlen > 20)
+  {
+    strncpy((char *) d2buf, (char *) pw.pwd, 20);  d2buf[20]=0;
+    strcpy((char *) dispbuf, (char *) (pw.pwd+20));  
+  }
+
+
+  if (pw.uidlen > 0)
+    if (pw.pwdlen <= 20)
+      disp.displaysmall((char *) pw.uid, "", (char *) pw.pwd);
+    else
+      disp.displaysmall((char *) pw.uid, (char *) d2buf, (char *) dispbuf);
+  else
+    if (pw.pwdlen <= 20)
+      disp.displaysmall((char *) pw.pwd, "", "");
+    else
+      disp.displaysmall((char *) d2buf, (char *) dispbuf, "");
+}

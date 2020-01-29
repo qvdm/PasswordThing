@@ -22,9 +22,7 @@
  * 
  * TBD
  *      Save and Restore - complete Restore 
- *      Implement Autolock again
  *      Create desktop configuration sw with upload facility
- *      Replace X in P_G_X with View - view pwd 
  * 
  * BUGS:
  * 

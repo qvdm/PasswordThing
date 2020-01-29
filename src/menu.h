@@ -52,6 +52,7 @@ class Menu {
     unsigned long rtcount=0;
     struct eepw pwbuf;
     char dispbuf[64];
+    char d2buf[32];
     char snbuf[EE_SNLEN];
     byte gen_button=B_GENERATE;
     byte nxt_button=B_NEXT;
@@ -75,6 +76,7 @@ class Menu {
     void showslotled(struct pwvalid *v);
     void displayleds(byte color, byte clmode);
     void indicate_slot(void);
+    void displaypw(void);
 };
 
 #endif 
