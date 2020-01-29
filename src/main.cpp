@@ -146,7 +146,7 @@ void setup()
 
   if (cEeprom.getvar(EEVAR_AYB) == 0)
   {
-    cDisp.displaylarge((char *) "ayb.ca/pwt");
+    cDisp.displaylarge((char *) "ayb.ca/pwt", false);
     delay(2000);
   }
 
@@ -165,8 +165,8 @@ void setup()
   else
   {
 //    cSui.init(sseq); // uncomment to ask for pwd on serial TBD debug
-    cSui.init(0);
-    cDisp.displaylarge((char *) "SERIAL"); 
+    cDisp.displaylarge((char *) "SERIAL", false); 
+    cSui.init(sseq);
   }
   
 

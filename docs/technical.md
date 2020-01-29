@@ -72,14 +72,14 @@ Slot commands have the format:
 
 > <0..5><cmd>[arg]
 
-* #O<passwd> : The **O** command sets the password for the slot selected by **#** to the string specified by **passwd**
-  - Example: **1Ohunter2** - sets the password for slot 1 to "hunter2"
+* #O<passwd> : The **S** command sets the password for the slot selected by **#** to the string specified by **passwd**
+  - Example: **1Shunter2** - sets the password for slot 1 to "hunter2"
 * #I<userid> : The **I** command sets the userid for the slot selected by **#** to the string specified by **userid**
   - Example: **1Ieddy** - sets the userid for slot 1 to "eddy"
 * #N<name> : The **N** command sets the name of the slot selected by **#** to the string specified by **name**
   - Example: **1NWindows** - sets the name of slot 1 to "Windows"
 * #P : The **P** command prints the name, userid and password for the slot selected by **#*
-  - Example: **1O** - prints the information stored in slot 1
+  - Example: **1P** - prints the information stored in slot 1
 * #G : The **G** command generates a new password for the slot selected by **#*, based on the rules specified by group **G** commands. 
   - Example: **1G** - generates a new password for slot 1
 * #C : The **C** command clears the contents of the  slot selected by **#**

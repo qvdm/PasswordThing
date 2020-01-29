@@ -41,7 +41,7 @@ void Display::init()
   oled.set2X();
   oled.clear();
 
-  displaylarge(Version);
+  displaylarge(Version, false);
   delay(DVDELAY);
 }
 
@@ -53,27 +53,32 @@ bool Display::isblank()
 
 
 // Display large chars on Oled
-void Display::displaylarge(char *str)
+void Display::displaylarge(char *str, bool displayhelp)
 {
   oled.set2X();
   oled.clear();
+
+  if (!displayhelp)
+    oled.setRow(1);
   oled.println(str); 
   
-  // Display bottom help string
-  oled.set1X();
-  oled.println(""); 
-
-  byte b=  eeprom.getvar(EEVAR_BUTSEQ);
-  switch (b) 
+  if (displayhelp)
   {
-    case 0 : oled.print("P-G-X   N-0-S   S-N-R]"); break; 
-    case 1 : oled.print("P-G-X   S-N-R   N-0-S]"); break; 
-    case 2 : oled.print("N-0-S   P-G-X   S-N-R]"); break; 
-    case 3 : oled.print("N-0-S   S-N-R   P-G-X]"); break; 
-    case 4 : oled.print("S-N-R   P-G-X   N-0-S]"); break; 
-    case 5 : oled.print("S-N-R   N-0-S   P-G-X]"); break; 
-  }
-  
+    // Display bottom help string
+    oled.set1X();
+    oled.println(""); 
+
+    byte b=  eeprom.getvar(EEVAR_BUTSEQ);
+    switch (b) 
+    {
+      case 0 : oled.print("P-G-X   N-0-S   S-N-R]"); break; 
+      case 1 : oled.print("P-G-X   S-N-R   N-0-S]"); break; 
+      case 2 : oled.print("N-0-S   P-G-X   S-N-R]"); break; 
+      case 3 : oled.print("N-0-S   S-N-R   P-G-X]"); break; 
+      case 4 : oled.print("S-N-R   P-G-X   N-0-S]"); break; 
+      case 5 : oled.print("S-N-R   N-0-S   P-G-X]"); break; 
+    }
+  }  
   // set up for blanking after PTO s
   blanktime = (unsigned long) privacy_timeout * 1000L / LOOP_MS;
 }
