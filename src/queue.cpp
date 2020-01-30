@@ -48,15 +48,12 @@ byte Queue::dequeue()
 // Add an item to the queue
 bool Queue::enqueue(byte item)
 {
-	// check for queue overflow
-	if (isFull())
-	{
-      return false;
-	}
+	// check for queue full - special mod: if it is, we still add new randomness, but just don't increment the count
+	if (!isFull())
+  	  count++;
 
 	rear = (rear + 1) % MAXQUEUE;
 	arr[rear] = item;
-	count++;
 	return true;
 }
 

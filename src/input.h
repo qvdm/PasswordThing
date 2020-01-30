@@ -24,7 +24,7 @@
 
 #define SHORTPRESS  0
 #define LONGPRESS   1
-#define LONGPRESS_T (TICKS_PERMS)*1000 
+#define LONGPRESS_T (TICKS_PERMS)*1500 
 #define VLONGPRESS_T (TICKS_PERMS)*3000 
 
 class Input {

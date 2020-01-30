@@ -152,16 +152,10 @@ void setup()
 
 #ifdef TEST
     testhw();
-<<<<<<< HEAD
 #else
     wdt_enable(WDTO_4S);  
 #endif    
 
-=======
-#endif
-
-    // Show first slot (or Locked prompt) on display
->>>>>>> 0b006fad7c4ec1a75d641198ea0078b9acdf2ed3
     cMenu.init(sseq);  
   }
   else

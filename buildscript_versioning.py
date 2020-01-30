@@ -1,6 +1,6 @@
 FILENAME_BUILDNO = 'versioning'
 FILENAME_VERSION_H = 'include/version.h'
-version = 'v5.0.'
+version = 'V5.1.'
 
 import datetime
 
