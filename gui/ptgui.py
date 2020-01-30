@@ -1,9 +1,6 @@
-# menu.py
+import wx, wx.html
 import sys
 import glob
-import tkinter as tk
-from tkinter import messagebox
-import pygubu
 import serial
 
 
@@ -36,48 +33,133 @@ def serial_ports():
     return result
 
 
-class MyApplication(pygubu.TkApplication):
+class Comport:
+    def __init__(self, port, speed, parity, datab, stopb):
+        self.port = port
+        self.speed = speed
+        self.parity = parity
+        self.datab = datab
+        self.stopb = stopb
 
-    def _create_ui(self):
-        #1: Create a builder
-        self.builder = builder = pygubu.Builder()
+class Slot:
+    def __init__(self, index, name, userid, password):
+        self.index = index
+        self.name = name
+        self.userid = userid
+        self.password = password
+   
+aboutText = "Hello world"
 
-        #2: Load an ui file
-        builder.add_from_file('menu.ui')
+class HtmlWindow(wx.html.HtmlWindow):
+    def __init__(self, parent, id, size=(600,400)):
+        wx.html.HtmlWindow.__init__(self,parent, id, size=size)
+        if "gtk2" in wx.PlatformInfo:
+            self.SetStandardFonts()
 
-        #3: Create the widget using self.master as parent
-        self.mainwindow = builder.get_object('mainwindow', self.master)
+    def OnLinkClicked(self, link):
+        wx.LaunchDefaultBrowser(link.GetHref())
+        
+class AboutBox(wx.Dialog):
+    def __init__(self):
+        wx.Dialog.__init__(self, None, -1, "About <<project>>",
+            style=wx.DEFAULT_DIALOG_STYLE|wx.THICK_FRAME|wx.RESIZE_BORDER|
+                wx.TAB_TRAVERSAL)
+        hwin = HtmlWindow(self, -1, size=(400,200))
+        vers = {}
+        vers["python"] = sys.version.split()[0]
+        vers["wxpy"] = wx.VERSION_STRING
+        hwin.SetPage(aboutText % vers)
+        btn = hwin.FindWindowById(wx.ID_OK)
+        irep = hwin.GetInternalRepresentation()
+        hwin.SetSize((irep.GetWidth()+25, irep.GetHeight()+10))
+        self.SetClientSize(hwin.GetSize())
+        self.CentreOnParent(wx.BOTH)
+        self.SetFocus()
 
-        # Set main menu
-        self.mainmenu = menu = builder.get_object('mainmenu', self.master)
-        self.set_menu(menu)
+class Frame(wx.Frame):
+    def __init__(self, title):
+        wx.Frame.__init__(self, None, title=title, pos=(150,150), size=(350,200))
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        # Configure callbacks
-        builder.connect_callbacks(self)
+        menuBar = wx.MenuBar()
+        menu = wx.Menu()
+        m_exit = menu.Append(wx.ID_EXIT, "E&xit\tAlt-X", "Close window and exit program.")
+        self.Bind(wx.EVT_MENU, self.OnClose, m_exit)
+        menuBar.Append(menu, "&File")
+        menu = wx.Menu()
+        m_about = menu.Append(wx.ID_ABOUT, "&About", "Information about this program")
+        self.Bind(wx.EVT_MENU, self.OnAbout, m_about)
+        menuBar.Append(menu, "&Help")
+        self.SetMenuBar(menuBar)
+        
+        self.statusbar = self.CreateStatusBar()
+
+        panel = wx.Panel(self)
+        box = wx.BoxSizer(wx.VERTICAL)
+        
+        m_text = wx.StaticText(panel, -1, "Hello World!")
+        m_text.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.BOLD))
+        m_text.SetSize(m_text.GetBestSize())
+        box.Add(m_text, 0, wx.ALL, 10)
+        
+        m_close = wx.Button(panel, wx.ID_CLOSE, "Close")
+        m_close.Bind(wx.EVT_BUTTON, self.OnClose)
+        box.Add(m_close, 0, wx.ALL, 10)
+        panel.SetSizer(box)
+
+        cports = [Comport(0, 115200, "N", 8,1),
+                  Comport(1, 115200, "N", 8,1),
+                  Comport(2, 38400, "E", 7,1) ]
+
+        sampleList = []
+        self.cb = wx.ComboBox(panel,
+                              size=wx.DefaultSize,
+                              choices=sampleList)
+        self.widgetMaker(self.cb, cports)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.cb, 1, wx.ALL, 5)
+        panel.SetSizer(sizer)
+        panel.Layout()
+
+    def widgetMaker(self, widget, objects):
+        for obj in objects:
+            widget.Append(obj.make, obj)
+        widget.Bind(wx.EVT_COMBOBOX, self.onSelect)
+
+    #----------------------------------------------------------------------
+    def onSelect(self, event):
+        print("You selected: " + self.cb.GetStringSelection())
+        obj = self.cb.GetClientData(self.cb.GetSelection())
+        text = """
+        The object's attributes are:
+        %s  %s    %s  %s
+
+        """ % (obj.id, obj.make, obj.model, obj.year)
+        print (text)
 
 
-    def on_mfile_item_clicked(self, itemid):
-        if itemid == 'mfile_open':
-            messagebox.showinfo('File', 'You clicked Open menuitem')
 
-        if itemid == 'mfile_quit':
-            messagebox.showinfo('File', 'You clicked Quit menuitem. Byby')
-            self.quit();
+    def OnClose(self, event):
+        dlg = wx.MessageDialog(self, 
+            "Do you really want to close this application?",
+            "Confirm Exit", wx.OK|wx.CANCEL|wx.ICON_QUESTION)
+        result = dlg.ShowModal()
+        dlg.Destroy()
+        if result == wx.ID_OK:
+            self.Destroy()
 
-    def on_mtools_item_clicked(self, itemid):
-        if itemid == 'mtools_dump':
-            messagebox.showinfo('File', 'You clicked Dump menuitem')
-        elif itemid == 'mtools_clear':
-            messagebox.showinfo('File', 'You clicked Clear menuitem')
-
-    def on_about_clicked(self):
-        messagebox.showinfo('About', 'You clicked About menuitem')
+    def OnAbout(self, event):
+        dlg = AboutBox()
+        dlg.ShowModal()
+        dlg.Destroy()  
 
 
-if __name__ == '__main__':
+# Run the program
+if __name__ == "__main__":
     ports = serial_ports()
-    root = tk.Tk()
-    app = MyApplication(root)
-    app.run()
-    
-    
+    app = wx.App(redirect=True)   
+    top = Frame("<<project>>")
+    top.Show()
+    app.MainLoop()
+
