@@ -22,7 +22,6 @@
  * 
  * TBD
  *      Save and Restore - complete Restore 
- *      Implement Autolock again
  *      Create desktop configuration sw with upload facility
  * 
  * BUGS:
@@ -86,7 +85,7 @@ int Secseq[] = { 0,
 // Lock variables
 unsigned long locktimeout=0;
 unsigned long lastkeypress=0;
-bool autolocked=false;
+byte sseq=0;
 
 // "Initial Task"
 void setup() 
@@ -128,42 +127,48 @@ void setup()
   cDisp.setprivacy(priv);
   priv = cEeprom.getvar(EEVAR_LPRIV); // LED timeout
   cLed.settimeout(priv);
-  byte lck = cEeprom.getvar(EEVAR_LOCK); // LED timeout
+  byte lck = cEeprom.getvar(EEVAR_LOCK); // Autolock timeout
   locktimeout = (unsigned long) lck * 10L * 60L * 1000 * TICKS_PERMS;
   byte flip = cEeprom.getvar(EEVAR_DFLP); // Display flip
   cDisp.setflip((bool) flip);
   byte pwrevert = cEeprom.getvar(EEVAR_PRTO); // PW Revert
   cDisp.setpwrevert((bool) pwrevert);
-  byte sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq
+  sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq
   byte btnmode = cEeprom.getvar(EEVAR_BUTSEQ); // Button assignments
   cMenu.set_buttonmode(btnmode);
   byte ledcols = cEeprom.getvar(EEVAR_LEDSEQ); // LED color assignments
   cMenu.set_slotcolors(ledcols);
 
-  if (cEeprom.getsema(EESEM_AYB) == 0)
+  if (cEeprom.getvar(EEVAR_AYB) == 0)
   {
-    cDisp.displaylarge((char *) "ayb.ca/pwt");
+    cDisp.displaylarge((char *) "ayb.ca/pwt", false);
     delay(2000);
   }
+
   // Initialize button 'menu' or serial menu depending in global mode
   if (kbmode == KM_KBD)
   {
     cSui.sio_menu_off();
-    // Show first slot (or Locked prompt) on display
 
 #ifdef TEST
     testhw();
+<<<<<<< HEAD
 #else
     wdt_enable(WDTO_4S);  
 #endif    
 
+=======
+#endif
+
+    // Show first slot (or Locked prompt) on display
+>>>>>>> 0b006fad7c4ec1a75d641198ea0078b9acdf2ed3
     cMenu.init(sseq);  
   }
   else
   {
 //    cSui.init(sseq); // uncomment to ask for pwd on serial TBD debug
-    cSui.init(0);
-    cDisp.displaylarge((char *) "SERIAL"); 
+    cDisp.displaylarge((char *) "SERIAL", false); 
+    cSui.init(sseq);
   }
   
 
@@ -209,13 +214,19 @@ void loop()
   cRandom.vTaskRandomGen();    // Random # entropy harvester
 
   if (kbmode == KM_SERIAL)
+  {
     cSui.vTaskSerialUi();      // Serial UI
+  }
   else
+  {
     cInput.vTaskDigitalRead(); // Digital input
+    // Check for lock timeout
+    if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout)  && (sseq > 0) )
+    {
+      WDRESET;
+    }
+  }
 
-  // Check for lock timeout
-//  if ( (locktimeout > 0) && ((getTime()-lastkeypress) > locktimeout) && !autolocked )
-//    WDRESET;
 
   // Measure elapsed time
   loopend = getTime();

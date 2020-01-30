@@ -110,6 +110,8 @@ SerialUi::~SerialUi() { }
 // Post CTOR initialization
 void SerialUi::init(int sseq)
 {
+
+  // tbd sseq
   while (Serial.available() > 0) 
     Serial.read();
 }
@@ -207,7 +209,7 @@ void SerialUi::handle_slot()
 
   switch (toupper(st_buf[1]))
   {
-    case 'O' : if ((st_ptr > MINPW+2) && (st_ptr < EE_PWLEN+2)) 
+    case 'S' : if ((st_ptr > MINPW+2) && (st_ptr < EE_PWLEN+2)) 
                { 
                  set_eepw(); 
                  printcurpw(); 
@@ -233,7 +235,7 @@ void SerialUi::handle_slot()
     case 'C' : eeprom.clearslot(curslot); printcurpw();break;
     case 'D' : if ( (st_buf[2] >= '0') && (st_buf[2] < '0' + MAXSLOTS) ) dup_slot(st_buf[2]); printcurpw(); break;
     case 'H' :
-    case '?' : Serial.println("OUNPGCD");
+    case '?' : Serial.println("SUNPGCD");
     
   }
 }
@@ -423,9 +425,10 @@ void SerialUi::show_prto()
 // Toggle logo display state
 void SerialUi::toggle_logo()
 {
-  bool logo = (bool) eeprom.getsema(EESEM_AYB);
+  bool logo = (bool) eeprom.getvar(EEVAR_AYB);
   logo = !logo;
-  eeprom.storesema(EESEM_AYB, (byte) logo);
+  eeprom.storevar(EEVAR_AYB, (byte) logo);
+  if (logo) Serial.print(F("OFF")); else Serial.print(F("ON")); 
 }
 
 
@@ -561,7 +564,8 @@ void SerialUi::show_ledto()
 // Set lock timeout from string in buf
 void SerialUi::set_lockto()
 {
-  int d = buf_to_int(2, 0, MAXLTO*10);
+  int d = buf_to_int(2, 0, MAXLOCKTO*10);
+  Serial.println(d );
   if ( d >= 0 )
   {            
     byte lck = (byte) (d/10);

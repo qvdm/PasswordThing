@@ -28,7 +28,7 @@ class Display {
     ~Display();
     void init();
     bool isblank();
-    void displaylarge(char *str);
+    void displaylarge(char *str, bool showhelp);
     void displaysmall(char *str1, char *str2, char *str3);
     void setprivacy(byte timeout);
     void setflip(bool state);

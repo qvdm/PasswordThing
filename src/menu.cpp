@@ -62,7 +62,7 @@ void Menu::init(int sseq)
   else
   {
     waitforseq=sseq;
-    disp.displaylarge((char *) "LOCKED"); 
+    disp.displaylarge((char *) "LOCKED", false); 
     disp.setprivacy(0);
   }
 }
@@ -143,11 +143,11 @@ void Menu::pressing(byte button)
     return;
 
   if (button == nxt_button)
-    disp.displaylarge((char *) "Nxt|Rvt|Ser"); 
+    disp.displaylarge((char *) "Nxt|Rvt|Ser", false); 
   else if(button == sel_button)
-    disp.displaylarge((char *) "UP|Nxt|Rst"); 
+    disp.displaylarge((char *) "UP|Nxt|Rst", false); 
   else if (button == gen_button)  
-    disp.displaylarge((char *) "Pwd|Gen|X"); 
+    disp.displaylarge((char *) "Pwd|Gen|VP", false); 
 }
 
 // Handle short press of a button
@@ -192,7 +192,7 @@ void Menu::shortpress(byte button)
       }
       if (!secok)
       {
-        disp.displaylarge((char *) "INVALID"); 
+        disp.displaylarge((char *) "INVALID", false); 
         WDRESET;
       }
     }
@@ -244,17 +244,17 @@ void Menu::pressinglong(byte button)
   {
     byte nxts = (slot+1) % MAXSLOTS; 
     displayleds(slotcolors[(int)nxts], BLNK_ON);  
-    disp.displaylarge((char *) "Nxt|Rst"); 
+    disp.displaylarge((char *) "Nxt|Rst", false); 
   }
   else if ( button == nxt_button)
   {
     displayleds(slotcolors[0], BLNK_ON);  
-    disp.displaylarge((char *) "Rvt|Ser"); 
+    disp.displaylarge((char *) "Rvt|Ser", false); 
   }
   else if (button == gen_button)
   {
     displayleds(COL_WHT, BLNK_ON);  
-    disp.displaylarge((char *) "Gen|X"); 
+    disp.displaylarge((char *) "Gen|View", false); 
   }
 }
 
@@ -263,19 +263,20 @@ void Menu::verylongpress(byte button)
 {
   if (button == sel_button) // Reset
   {
-     disp.displaylarge((char *) F("RESET")); 
+     disp.displaylarge((char *) "RESET", false); 
      displayleds(COL_YEL, BLNK_ON);
      WDRESET;
   }
-  else if (button == gen_button) // Cancel Gen
+  else if (button == gen_button) // View Pwd
   {
-    indicate_slot();
+    //indicate_slot();
+    displaypw();
   }
   else // next - reset to Serial mode
   {
      // Set serial boot flag
      eeprom.storesema(EESEM_SERMODE, 1);
-     disp.displaylarge((char *) "R-SERIAL"); 
+     disp.displaylarge((char *) "SERIAL R", false); 
      displayleds(COL_WHT, BLNK_ON);
      WDRESET;
   }
@@ -287,17 +288,17 @@ void Menu::pressingverylong(byte button)
   if (button == sel_button) 
   {
     displayleds(COL_YEL, BLNK_ON);  
-    disp.displaylarge((char *) "Reset"); 
+    disp.displaylarge((char *) "Reset", false); 
   }
   else if (button == gen_button) 
   {
     displayleds(slotcolors[slot], BLNK_ON);  
-    disp.displaylarge((char *) "Cancel"); 
+    disp.displaylarge((char *) "View", false); 
   }
   else
   {
     displayleds(COL_WHT, BLNK_ON);  
-    disp.displaylarge((char *) "Serial"); 
+    disp.displaylarge((char *) "Serial", false); 
   }
 }
 
@@ -339,12 +340,12 @@ void  Menu::generate()
     }
     else
     {
-      disp.displaylarge((char *) "ERROR");
+      disp.displaylarge((char *) "ERROR", true);
     }
   }
   else
   {
-    disp.displaysmall((char *) "Entropy", NULL, NULL);
+    disp.displaylarge((char *) "Entropy", true);
   }
   
   // Update LED
@@ -440,7 +441,7 @@ void Menu::displayslot(struct pwvalid *v)
   else if (v->uidvalid) strcat(dispbuf, " UP");
   else strcat(dispbuf, " P");
 
-  disp.displaylarge(dispbuf);
+  disp.displaylarge(dispbuf, true);
 
 }
 
@@ -453,3 +454,27 @@ void Menu::indicate_slot()
   prevslot = slot;
 }
 
+// Display pwd on OLED
+void Menu::displaypw()
+{
+  struct eepw pw;
+  eeprom.getpw(slot, &pw);
+
+  if (pw.pwdlen > 20)
+  {
+    strncpy((char *) d2buf, (char *) pw.pwd, 20);  d2buf[20]=0;
+    strcpy((char *) dispbuf, (char *) (pw.pwd+20));  
+  }
+
+
+  if (pw.uidlen > 0)
+    if (pw.pwdlen <= 20)
+      disp.displaysmall((char *) pw.uid, "", (char *) pw.pwd);
+    else
+      disp.displaysmall((char *) pw.uid, (char *) d2buf, (char *) dispbuf);
+  else
+    if (pw.pwdlen <= 20)
+      disp.displaysmall((char *) pw.pwd, "", "");
+    else
+      disp.displaysmall((char *) d2buf, (char *) dispbuf, "");
+}

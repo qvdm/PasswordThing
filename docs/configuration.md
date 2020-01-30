@@ -41,6 +41,9 @@ disable blanking.
 ## Colour LED timeout
 Adjust the time before the LED blanks
 
+## Lock timeout
+Adjust the time before the PT locks automatically (if a security sequence was set)
+
 ## Password Revert
 If you have one password that you use all the time (like for your password
 manager), it is often annoying to have to cycle back through the whole 
@@ -54,6 +57,11 @@ The display of the PT model U may appear upside down depending on the
 orientation in which you use it. 
 
 Select Flip to flip the display around.  
+
+## Toggle Logo
+By default, the PT displays the website hosting this manual for a couple of 
+seconds after startup.  This setting enables / disables that behaviour.
+
 
 ## Reconfigure buttons
 Depending on the orientation in which you use your PT model U or the side of
@@ -80,8 +88,9 @@ sequence.
 the **Next** button and then the **Generate** button.
 
 ## Exit / Reboot 
+End the confguration session and restart the PWT in normal mode
 
-Select **Exit** to end the confguration session and restart the PWT in normal mode
+
 
 
 ## Show EEPROM Variables, Dump EEPROM,  Zero EEPROM and Show Entropy
