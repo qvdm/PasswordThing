@@ -21,7 +21,6 @@
  * loop - Arduino loop
  * 
  * TBD
- *      Save and Restore - complete Restore 
  *      Create desktop configuration sw with upload facility
  * 
  * BUGS:

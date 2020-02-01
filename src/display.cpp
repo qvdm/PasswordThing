@@ -58,8 +58,7 @@ void Display::displaylarge(char *str, bool displayhelp)
   oled.clear();
   if (!displayhelp)
   {
-    oled.set1X();
-    oled.println("");
+    oled.setRow(2);
   }
   oled.set2X();
   oled.println(str); 

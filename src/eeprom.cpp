@@ -350,28 +350,9 @@ void Eeprom::backup()
   Serial.begin(115200);  while (!Serial);
   Serial.println(eedVer); 
 
-  for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
+  for (int i = 0 ; i < EE_USED  ; ++i)
   {
-    for (int j=0; j < EE_SLOTLEN; j++)
-    {
-      sprintf(eo_buf, "%02X", EEPROM.readByte(i*EE_SLOTLEN+j));
-      Serial.print(eo_buf);
-    }
-    Serial.println("");
-    Serial.flush();
-  }
-
-  for (int v=0; v < EE_VARS; v++)
-  {
-    sprintf(eo_buf, "%02X", EEPROM.readByte(EE_VARLOC+v));
-    Serial.print(eo_buf);
-  }
-  Serial.println("");
-  Serial.flush();
-
-  for (int c = 0 ; c < 4  ; c++)
-  {
-    sprintf(eo_buf, "%02X", EEPROM.readByte(EE_CRCLOC+c));
+    sprintf(eo_buf, "%02X", EEPROM.readByte(i));
     Serial.print(eo_buf);
   }
   Serial.println("");
@@ -383,82 +364,54 @@ void Eeprom::backup()
 
 void Eeprom::restore()
 {
-  int l;
+  int ptr;
   byte ee;
 
-  while (Serial.available() == 0 ); // wait for input
-  l = 3;
-  if (recvWithEndMarker('\n', &l, parsebuf))
-  {
-    for (int j = 0 ;  j < 3 ; j++)
-    {
-      if (parsebuf[j] != eedVer[j])
-      {
-          Serial.println(F("Wrong Version"));
-          return;
-      }
-    }
-  }
-  Serial.println(F("VR OK"));
+  Serial.println("");
+  Serial.print("R>");
+  Serial.flush();
 
   while (Serial.available() == 0 ); // wait for input
-  for (int i = 0 ; i < EE_NUMSLOTS  ; ++i)
-  {
-    l = EE_SLOTLEN*2;
-    Serial.println(l);
-    if (recvWithEndMarker('\n', &l, parsebuf))
-    {
-      Serial.println(l);
-      for (int j = 0 ;  j < l ; j+=2)
-      {
-        ee = hextobyte(parsebuf+j);
-        EEPROM.updateByte(i*EE_SLOTLEN+j, ee);
-      }
-    }
-    else 
-    {
-      Serial.print("*"); Serial.print(l);
-      Serial.println(F(" Bad Restore"));
-      return;
-    }
-  }
-  Serial.println(F("PW OK"));
+  parsebuf[3]=0;
+  parsebuf[0] = Serial.read();
+  parsebuf[1] = Serial.read();
+  parsebuf[2] = Serial.read();
+  Serial.read();
 
-  while (Serial.available() == 0 ); // wait for input
-  for (int v=0; v < EE_VARS; v++)
+  if (strcmp(parsebuf, eedVer) != 0)
   {
-    l = 2;
-    if (recvWithEndMarker('\n', &l, parsebuf))
-    {
-      ee = hextobyte(parsebuf);
-      EEPROM.updateByte(EE_VARLOC+v, ee);
-    }
-    else 
-    {
-      Serial.println(F("Bad Restore"));
-      return;
-    }
-  }
-  Serial.println(F("VA OK"));
-
-  while (Serial.available() == 0 ); // wait for input
-  l = 8;
-  if (recvWithEndMarker('\n', &l, parsebuf))
-  {
-    for (int c = 0 ;  c < 8 ; c+=2)
-    {
-      ee = hextobyte(parsebuf+c);
-      EEPROM.updateByte(EE_CRCLOC+c, ee);
-    }
-  }
-  else 
-  {
-    Serial.println(F("Bad Restore"));
+    Serial.print("Wrong Version, got ");
+    Serial.print(parsebuf);
+    Serial.print(" expected ");
+    Serial.println(eedVer);
+    Serial.flush();
     return;
   }
-  Serial.println(F("CS OK"));
 
-  Serial.println(F("Restored"));
+  while (Serial.available() == 0 ); // wait for input
+  
+  parsebuf[2]=0;
+  ptr=0;
+  while (Serial.available() > 0 ) 
+  {
+    parsebuf[0] = Serial.read();
+    parsebuf[1] = Serial.read();
+    ee = hextobyte(parsebuf);
+    EEPROM.updateByte(ptr, ee);
+    if (++ptr > EE_USED)
+      break;
+  }
+  
+  if (valid())
+    Serial.println(F("Restored"));
+  else
+  {
+    Serial.println(F("Bad Restore"));
+    zero();
+  }
+
+
+
 }
 
 
