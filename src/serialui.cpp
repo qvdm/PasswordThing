@@ -138,7 +138,8 @@ void SerialUi::vTaskSerialUi()
   if (Serial.available() > 0) 
   {
     st_inchar = Serial.read();
-    Serial.write(st_inchar); Serial.flush();
+    if (waitforsec == 0)
+      Serial.write(st_inchar); Serial.flush();
     handle_input();
   }
 }
