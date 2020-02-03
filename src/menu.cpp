@@ -406,7 +406,7 @@ void Menu::sendpw(bool sndcr, bool snduid)
 // Sets the color and blink state of the LEDs
 void Menu::displayleds(byte color, byte clmode)
 {
-  led.ledcolor(color, clmode);
+  led.ledcolor(color, clmode, false);
 }
 
 // Set color of LED according to slot and blink rate according to validity

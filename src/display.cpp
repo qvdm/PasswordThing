@@ -51,10 +51,11 @@ bool Display::isblank()
 // Display large chars on Oled
 void Display::displaylarge(char *str, bool displayhelp)
 {
-  oled.set2X();
+  oled.set1X();
   oled.clear();
   if (!displayhelp)
     oled.println(""); 
+  oled.set2X();
   oled.println(str); 
   
   if (displayhelp)

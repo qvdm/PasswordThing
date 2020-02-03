@@ -35,7 +35,7 @@ Led::Led()
   digitalWrite(OLO_PIN, HIGH);
 
   // Set colour led to white and set to nonblinking
-  ledcolor(COL_GRN, BLNK_ON);
+  ledcolor(COL_GRN, BLNK_ON, true);
 }
 
 Led::~Led()  { }
@@ -50,9 +50,9 @@ void Led::cledout(byte r, byte g, byte b)
 
 
 // Set led color from color code table
-void Led::ledcolor(byte colorcode, byte mode)
+void Led::ledcolor(byte colorcode, byte mode, bool now)
 {
-   byte r=BRI_OFF, g=BRI_OFF, b=BRI_OFF;
+  byte r=BRI_OFF, g=BRI_OFF, b=BRI_OFF;
   
   if (colorcode & RMASK) r=BRI_ON;
   if (colorcode & GMASK) g=BRI_ON;
@@ -61,15 +61,16 @@ void Led::ledcolor(byte colorcode, byte mode)
   cl_blink(mode);
   lr=r; lg=g; lb=b; lk=mode;
   unblank();
+  if (now) cledout(lr, lg, lb);
 }
 
 // Set led color using rgb values
-void Led::ledcolor(byte r, byte g, byte b, byte mode)
+void Led::ledcolor(byte r, byte g, byte b, byte mode, bool now)
 {
-   cl_blink(mode);
+  cl_blink(mode);
   lr=r; lg=g; lb=b; lk=mode;
   unblank();
-
+  if (now) cledout(lr, lg, lb);
 }
 
 
@@ -82,7 +83,7 @@ void Led::push()
 // Restore saved LED state
 void Led::pop()
 {
-  ledcolor(slr, slg, slb, slk);
+  ledcolor(slr, slg, slb, slk, false);
 }
 
 

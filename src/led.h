@@ -52,8 +52,8 @@ class Led {
     Led();
     ~Led();
     void set_colmap(byte map);
-    void ledcolor(byte colorcode, byte mode);
-    void ledcolor(byte r, byte g, byte b, byte mode);
+    void ledcolor(byte colorcode, byte mode, bool now);
+    void ledcolor(byte r, byte g, byte b, byte mode, bool now);
     void cl_blink(byte rate);
     void push(void);
     void pop(void);

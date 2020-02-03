@@ -112,20 +112,20 @@ void SerialUi::sio_init(int sseq)
 {
   waitforsec=sseq;
   disp.displaylarge((char *) "R-SERIAL", false); 
-  led.ledcolor(COL_WHT, BLNK_ON);
+  led.ledcolor(COL_WHT, BLNK_ON, true);
   Keyboard.end(); // Turn off kbd
   Serial.begin(115200);  while (!Serial); 
   Serial.println((char *) Version);
   if (waitforsec == 0)
   {
     disp.displaylarge((char *) "SERIAL", false); 
-    led.ledcolor(COL_WHT, BLNK_MOST);
+    led.ledcolor(COL_WHT, BLNK_MOST, false);
   }
   else
   {
     disp.displaylarge((char *) "LOCKED", false); 
     disp.setprivacy(0);
-    led.ledcolor(COL_YEL, BLNK_ON);
+    led.ledcolor(COL_YEL, BLNK_ON, true);
   }
   SUIPROMPT;
 }
@@ -229,7 +229,7 @@ void SerialUi::handle_sec()
         {
           waitforsec=0;
           disp.displaylarge((char *) "SERIAL", false); 
-          led.ledcolor(COL_WHT, BLNK_MOST);
+          led.ledcolor(COL_WHT, BLNK_MOST, false);
           break;
         }
       }

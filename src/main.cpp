@@ -92,6 +92,9 @@ void setup()
    // Initialize Oled display
   cDisp.init(); 
 
+  // Start LED @ green
+  cLed.ledcolor(COL_GRN, BLNK_ON, true);
+
   // Initialize Serial if a button is pressed at startup
   if ( cInput.anyPressed() )
   {
@@ -99,25 +102,31 @@ void setup()
     if (cInput.anyPressed())
     {
       kbmode = KM_SERIAL;
+      // Set led to white in serial mode
+      cLed.ledcolor(COL_WHT, BLNK_ON, true);
     }
   }
   else if (cEeprom.getsema(EESEM_SERMODE) > 0)
   {
     cEeprom.storesema(EESEM_SERMODE, 0);
     kbmode = KM_SERIAL;
+    // Set led to white in serial mode
+    cLed.ledcolor(COL_WHT, BLNK_ON, true);
   }
   else
   {
-    cLed.ledcolor(COL_YEL, BLNK_ON);
+    // Set led to yellow in kbd mode
+    cLed.ledcolor(COL_YEL, BLNK_ON, true);
   }
   
   // Check EEPROM signature and crc - if not valid, zero EEPROM and write signature
   if (!cEeprom.valid() || !cEeprom.check_signature())
   {
-    cLed.ledcolor(COL_CYA, BLNK_ON);
+    // Cyan led indicates eeprom kerfuffling
+    cLed.ledcolor(COL_CYA, BLNK_ON, true);
     cEeprom.zero();
     cEeprom.write_signature();
-    cLed.ledcolor(COL_BLU, BLNK_ON);
+    cLed.ledcolor(COL_BLU, BLNK_ON, true);
   }
 
   // Get security seq
