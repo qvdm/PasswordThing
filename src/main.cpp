@@ -89,7 +89,10 @@ byte sseq=0;
 // "Initial Task"
 void setup() 
 {
-  // Initialize Serial if a button is pressed at startup, else initialise keyboard
+   // Initialize Oled display
+  cDisp.init(); 
+
+  // Initialize Serial if a button is pressed at startup
   if ( cInput.anyPressed() )
   {
     delay(200); // Wait 200 ms to see if still pressed
@@ -107,7 +110,7 @@ void setup()
   {
     cLed.ledcolor(COL_YEL, BLNK_ON);
   }
-
+  
   // Check EEPROM signature and crc - if not valid, zero EEPROM and write signature
   if (!cEeprom.valid() || !cEeprom.check_signature())
   {
@@ -117,8 +120,15 @@ void setup()
     cLed.ledcolor(COL_BLU, BLNK_ON);
   }
 
-  // Initialize Oled display
-  cDisp.init(); 
+  // Get security seq
+  sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq
+
+  if (kbmode == KM_SERIAL)
+  {
+    // Early init to allow programming (!! Needs to be up here - do not move down)
+    cSui.sio_init(sseq);
+  }
+
   // Initialize EEPROM vars
   byte priv = cEeprom.getvar(EEVAR_OPRIV); // Display timeout
   cDisp.setprivacy(priv);
@@ -130,7 +140,6 @@ void setup()
   cDisp.setflip((bool) flip);
   byte pwrevert = cEeprom.getvar(EEVAR_PRTO); // PW Revert
   cDisp.setpwrevert((bool) pwrevert);
-  sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq
   byte btnmode = cEeprom.getvar(EEVAR_BUTSEQ); // Button assignments
   cMenu.set_buttonmode(btnmode);
   byte ledcols = cEeprom.getvar(EEVAR_LEDSEQ); // LED color assignments
@@ -155,10 +164,6 @@ void setup()
     wdt_enable(WDTO_4S);  
 #endif    
     cMenu.init(sseq);  
-  }
-  else
-  {
-    cSui.sio_init(sseq);
   }
   
 
