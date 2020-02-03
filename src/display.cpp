@@ -19,7 +19,6 @@
 
 #include "display.h"
 
-extern char Version[];
 extern byte slot;
 
 Display::Display(SSD1306AsciiWire &rd, Eeprom &re) : oled(rd), eeprom(re)
@@ -37,12 +36,9 @@ void Display::init()
   // Initialize display
   oled.begin(&Adafruit128x32, I2C_OLED_ADDRESS);
   oled.setFont(Adafruit5x7);
-  oled.setScrollMode(SCROLL_MODE_AUTO);
-  oled.set2X();
+    oled.set2X();
   oled.clear();
 
-  displaylarge(Version, false);
-  delay(DVDELAY);
 }
 
 
@@ -55,12 +51,10 @@ bool Display::isblank()
 // Display large chars on Oled
 void Display::displaylarge(char *str, bool displayhelp)
 {
+  oled.set2X();
   oled.clear();
   if (!displayhelp)
-  {
-    oled.setRow(2);
-  }
-  oled.set2X();
+    oled.println(""); 
   oled.println(str); 
   
   if (displayhelp)

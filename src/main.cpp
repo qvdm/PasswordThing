@@ -95,14 +95,12 @@ void setup()
     delay(200); // Wait 200 ms to see if still pressed
     if (cInput.anyPressed())
     {
-      cSui.sio_menu_on();
       kbmode = KM_SERIAL;
     }
   }
   else if (cEeprom.getsema(EESEM_SERMODE) > 0)
   {
     cEeprom.storesema(EESEM_SERMODE, 0);
-    cSui.sio_menu_on();
     kbmode = KM_SERIAL;
   }
   else
@@ -138,30 +136,29 @@ void setup()
   byte ledcols = cEeprom.getvar(EEVAR_LEDSEQ); // LED color assignments
   cMenu.set_slotcolors(ledcols);
 
+  cDisp.displaylarge(Version, false);
+  delay(DVDELAY);
+
   if (cEeprom.getvar(EEVAR_AYB) == 0)
   {
     cDisp.displaylarge((char *) "ayb.ca/pwt", false);
-    delay(2000);
+    delay(DVDELAY);
   }
 
   // Initialize button 'menu' or serial menu depending in global mode
   if (kbmode == KM_KBD)
   {
-    cSui.sio_menu_off();
-
+      Keyboard.begin(); // Turn on kbd
 #ifdef TEST
     testhw();
 #else
     wdt_enable(WDTO_4S);  
 #endif    
-
     cMenu.init(sseq);  
   }
   else
   {
-//    cSui.init(sseq); // uncomment to ask for pwd on serial TBD debug
-    cDisp.displaylarge((char *) "SERIAL", false); 
-    cSui.init(sseq);
+    cSui.sio_init(sseq);
   }
   
 

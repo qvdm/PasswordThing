@@ -54,7 +54,14 @@ button on the PT for longer than 3 seconds.  The LED will change to white to
 indicate that the PT is in configuration mode.  
 
 When you enter Configuration mode and connect a serial terminal, you should
-see the current software version, folllowed by a prompt: **>** on the terminal. 
+see the current software version, folllowed by a prompt: **>** on the terminal, unless
+a lock code was set, in which case the prompt will be **#**
+
+# Unlocking
+If a lock code was set, you will need an unlock code to enter Serial command mode.
+Enter the lock code (exactly 4 digits between 1 and 3) followed by **<Return>**
+If you cannot remember the lock code, enter **Z**.  
+**This will clear the contents of the EEPROM, deleting all passwords, userids and settings, and disable the lock code.**
 
 # Commands
 Serial configuration commands have the format: 
@@ -75,9 +82,9 @@ Slot commands have the format:
 * #O<passwd> : The **S** command sets the password for the slot selected by **#** to the string specified by **passwd**
   - Example: **1Shunter2** - sets the password for slot 1 to "hunter2"
 * #I<userid> : The **I** command sets the userid for the slot selected by **#** to the string specified by **userid**
-  - Example: **1Ieddy** - sets the userid for slot 1 to "eddy"
+  - Example: **2Ijoe** - sets the userid for slot 2 to "joe"
 * #N<name> : The **N** command sets the name of the slot selected by **#** to the string specified by **name**
-  - Example: **1NWindows** - sets the name of slot 1 to "Windows"
+  - Example: **3NWindows** - sets the name of slot 3 to "Windows"
 * #P : The **P** command prints the name, userid and password for the slot selected by **#*
   - Example: **1P** - prints the information stored in slot 1
 * #G : The **G** command generates a new password for the slot selected by **#*, based on the rules specified by group **G** commands. 
@@ -134,8 +141,6 @@ Commands in the Sequence group have the format:
   - Examples: **QBSNG** - sets the button sequence to "Sel-Next-Gen", **QB** - shows the current button sequence
 * QL[sequence] : The **L** command shows or sets the LED sequence
   - Examples: **QLRGBCMY** - sets the LED sequence to "R-G-B-C-M-Y", **QL** - shows the current LED sequence
-* QS[sequence] : The **S** command shows or sets sthe security code/sequence
-  - Examples: **QS1231** - sets the security sequence to "1-2-3-1", **QS** - shows the current security sequence
   
 ## Eeprom commands
 
@@ -156,6 +161,8 @@ Commands in the Maintenance group have the format:
  
 * MR : The **R** command resets the PT.  It will disconnect from the terminal session and restart in normal mode
 * ML : The **L** command toggles the display of "ayb.ca/pwt" during startup
+* MS[sequence] : The **S** command shows or sets sthe security code/sequence
+  - Examples: **MS1231** - sets the security sequence to "1-2-3-1", **MS** - shows the current security sequence
   
 
 # Configuration interface issues

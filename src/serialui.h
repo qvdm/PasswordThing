@@ -27,20 +27,18 @@
 #define MINPW 6 // min pw length
 
 // Macros
-#define SUIPROMPT  Serial.println(" "); Serial.print(">"); Serial.flush()
+#define SUIPROMPT Serial.println(" "); if (waitforsec == 0) Serial.print(">"); else Serial.print("#"); Serial.flush()
 #define SUICRLF  Serial.println(" "); Serial.flush()
 
 class SerialUi {
   public:
     SerialUi(Led&, Display&, Random&, Eeprom&);
     ~SerialUi();
-    void init(int sseq);
-    void sio_menu_on();
-    void sio_menu_off();
+    void sio_init(int sseq);
     void vTaskSerialUi();
 
   private:
-    bool menurunning=false;
+    int waitforsec=0;
     byte curslot=0;
     byte pwgenlen;
     byte pwgenmode;
@@ -63,6 +61,7 @@ class SerialUi {
     void handle_input(void);
     void parse_input(void);
 
+    void handle_sec(void);
     void handle_slot(void);
     void handle_gen(void);
     void handle_set(void);

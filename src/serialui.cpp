@@ -77,8 +77,6 @@
  * QB - show
  * QL<llllll> : TRGBCMY - Set LED sequence to RGBCMY
  * QL - show
- * QS<nnnn> : W1231 - Set security seq to 1231
- * QS - show
  * 
  * ED - Dump eeprom in friendly mode
  * EB - Dump eeprom in backup mode
@@ -88,7 +86,9 @@
  * <cmd>
  * MR - Reset
  * ML - Toggle logo display at startup
- * 
+ * MS<nnnn> : W1231 - Set security seq to 1231
+ * MS - show
+* 
  */
 
 #include "serialui.h"
@@ -107,45 +107,32 @@ SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp
 
 SerialUi::~SerialUi() { }
 
-// Post CTOR initialization
-void SerialUi::init(int sseq)
+// Initialize SIO menu 
+void SerialUi::sio_init(int sseq)
 {
-
-  // tbd sseq
-  while (Serial.available() > 0) 
-    Serial.read();
-}
-
-// Turn SIO menu on
-void SerialUi::sio_menu_on()
-{
-  menurunning = true;
+  waitforsec=sseq;
+  disp.displaylarge((char *) "R-SERIAL", false); 
+  led.ledcolor(COL_WHT, BLNK_ON);
   Keyboard.end(); // Turn off kbd
   Serial.begin(115200);  while (!Serial); 
   Serial.println((char *) Version);
+  if (waitforsec == 0)
+  {
+    disp.displaylarge((char *) "SERIAL", false); 
+    led.ledcolor(COL_WHT, BLNK_MOST);
+  }
+  else
+  {
+    disp.displaylarge((char *) "LOCKED", false); 
+    disp.setprivacy(0);
+    led.ledcolor(COL_YEL, BLNK_ON);
+  }
   SUIPROMPT;
 }
 
-// Turn SIO menu off
-void SerialUi::sio_menu_off()
-{
-  menurunning = false;
-  Serial.end();
-  Keyboard.begin(); // Turn on kbd
-}
-
-
+// Periodic 'Task' handling serial UI
 void SerialUi::vTaskSerialUi()
 {
-
-  // flush the input if not running
-  if (!menurunning) 
-  {
-    if (Serial.available() > 0) 
-      Serial.read();
-    return;
-  }
-  led.ledcolor(COL_WHT, BLNK_MOST);
 
   // Read input
   if (Serial.available() > 0) 
@@ -159,14 +146,14 @@ void SerialUi::vTaskSerialUi()
 // Process a single menu input char
 void SerialUi::handle_input()
 {
-  if ( st_inchar == '\r' )
+  if ( st_inchar == '\r' ) // CMD received - process
   {
     SUICRLF;
     parse_input();
     st_ptr=0;
     SUIPROMPT;
   }
-  else if (st_inchar == '\b')
+  else if (st_inchar == '\b') // Backspace
   {
     if (st_ptr > 0) 
     {
@@ -174,16 +161,22 @@ void SerialUi::handle_input()
       st_ptr--;
     }
   }
-  else if ( ((st_inchar >= ' ') && (st_inchar <= '~') )  || (st_inchar == '\t') )
+  else if ( ((st_inchar >= ' ') && (st_inchar <= '~') )  || (st_inchar == '\t') ) // buffer input char
   {
     st_buf[st_ptr++] = st_inchar;
   }
 }
 
+// Parse the input line
 void SerialUi::parse_input()
 {
   st_buf[st_ptr]=0;
-  if ( (st_buf[0] >= '0') && (st_buf[0] < '0' + MAXSLOTS) )
+
+  if (waitforsec != 0) // Security sequence active? 
+  {
+    handle_sec();
+  }
+  else if ( (st_buf[0] >= '0') && (st_buf[0] < '0' + MAXSLOTS) ) // Fist char is a digit --> slot
   {
     curslot = st_buf[0] - '0';
     handle_slot();
@@ -204,18 +197,60 @@ void SerialUi::parse_input()
   }
 }
 
+// Parse security sequence
+void SerialUi::handle_sec()
+{
+  if (st_buf[0] == '?') 
+  {
+    Serial.println("#Z");
+    return;
+  }
+  else if (st_buf[0] == 'Z')
+  {
+    eeprom.zero();
+    waitforsec=0;
+    return;
+  }
+
+  if (st_ptr != SSEQL)
+    return;
+  for (int i=0; i < SSEQL; i++)
+    if (!isdigit(st_buf[i]))
+      return;
+  int d = buf_to_int(0, 1, 3333);
+  if ( d > 0 )
+  {
+    for (int i=1; i < NSSEQ+1; i++)
+    {
+      if (Secseq[i] == d)
+      {
+        if ((i-1) == waitforsec)
+        {
+          waitforsec=0;
+          disp.displaylarge((char *) "SERIAL", false); 
+          led.ledcolor(COL_WHT, BLNK_MOST);
+          break;
+        }
+      }
+    }
+  }
+}
+
+// Handle slot subcommands
 void SerialUi::handle_slot()
 {
 
   switch (toupper(st_buf[1]))
   {
-    case 'S' : if ((st_ptr > MINPW+2) && (st_ptr < EE_PWLEN+2)) 
+    // Set new password for slot
+    case 'S' : if ((st_ptr > MINPW+2) && (st_ptr < EE_PWLEN+2))  
                { 
                  set_eepw(); 
                  printcurpw(); 
                }
                else Serial.println("LENGTH");
                break;
+    // Set new userid for slot
     case 'U' : if ((st_ptr > 3) && (st_ptr < EE_PWLEN+2)) 
                { 
                  set_eeuid(); 
@@ -223,6 +258,7 @@ void SerialUi::handle_slot()
                }
                else Serial.println("LENGTH");
                break;
+    // Set new name for slot
     case 'N' : if ((st_ptr > 3) && (st_ptr < EE_PWLEN+2)) 
                { 
                  set_eename(); 
@@ -230,9 +266,13 @@ void SerialUi::handle_slot()
                }
                else Serial.println("LENGTH");
                break;
+    // Print
     case 'P' : printcurpw(); break;
+    // Generate
     case 'G' : genpw(); printcurpw(); break;
+    // Clear
     case 'C' : eeprom.clearslot(curslot); printcurpw();break;
+    // Duplicate
     case 'D' : if ( (st_buf[2] >= '0') && (st_buf[2] < '0' + MAXSLOTS) ) dup_slot(st_buf[2]); printcurpw(); break;
     case 'H' :
     case '?' : Serial.println("SUNPGCD");
@@ -240,74 +280,95 @@ void SerialUi::handle_slot()
   }
 }
 
+// Handle generator subcommands
 void SerialUi::handle_gen()
 {
   switch (toupper(st_buf[1]))
   {
+    // Set mode
     case 'M' : if (st_ptr > 1) set_pwgmode(st_buf[2]); break;
+    // Set length
     case 'L' : if (st_ptr > 1) set_pwglen(); break;
+    // Show entropy
     case 'E' : showentropy(); break;
     case 'H' :
     case '?' : Serial.println("MLE");
   }
 }
 
+// Handle Set subommands
 void SerialUi::handle_set()
 {
   switch (toupper(st_buf[1]))
   {
+    // Display flip
     case 'F' : if ( (st_ptr > 1) && (toupper(st_buf[2]) == 'T') ) toggle_flip(); show_flip(); break;
+    // Pwd revert
     case 'R' : if ( (st_ptr > 1) && (toupper(st_buf[2]) == 'T') ) toggle_prto(); show_prto(); break;
     case 'H' :
     case '?' : Serial.println("FR");
   }
 }
 
+// Handle timeout subcommands
 void SerialUi::handle_to() 
 {
   switch (toupper(st_buf[1]))
   {
+    // Display
     case 'D' : if (st_ptr > 2) set_dispto(); show_dispto(); break;
+    // LED
     case 'I' : if (st_ptr > 2) set_ledto(); show_ledto(); break;
+    // Lock
     case 'L' : if (st_ptr > 2) set_lockto(); show_lockto(); break;
     case 'H' :
     case '?' : Serial.println("DIL");
   }
-
 }
 
+// Handle Sequence subcommands
 void SerialUi::handle_seq()
 {
   switch (toupper(st_buf[1]))
   {
+    // Buttons
     case 'B' : if (st_ptr > 2) set_butseq(); show_butseq(); break;
+    // Led colors
     case 'L' : if (st_ptr > 2) set_ledseq(); show_ledseq(); break;
-    case 'S' : if (st_ptr > 2) set_lockseq(); show_lockseq(); break;
     case 'H' :
-    case '?' : Serial.println("BLS");
+    case '?' : Serial.println("BL");
   }
 }
 
+// Handle eeprom subcommands
 void SerialUi::handle_eep()
 {
-
   switch (toupper(st_buf[1]))
   {
+    // Human readable dump
     case 'D' : eeprom.dump(); break;
+    // Backup
     case 'B' : eeprom.backup(); break;
+    // Restore
     case 'R' : Serial.setTimeout(30000); eeprom.restore(); break;
+    // Zero
     case 'Z' : eeprom.zero(); break;
     case 'H' :
     case '?' : Serial.println("DBRZ");
   }
 }
 
+// Handle management subcommands
 void SerialUi::handle_cmd() 
 {
   switch (toupper(st_buf[1]))
   {
+    // Reset
     case 'R' : reset(); break;
+    // Toggle logo display
     case 'L' : toggle_logo(); break;
+    // Lock sequence
+    case 'S' : if (st_ptr > 2) set_lockseq(); show_lockseq(); break;
     case 'H' :
     case '?' : Serial.println("RL");
   }
@@ -355,6 +416,7 @@ void SerialUi::printcurpw()
     Serial.print(F("None "));
 }
 
+// Show entropy
 void SerialUi::showentropy()
 {
   int e = rand.getEntropy();
@@ -380,13 +442,12 @@ void SerialUi::genpw()
   }
 }
 
+// Reset
 void SerialUi::reset()
 {
   eeprom.storesema(EESEM_SERMODE, 0); // get out of wserial mode after reset
   WDRESET;
 }
-
-
 
 
 // Toggle display flip state
@@ -609,8 +670,8 @@ void SerialUi::show_butseq()
     case 5 : Serial.println("SNG"); break;
   }
 }
-// Set button mode
 
+// Set led sequence
 void SerialUi::set_ledseq()
 {
   char *s = st_buf+2;
