@@ -21,6 +21,8 @@
 // Version display delay
 #define DVDELAY 2000
 
+// Max length of large string
+#define MAXLDSTR 10
 
 class Display {
   public:

@@ -56,6 +56,8 @@ void Display::displaylarge(char *str, bool displayhelp)
   if (!displayhelp)
     oled.println(""); 
   oled.set2X();
+  if (strlen(str) <= (MAXLDSTR-2))
+    oled.print(" "); 
   oled.println(str); 
   
   if (displayhelp)

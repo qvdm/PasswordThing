@@ -62,6 +62,8 @@ void Menu::init(int sseq)
   else
   {
     waitforseq=sseq;
+    // Set led to white in serial mode
+    led.ledcolor(COL_YEL, BLNK_ON, true);
     disp.displaylarge((char *) "LOCKED", false); 
     disp.setprivacy(0);
   }

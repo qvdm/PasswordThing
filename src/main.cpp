@@ -113,11 +113,6 @@ void setup()
     // Set led to white in serial mode
     cLed.ledcolor(COL_WHT, BLNK_ON, true);
   }
-  else
-  {
-    // Set led to yellow in kbd mode
-    cLed.ledcolor(COL_YEL, BLNK_ON, true);
-  }
   
   // Check EEPROM signature and crc - if not valid, zero EEPROM and write signature
   if (!cEeprom.valid() || !cEeprom.check_signature())
