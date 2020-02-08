@@ -100,10 +100,10 @@ class Application(pygubu.TkApplication):
     def on_connect(self):
         if self.port != None:
             if self.serial == None:
-                self.serial = serial.Serial(port=self.port, baudrate=self.baud)
+                self.serial = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
             else:
                 self.serial.close()
-                self.serial = serial.Serial(port=self.port, baudrate=self.baud)
+                self.serial = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
             self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
             self.Serial_term()
         else:
@@ -123,16 +123,20 @@ class Application(pygubu.TkApplication):
         self.mainwindow.master.destroy()
 
     def Serial_term(self):
-        if self.serial != None:
-            rx = []
-            while (self.serial.inWaiting()>0):
-                rx.append(ord(self.serial.read(1)))
-                time.sleep(0.001)
-            if rx != []:
-                for s in rx:
-                    self.termbox.insert(tk.INSERT, "%c"%s)
-                if(rx[-1] != 0x0d): self.termbox.insert(tk.INSERT, "\n")
-                if(self.autoscroll): self.termbox.see("end")
+        s= self.serial
+        if s != None:
+            rx = ""
+            while True:
+                c = s.read()
+                if len(c) == 0:
+                    break
+
+                if c == '\r':
+                    rx += c
+                    self.termbox.insert('0.0', rx)
+                    rx = ""
+                else:
+                    rx += c
 
 if __name__ == '__main__':
     portlist = serial_ports()
