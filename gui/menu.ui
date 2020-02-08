@@ -115,8 +115,12 @@
         </layout>
         <child>
           <object class="ttk.Label" id="lmain">
+            <property name="compound">top</property>
+            <property name="justify">center</property>
             <property name="padding">0</property>
-            <property name="text" translatable="yes">PWT configurator version 1234</property>
+            <property name="text" translatable="yes">PWT configurator version 0</property>
+            <property name="textvariable">string:strlmain</property>
+            <property name="width">0</property>
             <layout>
               <property name="column">0</property>
               <property name="propagate">True</property>
@@ -139,10 +143,12 @@
         </child>
         <child>
           <object class="ttk.Combobox" id="cport">
-            <property name="postcommand">on_select_port</property>
+            <property name="postcommand">populate_ports</property>
+            <property name="textvariable">string:tvport</property>
+            <property name="validate">all</property>
             <property name="values">Auto COM1</property>
             <property name="width">8</property>
-            <bind add="" handler="cbPortSelected" sequence="&lt;ComboboxSelected&gt;" />
+            <bind add="" handler="on_port_selected" sequence="&lt;&lt;ComboboxSelected&gt;&gt;" />
             <layout>
               <property name="column">2</property>
               <property name="propagate">True</property>
@@ -164,6 +170,7 @@
         </child>
         <child>
           <object class="ttk.Button" id="bconnect">
+            <property name="command">on_connect</property>
             <property name="text" translatable="yes">Connect</property>
             <layout>
               <property name="column">4</property>
