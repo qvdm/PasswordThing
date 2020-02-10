@@ -22,6 +22,7 @@
  * 
  * TBD
  *      Create desktop configuration sw with upload facility
+ *      Implement EE erase after N bad tries - EEVAR_TRIES = done - test
  * 
  * BUGS:
  * 
@@ -126,6 +127,19 @@ void setup()
 
   // Get security seq
   sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq
+
+  if (sseq > 0)
+  {
+    byte badseq = cEeprom.getvar(EEVAR_TRIES);
+    byte badtries = cEeprom.getsema(EESEM_BADLCK);
+    switch (badseq)
+    {
+       case 0 : break; // infinite retries
+       case 1 : if ( badtries > 3) cEeprom.zero(); break;
+       case 2 : if ( badtries > 10) cEeprom.zero(); break;
+       default: delay((1 << badtries) * badseq * 1000);
+    }
+  }
 
   if (kbmode == KM_SERIAL)
   {

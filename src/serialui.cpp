@@ -214,10 +214,18 @@ void SerialUi::handle_sec()
   }
 
   if (st_ptr != SSEQL)
-    return;
+  {
+    byte b = eeprom.getsema(EESEM_BADLCK);
+    eeprom.storesema(EESEM_BADLCK, b+1);
+    return; 
+  }
   for (int i=0; i < SSEQL; i++)
     if (!isdigit(st_buf[i]))
+    {
+      byte b = eeprom.getsema(EESEM_BADLCK);
+      eeprom.storesema(EESEM_BADLCK, b+1);
       return;
+    }
   int d = buf_to_int(0, 1, 3333);
   if ( d > 0 )
   {
@@ -227,7 +235,9 @@ void SerialUi::handle_sec()
       {
         if ((i-1) == waitforsec)
         {
+          // Success
           waitforsec=0;
+          eeprom.storesema(EESEM_BADLCK, 0);
           disp.displaylarge((char *) "SERIAL", false); 
           led.ledcolor(COL_WHT, BLNK_MOST, false);
           break;
@@ -335,9 +345,11 @@ void SerialUi::handle_seq()
     // Buttons
     case 'B' : if (st_ptr > 2) set_butseq(); show_butseq(); break;
     // Led colors
-    case 'L' : if (st_ptr > 2) set_ledseq(); show_ledseq(); break;
+    case 'L' : if (st_ptr > 2) set_ledseq(); show_ledseq(); break; 
+    // Bad sequence action
+    case 'U' : if (st_ptr > 2) set_badseq(); show_badseq(); break; 
     case 'H' :
-    case '?' : Serial.println("BL");
+    case '?' : Serial.println("BLU");
   }
 }
 
@@ -702,6 +714,30 @@ void SerialUi::show_ledseq()
     case 5 : Serial.println("BGYRCM"); break;
   }
 }
+
+// Set bad sec entry sequence
+void SerialUi::set_badseq()
+{
+  int d = buf_to_int(2, 0, 255);
+  if ((d >= 0) && (d <= 255))
+  {
+    eeprom.storevar(EEVAR_TRIES, d);
+  }
+}
+
+void SerialUi::show_badseq()
+{
+  byte d =  eeprom.getvar(EEVAR_TRIES);
+
+  switch (d) 
+  {
+    case 0 : Serial.println("Disabled"); break;
+    case 1 : Serial.println("3s"); break;
+    case 2 : Serial.println("10s"); break;
+    default : Serial.print(d) ; Serial.println(" secs doubling"); break;
+  }
+}
+
 
 // Set security button sequence
 void SerialUi::set_lockseq()

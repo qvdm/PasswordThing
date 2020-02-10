@@ -181,8 +181,10 @@ void Menu::shortpress(byte button)
           {
             if ((i-1) == waitforseq)
             {
+              // Success!
               secok = true;
               waitforseq=0;
+              eeprom.storesema(EESEM_BADLCK, 0);
               // Reinstate privacy timeout
               byte priv = eeprom.getvar(EEVAR_OPRIV); 
               disp.setprivacy(priv);
@@ -195,6 +197,8 @@ void Menu::shortpress(byte button)
       if (!secok)
       {
         disp.displaylarge((char *) "INVALID", false); 
+        byte b = eeprom.getsema(EESEM_BADLCK);
+        eeprom.storesema(EESEM_BADLCK, b+1);
         WDRESET;
       }
     }

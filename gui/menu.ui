@@ -221,6 +221,20 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="tk.Canvas" id="cvled">
+            <property name="height">20</property>
+            <property name="takefocus">true</property>
+            <property name="width">20</property>
+            <layout>
+              <property name="column">5</property>
+              <property name="padx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -334,6 +348,7 @@
             <child>
               <object class="ttk.Label" id="ls0">
                 <property name="text" translatable="yes">Slot 0</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -411,13 +426,53 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr0">
-                <property name="text" translatable="yes">Clear</property>
-                <property name="width">4</property>
+              <object class="ttk.Button" id="bgen0">
+                <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
+                  <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy0">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste0">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr0">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -450,6 +505,7 @@
             <child>
               <object class="ttk.Label" id="ls1">
                 <property name="text" translatable="yes">Slot 1</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -525,13 +581,53 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr1">
-                <property name="text" translatable="yes">Clear</property>
-                <property name="width">4</property>
+              <object class="ttk.Button" id="bgen1">
+                <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
+                  <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy1">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste1">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr1">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -564,6 +660,7 @@
             <child>
               <object class="ttk.Label" id="ls2">
                 <property name="text" translatable="yes">Slot 2</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -639,13 +736,53 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr2">
-                <property name="text" translatable="yes">Clear</property>
-                <property name="width">4</property>
+              <object class="ttk.Button" id="bgen2">
+                <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
+                  <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy2">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste2">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr2">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -678,6 +815,7 @@
             <child>
               <object class="ttk.Label" id="ls3">
                 <property name="text" translatable="yes">Slot 3</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -753,13 +891,53 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr3">
-                <property name="text" translatable="yes">Clear</property>
-                <property name="width">4</property>
+              <object class="ttk.Button" id="bgen3">
+                <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
+                  <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy3">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste3">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr3">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -792,6 +970,7 @@
             <child>
               <object class="ttk.Label" id="ls4">
                 <property name="text" translatable="yes">Slot 4</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -867,13 +1046,53 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr4">
-                <property name="text" translatable="yes">Clear</property>
-                <property name="width">4</property>
+              <object class="ttk.Button" id="bgen4">
+                <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
+                  <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy4">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste4">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr4">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -906,6 +1125,7 @@
             <child>
               <object class="ttk.Label" id="ls5">
                 <property name="text" translatable="yes">Slot 5</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -981,51 +1201,86 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr5">
-                <property name="text" translatable="yes">Clear</property>
-                <property name="width">4</property>
+              <object class="ttk.Button" id="bgen5">
+                <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
+                  <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy5">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste5">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr5">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="ttk.Labelframe" id="fcopy">
+          <object class="ttk.Frame" id="fscb">
             <property name="height">50</property>
-            <property name="text" translatable="yes">Duplicate</property>
             <property name="width">600</property>
             <layout>
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">6</property>
               <property name="sticky">w</property>
-              <rows>
-                <row id="0">
-                  <property name="pad">0</property>
-                </row>
-              </rows>
               <columns>
                 <column id="0">
-                  <property name="pad">0</property>
-                </column>
-                <column id="1">
                   <property name="pad">20</property>
                 </column>
                 <column id="2">
                   <property name="pad">10</property>
                 </column>
-                <column id="3">
-                  <property name="pad">20</property>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
                 </column>
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="lfrom">
-                <property name="text" translatable="yes">From:</property>
+              <object class="ttk.Label" id="lscb">
+                <property name="text" translatable="yes">Clipboard</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -1035,9 +1290,8 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Combobox" id="cfrom">
-                <property name="values">0 1 2 3 4 5</property>
-                <property name="width">2</property>
+              <object class="ttk.Label" id="lnamecb">
+                <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="propagate">True</property>
@@ -1047,8 +1301,8 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lto">
-                <property name="text" translatable="yes">To:</property>
+              <object class="ttk.Entry" id="enamecb">
+                <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
                   <property name="propagate">True</property>
@@ -1058,9 +1312,8 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Combobox" id="cto">
-                <property name="values">0 1 2 3 4 5</property>
-                <property name="width">2</property>
+              <object class="ttk.Label" id="luidcb">
+                <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
                   <property name="propagate">True</property>
@@ -1070,10 +1323,32 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bdup">
-                <property name="text" translatable="yes">Duplicate</property>
+              <object class="ttk.Entry" id="cuidcb">
+                <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwdcb">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwdcb">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1352,6 +1627,28 @@
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lkerase">
+                <property name="text" translatable="yes">Erase after failures:	</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="ckfail">
+                <property name="width">6</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">3</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>

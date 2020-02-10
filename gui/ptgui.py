@@ -4,9 +4,11 @@ import glob
 try:
     import tkinter as tk
     from tkinter import messagebox
+    import tk_tools
 except:
     import Tkinter as tk
     import tkMessageBox as messagebox
+    import tk_tools
 import pygubu
 import serial
 
@@ -48,7 +50,7 @@ class Application(pygubu.TkApplication):
         self.dirty=False
         self.port=None
         self.baud=115200
-        self.serial=None
+        self.ser=None
 
         self.builder = builder = pygubu.Builder()
 
@@ -68,6 +70,11 @@ class Application(pygubu.TkApplication):
         self.master.protocol("WM_DELETE_WINDOW", self.on_close_window)
 
         self.termbox = termbox = builder.get_object('tterm', self.master)
+
+        self.canvas = canvas = builder.get_object('cvled', self.master)
+        self.led = led = tk_tools.Led(canvas, size=15)
+        led.pack()
+        led.to_red(on=True)
 
         builder.connect_callbacks(self)
 
@@ -97,18 +104,29 @@ class Application(pygubu.TkApplication):
         self.portcombo['values'] = portlist
         self.portcombo.current(0)
 
+    def open_serial(self):
+        self.ser.rts=True
+        self.ser.dtr=True
+
+    def close_serial(self):         
+        self.ser.rts=False
+        self.ser.dtr=False
+        self.ser.close()
+
     def on_connect(self):
         if self.port != None:
-            if self.serial == None:
-                self.serial = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
+            if self.ser == None:
+                self.ser = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
+                self.open_serial()
             else:
-                self.serial.close()
-                self.serial = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
+                self.close_serial()
+                self.ser = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
+                self.open_serial()
             self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
             self.Serial_term()
         else:
             messagebox.showerror('Error', 'No port selected')
-           
+
 
     def on_close_window(self, event=None):
         if self.dirty:
@@ -116,14 +134,14 @@ class Application(pygubu.TkApplication):
             if msg != 'yes':
                 return
 
-        if self.serial != None:
-            self.serial.close()
+        if self.ser != None:
+            self.close_serial()
         
         # Call destroy on toplevel to finish program
         self.mainwindow.master.destroy()
 
     def Serial_term(self):
-        s= self.serial
+        s= self.ser
         if s != None:
             rx = ""
             while True:

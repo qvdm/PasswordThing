@@ -95,6 +95,8 @@ class SerialUi {
     void show_butseq(void);
     void set_ledseq(void);
     void show_ledseq(void);
+    void set_badseq(void);
+    void show_badseq(void);
     void set_lockseq(void);
     void show_lockseq(void);
     void set_slot(char s);

@@ -102,11 +102,12 @@ typedef unsigned char byte;
 #define EEVAR_BUTSEQ  5 // Button seq          - byte index, see menu.h
 #define EEVAR_LEDSEQ  6 // LED seq             - byte index, see menu.h
 #define EEVAR_PRTO    7 // PWD Revert          - boolean
-#define EEVAR_UNUSED1 8 // Unused
+#define EEVAR_TRIES   8 // # of lock code tries before erase - byte 0=infinite, 1=3, 2=10, >2 = 20 w/incremental timeout: N
 #define EEVAR_LOCK    9 // Autolock            - byte timeout in minutes/10, 0 = none
 
-// EEPROM semaphore offset
+// EEPROM semaphores
 #define EESEM_SERMODE  0 // Reboot into serial mode
+#define EESEM_BADLCK   1 // # of bad unlock attempts
   
 // # of possible security seqs and seq length
 #define NSSEQ 81 
