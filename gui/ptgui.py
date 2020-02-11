@@ -1,17 +1,14 @@
 # menu.py
 import sys
 import glob
-try:
-    import tkinter as tk
-    from tkinter import messagebox
-    import tk_tools
-except:
-    import Tkinter as tk
-    import tkMessageBox as messagebox
-    import tk_tools
+import tkinter as tk
+from tkinter import messagebox
+import tk_tools
 import pygubu
 import serial
-
+import threading
+import time
+import queue
 
 __VERSION__ = '0.1'
 
