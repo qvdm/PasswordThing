@@ -135,9 +135,9 @@ void setup()
     switch (badseq)
     {
        case 0 : break; // infinite retries
-       case 1 : if ( badtries > 3) cEeprom.zero(); break;
-       case 2 : if ( badtries > 10) cEeprom.zero(); break;
-       default: delay((1 << badtries) * badseq * 1000);
+       case 1 : if ( badtries > 3) { cEeprom.zero(); WDRESET; } break;
+       case 2 : if ( badtries > 10) { cEeprom.zero(); WDRESET; } break;
+       default: if (badtries) delay((1 << (badtries-1)) * badseq * 1000); 
     }
   }
 
@@ -168,7 +168,7 @@ void setup()
 
   if (cEeprom.getvar(EEVAR_AYB) == 0)
   {
-    cDisp.displaylarge((char *) "ayb.ca/pwt", false);
+    cDisp.displaylarge(LOGO, false);
     delay(DVDELAY);
   }
 

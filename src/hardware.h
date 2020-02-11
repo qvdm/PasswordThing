@@ -122,5 +122,7 @@ typedef unsigned char byte;
 // Reset
 #define WDRESET cli(); wdt_enable(WDTO_15MS);  while (1)
 
+// Logo
+#define LOGO (const char *) "q.uent.in/pwt"
 
 #endif

@@ -306,6 +306,12 @@
           <property name="propagate">True</property>
           <property name="row">2</property>
           <property name="sticky">w</property>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">10</property>
+            </column>
+          </columns>
           <rows>
             <row id="5">
               <property name="pad">0</property>
@@ -314,12 +320,6 @@
               <property name="pad">20</property>
             </row>
           </rows>
-          <columns>
-            <column id="0">
-              <property name="minsize">0</property>
-              <property name="pad">10</property>
-            </column>
-          </columns>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs0">
@@ -1570,8 +1570,8 @@
             </child>
             <child>
               <object class="ttk.Combobox" id="cbseq">
-                <property name="values">SNG SGN NSG NGS GSN GNS</property>
-                <property name="width">3</property>
+                <property name="values">"Select Next Generate" "Select Generate Next" "Next Select Generate" "Next Generate Select" "Generate Select Next" "Generate Next Select"</property>
+                <property name="width">28</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="propagate">True</property>
@@ -1596,8 +1596,8 @@
             </child>
             <child>
               <object class="ttk.Combobox" id="clseq">
-                <property name="values">RYGMBC YRGMBC MRBYGC CBMGYR RYGBMC BGYRCM</property>
-                <property name="width">6</property>
+                <property name="values">"Red Yellow Green Magenta Blue Cyan" "Yellow Red Green Magenta Blue Cyan" "Magenta Red Blue Yellow Green Cyan" "Cyan Blue Magenta Green Yellow Red" "Red Yellow Green Blue Magenta Cyan" "Blue Green Yellow Red Cyan Magenta"</property>
+                <property name="width">28</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="propagate">True</property>
@@ -1633,7 +1633,8 @@
             </child>
             <child>
               <object class="ttk.Label" id="lkerase">
-                <property name="text" translatable="yes">Erase after failures:	</property>
+                <property name="font">TkDefaultFont</property>
+                <property name="text" translatable="yes">Unlock failure:	</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -1644,9 +1645,22 @@
             </child>
             <child>
               <object class="ttk.Combobox" id="ckfail">
-                <property name="width">6</property>
+                <property name="values">"Do nothing" "Erase after 3 tries" "Erase after 10 trries" "Doubling timeout starting @"</property>
+                <property name="width">28</property>
                 <layout>
                   <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="edto">
+                <property name="validate">none</property>
+                <property name="width">3</property>
+                <layout>
+                  <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">3</property>
                   <property name="sticky">w</property>
@@ -1666,14 +1680,6 @@
           <property name="propagate">True</property>
           <property name="row">4</property>
           <property name="sticky">nw</property>
-          <rows>
-            <row id="0">
-              <property name="pad">20</property>
-            </row>
-            <row id="1">
-              <property name="pad">0</property>
-            </row>
-          </rows>
           <columns>
             <column id="0">
               <property name="pad">10</property>
@@ -1682,6 +1688,14 @@
               <property name="pad">100</property>
             </column>
           </columns>
+          <rows>
+            <row id="0">
+              <property name="pad">20</property>
+            </row>
+            <row id="1">
+              <property name="pad">0</property>
+            </row>
+          </rows>
         </layout>
         <child>
           <object class="ttk.Button" id="bread">
@@ -1721,7 +1735,7 @@
     <child>
       <object class="ttk.Frame" id="fterm">
         <property name="height">200</property>
-        <property name="width">200</property>
+        <property name="width">250</property>
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
@@ -1731,8 +1745,8 @@
           <object class="tk.Text" id="tterm">
             <property name="height">10</property>
             <property name="insertofftime">0</property>
-            <property name="width">100</property>
-            <property name="wrap">none</property>
+            <property name="width">132</property>
+            <property name="wrap">char</property>
             <layout>
               <property name="column">0</property>
               <property name="columnspan">40</property>

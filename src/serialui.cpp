@@ -383,7 +383,7 @@ void SerialUi::handle_cmd()
     // Lock sequence
     case 'S' : if (st_ptr > 2) set_lockseq(); show_lockseq(); break;
     case 'H' :
-    case '?' : Serial.println("RL");
+    case '?' : Serial.println("RLS");
   }
 }
 
@@ -731,10 +731,10 @@ void SerialUi::show_badseq()
 
   switch (d) 
   {
-    case 0 : Serial.println("Disabled"); break;
-    case 1 : Serial.println("3s"); break;
-    case 2 : Serial.println("10s"); break;
-    default : Serial.print(d) ; Serial.println(" secs doubling"); break;
+    case 0 : Serial.println("Off"); break;
+    case 1 : Serial.println("3T"); break;
+    case 2 : Serial.println("10T"); break;
+    default : Serial.print(d) ; Serial.println("sD"); break;
   }
 }
 
