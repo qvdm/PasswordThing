@@ -41,24 +41,6 @@ def serial_ports():
     return result
 
 
-class SerialThread(threading.Thread):
-    def __init__(self, rxqueue, txqueue, serialport):
-        threading.Thread.__init__(self)
-        self.rxqueue = rxqueue
-        self.txqueue = txqueue
-        self.s = serialport
-    def run(self):
-        self.s.write(str.encode('\n'))
-        time.sleep(0.2)
-        while True:
-            if self.s.inWaiting():
-                text = self.s.readline(s.inWaiting())
-                self.rxqueue.put(text)
-            if self.txqueue.qsize():
-                text = self.txqueue.get()
-                self.s.write(str.encode(text))
-
-
 class Application(pygubu.TkApplication):
 
     def _create_ui(self):
@@ -142,10 +124,11 @@ class Application(pygubu.TkApplication):
                 self.open_serial()
             self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
 
-            thread = SerialThread(self.rxqueue, self.txqueue, self.ser)
-            thread.start()
-            self.process_serial()
+            while self.ser.inWaiting():
+                text = self.ser.readline(self.ser.inWaiting())
+                self.termbox.insert(tk.INSERT, text)
 
+            self.close_serial()
         else:
             messagebox.showerror('Error', 'No port selected')
 
@@ -161,17 +144,6 @@ class Application(pygubu.TkApplication):
         
         # Call destroy on toplevel to finish program
         self.mainwindow.master.destroy()
-
-
-    def process_serial(self):
-        while self.rxqueue.qsize():
-            try:
-                rx=self.rxqueue.get()
-                self.termbox.insert(INSERT, rx)
-            except self.rxqueue.empty:
-                pass
-        self.termbox.insert(INSERT, '?')
-        self.mainwindow.after(100, self.process_serial)
 
 
 if __name__ == '__main__':
