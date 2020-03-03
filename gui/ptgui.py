@@ -167,11 +167,11 @@ class Application(pygubu.TkApplication):
         while self.rxqueue.qsize():
             try:
                 rx=self.rxqueue.get()
-                self.termbox.insert('0.0', rx)
-            except self.rxqueue.Empty:
+                self.termbox.insert(INSERT, rx)
+            except self.rxqueue.empty:
                 pass
-
-        self.after(100, self.process_serial)
+        self.termbox.insert(INSERT, '?')
+        self.mainwindow.after(100, self.process_serial)
 
 
 if __name__ == '__main__':
