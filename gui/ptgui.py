@@ -41,6 +41,24 @@ def serial_ports():
     return result
 
 
+class SerialThread(threading.Thread):
+    def __init__(self, rxqueue, txqueue, serialport):
+        threading.Thread.__init__(self)
+        self.rxqueue = rxqueue
+        self.txqueue = txqueue
+        self.s = serialport
+    def run(self):
+        self.s.write(str.encode('\n'))
+        time.sleep(0.2)
+        while True:
+            if self.s.inWaiting():
+                text = self.s.readline(s.inWaiting())
+                self.rxqueue.put(text)
+            if self.txqueue.qsize():
+                text = self.txqueue.get()
+                self.s.write(str.encode(text))
+
+
 class Application(pygubu.TkApplication):
 
     def _create_ui(self):
@@ -48,6 +66,9 @@ class Application(pygubu.TkApplication):
         self.port=None
         self.baud=115200
         self.ser=None
+
+        self.rxqueue = queue.Queue()
+        self.txqueue = queue.Queue()
 
         self.builder = builder = pygubu.Builder()
 
@@ -75,7 +96,7 @@ class Application(pygubu.TkApplication):
 
         builder.connect_callbacks(self)
 
-
+       
     def on_mfile_item_clicked(self, itemid):
         if itemid == 'mfile_open':
             messagebox.showinfo('File', 'You clicked Open menuitem')
@@ -120,7 +141,11 @@ class Application(pygubu.TkApplication):
                 self.ser = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
                 self.open_serial()
             self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
-            self.Serial_term()
+
+            thread = SerialThread(self.rxqueue, self.txqueue, self.ser)
+            thread.start()
+            self.process_serial()
+
         else:
             messagebox.showerror('Error', 'No port selected')
 
@@ -137,21 +162,17 @@ class Application(pygubu.TkApplication):
         # Call destroy on toplevel to finish program
         self.mainwindow.master.destroy()
 
-    def Serial_term(self):
-        s= self.ser
-        if s != None:
-            rx = ""
-            while True:
-                c = s.read()
-                if len(c) == 0:
-                    break
 
-                if c == '\r':
-                    rx += c
-                    self.termbox.insert('0.0', rx)
-                    rx = ""
-                else:
-                    rx += c
+    def process_serial(self):
+        while self.rxqueue.qsize():
+            try:
+                rx=self.rxqueue.get()
+                self.termbox.insert('0.0', rx)
+            except self.rxqueue.Empty:
+                pass
+
+        self.after(100, self.process_serial)
+
 
 if __name__ == '__main__':
     portlist = serial_ports()
