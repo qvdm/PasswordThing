@@ -131,7 +131,7 @@ class Application(pygubu.TkApplication):
         self.ser.dtr=False
         self.ser.close()
 
-    def on_connect(self):
+    def on_read(self):
         if self.port != None:
             if self.ser == None:
                 self.ser = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)

@@ -169,14 +169,50 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="bconnect">
+          <object class="ttk.Button" id="bread">
             <property name="command">on_connect</property>
-            <property name="text" translatable="yes">Connect</property>
+            <property name="text" translatable="yes">Read</property>
             <layout>
               <property name="column">4</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
-              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="bwrite">
+            <property name="text" translatable="yes">Write</property>
+            <layout>
+              <property name="column">5</property>
+              <property name="padx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="breset">
+            <property name="text" translatable="yes">Reset</property>
+            <layout>
+              <property name="column">6</property>
+              <property name="padx">40</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Canvas" id="cvled">
+            <property name="height">20</property>
+            <property name="takefocus">true</property>
+            <property name="width">20</property>
+            <layout>
+              <property name="column">7</property>
+              <property name="padx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
             </layout>
           </object>
         </child>
@@ -222,19 +258,39 @@
           </object>
         </child>
         <child>
-          <object class="tk.Canvas" id="cvled">
-            <property name="height">20</property>
-            <property name="takefocus">true</property>
-            <property name="width">20</property>
+          <object class="ttk.Label" id="ullabel">
+            <property name="compound">top</property>
+            <property name="cursor">arrow</property>
+            <property name="text" translatable="yes">Unlock Code:	</property>
             <layout>
-              <property name="column">5</property>
-              <property name="padx">5</property>
+              <property name="column">1</property>
               <property name="propagate">True</property>
-              <property name="row">0</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="ulentry">
+            <property name="width">5</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
               <property name="sticky">w</property>
             </layout>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="bclear">
+        <property name="text" translatable="yes">Clear</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="padx">0</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+        </layout>
       </object>
     </child>
     <child>
@@ -306,12 +362,6 @@
           <property name="propagate">True</property>
           <property name="row">2</property>
           <property name="sticky">w</property>
-          <columns>
-            <column id="0">
-              <property name="minsize">0</property>
-              <property name="pad">10</property>
-            </column>
-          </columns>
           <rows>
             <row id="5">
               <property name="pad">0</property>
@@ -320,6 +370,12 @@
               <property name="pad">20</property>
             </row>
           </rows>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">10</property>
+            </column>
+          </columns>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs0">
@@ -1656,7 +1712,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="edto">
+              <object class="ttk.Entry" id="edto_1">
                 <property name="validate">none</property>
                 <property name="width">3</property>
                 <layout>
@@ -1667,67 +1723,6 @@
                 </layout>
               </object>
             </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="ttk.Frame" id="fgo">
-        <property name="height">50</property>
-        <property name="width">200</property>
-        <layout>
-          <property name="column">0</property>
-          <property name="propagate">True</property>
-          <property name="row">4</property>
-          <property name="sticky">nw</property>
-          <columns>
-            <column id="0">
-              <property name="pad">10</property>
-            </column>
-            <column id="1">
-              <property name="pad">100</property>
-            </column>
-          </columns>
-          <rows>
-            <row id="0">
-              <property name="pad">20</property>
-            </row>
-            <row id="1">
-              <property name="pad">0</property>
-            </row>
-          </rows>
-        </layout>
-        <child>
-          <object class="ttk.Button" id="bread">
-            <property name="text" translatable="yes">Read</property>
-            <layout>
-              <property name="column">0</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-              <property name="sticky">w</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="ttk.Button" id="bwrite">
-            <property name="text" translatable="yes">Write</property>
-            <layout>
-              <property name="column">1</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-              <property name="sticky">w</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="ttk.Button" id="bclear">
-            <property name="text" translatable="yes">Clear</property>
-            <layout>
-              <property name="column">2</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-              <property name="sticky">w</property>
-            </layout>
           </object>
         </child>
       </object>
