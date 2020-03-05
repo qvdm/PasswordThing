@@ -1,0 +1,1799 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface>
+  <object class="tk.Menu" id="mainmenu">
+    <property name="tearoff">0</property>
+    <child>
+      <object class="tk.Menuitem.Submenu" id="mfile">
+        <property name="label" translatable="yes">File</property>
+        <property name="tearoff">0</property>
+        <child>
+          <object class="tk.Menuitem.Command" id="mfile_open">
+            <property name="command">on_mfile_item_clicked</property>
+            <property name="command_id_arg">True</property>
+            <property name="label" translatable="yes">Open</property>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Menuitem.Command" id="mfile_save">
+            <property name="command">on_mfile_item_clicked</property>
+            <property name="command_id_arg">True</property>
+            <property name="label" translatable="yes">Save</property>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Menuitem.Separator" id="separator1" />
+        </child>
+        <child>
+          <object class="tk.Menuitem.Command" id="mfile_quit">
+            <property name="command">on_mfile_item_clicked</property>
+            <property name="command_id_arg">True</property>
+            <property name="label" translatable="yes">Quit</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="tk.Menuitem.Submenu" id="mtools">
+        <property name="label" translatable="yes">Tools</property>
+        <property name="tearoff">0</property>
+        <child>
+          <object class="tk.Menuitem.Command" id="mtools_dump">
+            <property name="command">on_mtools_item_clicked</property>
+            <property name="command_id_arg">True</property>
+            <property name="label" translatable="yes">Dump Eeprom</property>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Menuitem.Command" id="mtools_clear">
+            <property name="command">on_mtools_item_clicked</property>
+            <property name="command_id_arg">True</property>
+            <property name="label" translatable="yes">Clear Eeprom</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="tk.Menuitem.Submenu" id="mhelp">
+        <property name="label" translatable="yes">Help</property>
+        <property name="tearoff">0</property>
+        <child>
+          <object class="tk.Menuitem.Command" id="mhelp_about">
+            <property name="command">on_about_clicked</property>
+            <property name="command_id_arg">False</property>
+            <property name="label" translatable="yes">About</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="ttk.Frame" id="mainwindow">
+    <property name="padding">5</property>
+    <property name="width">600</property>
+    <layout>
+      <property name="column">0</property>
+      <property name="propagate">True</property>
+      <property name="row">0</property>
+      <property name="sticky">nesw</property>
+      <rows>
+        <row id="0">
+          <property name="pad">10</property>
+        </row>
+        <row id="1">
+          <property name="pad">10</property>
+        </row>
+        <row id="2">
+          <property name="pad">10</property>
+        </row>
+        <row id="3">
+          <property name="pad">10</property>
+        </row>
+      </rows>
+    </layout>
+    <child>
+      <object class="ttk.Frame" id="ftop">
+        <property name="height">50</property>
+        <property name="width">600</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="sticky">nw</property>
+          <columns>
+            <column id="0">
+              <property name="pad">20</property>
+            </column>
+            <column id="1">
+              <property name="pad">5</property>
+            </column>
+            <column id="2">
+              <property name="pad">10</property>
+            </column>
+            <column id="3">
+              <property name="pad">30</property>
+            </column>
+          </columns>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="lmain">
+            <property name="compound">top</property>
+            <property name="justify">center</property>
+            <property name="padding">0</property>
+            <property name="text" translatable="yes">PWT configurator version 0</property>
+            <property name="textvariable">string:strlmain</property>
+            <property name="width">0</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="lport">
+            <property name="padding">0</property>
+            <property name="text" translatable="yes">Port:</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Combobox" id="cport">
+            <property name="exportselection">true</property>
+            <property name="height">0</property>
+            <property name="justify">left</property>
+            <property name="postcommand">populate_ports</property>
+            <property name="textvariable">string:tvport</property>
+            <property name="validate">all</property>
+            <property name="values">Auto COM1</property>
+            <property name="width">8</property>
+            <bind add="" handler="on_port_selected" sequence="&lt;&lt;ComboboxSelected&gt;&gt;" />
+            <layout>
+              <property name="column">2</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="brescan">
+            <property name="command">on_rescan_ports</property>
+            <property name="text" translatable="yes">Rescan Ports</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="bread">
+            <property name="command">on_read</property>
+            <property name="text" translatable="yes">Read</property>
+            <layout>
+              <property name="column">4</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="bwrite">
+            <property name="command">on_write</property>
+            <property name="text" translatable="yes">Write</property>
+            <layout>
+              <property name="column">5</property>
+              <property name="padx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="breset">
+            <property name="command">on_reset</property>
+            <property name="text" translatable="yes">Reset</property>
+            <layout>
+              <property name="column">6</property>
+              <property name="padx">40</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Canvas" id="cvled">
+            <property name="height">20</property>
+            <property name="takefocus">true</property>
+            <property name="width">20</property>
+            <layout>
+              <property name="column">7</property>
+              <property name="padx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="ffw">
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">10</property>
+                </column>
+                <column id="1">
+                  <property name="pad">0</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="lfirmware">
+                <property name="text" translatable="yes">Firmware version:</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lfwver">
+                <property name="text" translatable="yes">Unknown</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="ullabel">
+            <property name="compound">top</property>
+            <property name="cursor">arrow</property>
+            <property name="text" translatable="yes">Unlock Code:	</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="ulentry">
+            <property name="width">5</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="bulock">
+            <property name="text" translatable="yes">Unlock</property>
+            <property name="width">6</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="padx">13</property>
+              <property name="pady">5</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="lstatus">
+            <property name="text" translatable="yes">Not Connected</property>
+            <layout>
+              <property name="column">7</property>
+              <property name="padx">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="bclear">
+        <property name="text" translatable="yes">Clear</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="padx">0</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="fgenerator">
+        <property name="height">51</property>
+        <property name="text" translatable="yes">Password Generator</property>
+        <property name="width">600</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+          <property name="sticky">w</property>
+          <columns>
+            <column id="1">
+              <property name="pad">10</property>
+            </column>
+          </columns>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="lmode">
+            <property name="text" translatable="yes">Mode:</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Combobox" id="cmode">
+            <property name="values">Alpha Numeric Alphanumeric Symbols</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="llen">
+            <property name="text" translatable="yes">Length:</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="elen">
+            <property name="width">3</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="fslots">
+        <property name="height">50</property>
+        <property name="text" translatable="yes">Slots</property>
+        <property name="width">600</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">2</property>
+          <property name="sticky">w</property>
+          <rows>
+            <row id="5">
+              <property name="pad">0</property>
+            </row>
+            <row id="6">
+              <property name="pad">20</property>
+            </row>
+          </rows>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">10</property>
+            </column>
+          </columns>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="fs0">
+            <property name="height">50</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">20</property>
+                </column>
+                <column id="2">
+                  <property name="pad">10</property>
+                </column>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="ls0">
+                <property name="text" translatable="yes">Slot 0</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lname0">
+                <property name="text" translatable="yes">Name:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="ename0">
+                <property name="validate">focusout</property>
+                <property name="validatecommand">on_slot0_name</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="luid0">
+                <property name="text" translatable="yes">Userid:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cuid0">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwd0">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwd0">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bgen0">
+                <property name="text" translatable="yes">Generate</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy0">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste0">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr0">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fs1">
+            <property name="height">50</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">20</property>
+                </column>
+                <column id="2">
+                  <property name="pad">10</property>
+                </column>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="ls1">
+                <property name="text" translatable="yes">Slot 1</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lname1">
+                <property name="text" translatable="yes">Name:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="ename1">
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="luid1">
+                <property name="text" translatable="yes">Userid:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cuid1">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwd1">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwd1">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bgen1">
+                <property name="text" translatable="yes">Generate</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy1">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste1">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr1">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fs2">
+            <property name="height">50</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">20</property>
+                </column>
+                <column id="2">
+                  <property name="pad">10</property>
+                </column>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="ls2">
+                <property name="text" translatable="yes">Slot 2</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lname2">
+                <property name="text" translatable="yes">Name:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="ename2">
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="luid2">
+                <property name="text" translatable="yes">Userid:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cuid2">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwd2">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwd2">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bgen2">
+                <property name="text" translatable="yes">Generate</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy2">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste2">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr2">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fs3">
+            <property name="height">50</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">3</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">20</property>
+                </column>
+                <column id="2">
+                  <property name="pad">10</property>
+                </column>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="ls3">
+                <property name="text" translatable="yes">Slot 3</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lname3">
+                <property name="text" translatable="yes">Name:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="ename3">
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="luid3">
+                <property name="text" translatable="yes">Userid:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cuid3">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwd3">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwd3">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bgen3">
+                <property name="text" translatable="yes">Generate</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy3">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste3">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr3">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fs4">
+            <property name="height">50</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">4</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">20</property>
+                </column>
+                <column id="2">
+                  <property name="pad">10</property>
+                </column>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="ls4">
+                <property name="text" translatable="yes">Slot 4</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lname4">
+                <property name="text" translatable="yes">Name:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="ename4">
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="luid4">
+                <property name="text" translatable="yes">Userid:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cuid4">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwd4">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwd4">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bgen4">
+                <property name="text" translatable="yes">Generate</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy4">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste4">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr4">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fs5">
+            <property name="height">50</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">5</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">20</property>
+                </column>
+                <column id="2">
+                  <property name="pad">10</property>
+                </column>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="ls5">
+                <property name="text" translatable="yes">Slot 5</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lname5">
+                <property name="text" translatable="yes">Name:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="ename5">
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="luid5">
+                <property name="text" translatable="yes">Userid:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cuid5">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwd5">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwd5">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bgen5">
+                <property name="text" translatable="yes">Generate</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bcpy5">
+                <property name="text" translatable="yes">Copy</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bpaste5">
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Paste</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">9</property>
+                  <property name="padx">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="bclr5">
+                <property name="text" translatable="yes">Clear</property>
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fscb">
+            <property name="height">50</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">6</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">20</property>
+                </column>
+                <column id="2">
+                  <property name="pad">10</property>
+                </column>
+                <column id="4">
+                  <property name="pad">10</property>
+                </column>
+                <column id="6">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="lscb">
+                <property name="text" translatable="yes">Clipboard</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lnamecb">
+                <property name="text" translatable="yes">Name:</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="enamecb">
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="luidcb">
+                <property name="text" translatable="yes">Userid:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cuidcb">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lpwdcb">
+                <property name="text" translatable="yes">Password:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="cpwdcb">
+                <property name="width">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="fsettings">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">Settings	</property>
+        <property name="width">600</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">3</property>
+          <property name="sticky">w</property>
+          <columns>
+            <column id="0">
+              <property name="pad">0</property>
+            </column>
+            <column id="1">
+              <property name="pad">50</property>
+            </column>
+          </columns>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="fs1_1">
+            <property name="height">100</property>
+            <property name="width">50</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+            <child>
+              <object class="ttk.Checkbutton" id="cbflip">
+                <property name="text" translatable="yes">Flip Display	</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="cbrevert">
+                <property name="text" translatable="yes">Revert Password</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="cblogo">
+                <property name="text" translatable="yes">Show URL at Startup</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fs2_2">
+            <property name="height">100</property>
+            <property name="width">50</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">0</property>
+                </column>
+                <column id="1">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="ldto">
+                <property name="text" translatable="yes">Display Timeout:</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="edto">
+                <property name="state">normal</property>
+                <property name="width">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="ldto1">
+                <property name="text" translatable="yes">seconds</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lito">
+                <property name="text" translatable="yes">LED Timeout:</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="eito">
+                <property name="state">normal</property>
+                <property name="width">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lito1">
+                <property name="text" translatable="yes">seconds</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="llto">
+                <property name="text" translatable="yes">Lock Timeout:</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="elto">
+                <property name="state">normal</property>
+                <property name="width">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="llto1">
+                <property name="text" translatable="yes">minutes</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="fs3_3">
+            <property name="height">100</property>
+            <property name="width">50</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+              <columns>
+                <column id="0">
+                  <property name="pad">10</property>
+                </column>
+                <column id="1">
+                  <property name="pad">10</property>
+                </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="lbseq">
+                <property name="text" translatable="yes">Button Sequence:</property>
+                <property name="underline">0</property>
+                <property name="width">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="padx">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="cbseq">
+                <property name="values">"Select Next Generate" "Select Generate Next" "Next Select Generate" "Next Generate Select" "Generate Select Next" "Generate Next Select"</property>
+                <property name="width">28</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="llseq">
+                <property name="text" translatable="yes">LED Sequence:</property>
+                <property name="underline">0</property>
+                <property name="width">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="padx">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="clseq">
+                <property name="values">"Red Yellow Green Magenta Blue Cyan" "Yellow Red Green Magenta Blue Cyan" "Magenta Red Blue Yellow Green Cyan" "Cyan Blue Magenta Green Yellow Red" "Red Yellow Green Blue Magenta Cyan" "Blue Green Yellow Red Cyan Magenta"</property>
+                <property name="width">28</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lkseq">
+                <property name="text" translatable="yes">Lock Code:</property>
+                <property name="underline">0</property>
+                <property name="width">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="padx">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="ekseq">
+                <property name="width">5</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lkerase">
+                <property name="font">TkDefaultFont</property>
+                <property name="text" translatable="yes">Unlock failure:	</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="ckfail">
+                <property name="values">"Do nothing" "Erase after 3 tries" "Erase after 10 trries" "Doubling timeout starting @"</property>
+                <property name="width">28</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="edto_1">
+                <property name="validate">none</property>
+                <property name="width">3</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="fterm">
+        <property name="height">200</property>
+        <property name="width">250</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">5</property>
+        </layout>
+        <child>
+          <object class="tk.Text" id="tterm">
+            <property name="height">10</property>
+            <property name="insertofftime">0</property>
+            <property name="width">80</property>
+            <property name="wrap">char</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="columnspan">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Scrollbar" id="sctermybar">
+            <property name="orient">vertical</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
