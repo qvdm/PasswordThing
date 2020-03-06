@@ -13,7 +13,7 @@ class SerialPort:
     def __init__(self):
         self.comportName = ""
         self.baud = 0
-        self.timeout = None
+        self.timeout = 1
         self.ReceiveCallback = None
         self.isopen = False
         self.receivedMessage = None
@@ -79,6 +79,15 @@ class SerialPort:
                 return True
         else:
             return False
+
+    def Receiveline(self):
+        try:
+            if self.isopen:
+                self.receivedMessage = self.serialport.readline()
+                return self.receivedMessage
+        except:
+            print("Error reading COM port: ", sys.exc_info()[0])
+        return ''
 
 
     def PortList(self):
