@@ -12,6 +12,16 @@ serialPort = serial_rx_tx.SerialPort()
 portlist = serialPort.PortList()
 portlist.insert(0, " ")
 comport=' '
+ledcolor='red'
+
+# Set port variable callback
+def set_port(port):
+    comport = port
+
+# serial data callback 
+def OnReceiveSerialData(message):
+    str_message = message.decode("utf-8")
+    textbox.insert('1.0', str_message)
 
 root = tk.Tk() # create a Tk root window
 root.title( "TERMINAL - Serial Data Terminal v1.01" )
@@ -32,45 +42,44 @@ textbox.pack(side='bottom', fill='y', expand=True, padx=0, pady=0)
 textbox.config(font="bold")
 
 #COM Port label
-label_comport = Label(root,width=10,height=2,text="COM Port:")
+label_comport = Label(root,width=12,height=2,text="Serial Port:")
 label_comport.place(x=10,y=26)
 label_comport.config(font="bold")
-
-def set_port(port):
-    comport = port
 
 tkvar = StringVar(root)
 tkvar.set(' ')
 comport_combobox =  tk.OptionMenu(root, tkvar, *portlist, command=set_port)
 comport_combobox.place(x=100,y=26)
 
-def set_port(port):
-    comport = port
+canvas1 = Canvas(root, height=25, width=25)
+led = canvas1.create_oval(5,5,20,20, fill=ledcolor)
+canvas1.pack()
 
-# serial data callback function
-def OnReceiveSerialData(message):
-    str_message = message.decode("utf-8")
-    textbox.insert('1.0', str_message)
 
 # Register the callback above with the serial port object
 serialPort.RegisterReceiveCallback(OnReceiveSerialData)
 
 def sdterm_main():
+    if serialPort.IsOpen() :
+        ledcolor = 'green'
+    else:
+        ledcolor = 'red'
+    canvas1.itemconfig(led, fill=ledcolor)
     root.after(200, sdterm_main)  # run the main loop once each 200 ms
 
 #
 #  commands associated with button presses
 #
 def OpenCommand():
-    if button_openclose.cget("text") == 'Open COM Port':
+    if button_openclose.cget("text") == 'Open Port':
         baudrate = baudrate_edit.get()
         serialPort.Open(comport,baudrate)
-        button_openclose.config(text='Close COM Port')
-        textbox.insert('1.0', "COM Port Opened\r\n")
-    elif button_openclose.cget("text") == 'Close COM Port':
+        button_openclose.config(text='ClosePort')
+        textbox.insert('1.0', "Port Opened\r\n")
+    elif button_openclose.cget("text") == 'Close Port':
         serialPort.Close()
-        button_openclose.config(text='Open COM Port')
-        textbox.insert('1.0',"COM Port Closed\r\n")
+        button_openclose.config(text='Open Port')
+        textbox.insert('1.0',"Port "+comport+" Closed\r\n")
 
 
 def ClearDataCommand():
@@ -85,6 +94,16 @@ def SendDataCommand():
     else:
         textbox.insert('1.0', "Not sent - COM port is closed\r\n")
 
+def RescanCommand():
+    portlist = serialPort.PortList()
+    portlist.insert(0, " ")
+
+    tkvar.set('')
+    comport_combobox['menu'].delete(0, 'end')
+
+    for port in portlist:
+        comport_combobox['menu'].add_command(label=port, command=tk._setit(tkvar, port))
+
 
 def DisplayAbout():
     tk.messagebox.showinfo(
@@ -92,9 +111,14 @@ def DisplayAbout():
     "Blah\r\n\r\n" )
 
 # COM Port open/close button
-button_openclose = Button(root,text="Open COM Port",width=20,command=OpenCommand)
+button_openclose = Button(root,text="Open Port",width=20,command=OpenCommand)
 button_openclose.config(font="bold")
 button_openclose.place(x=210,y=30)
+
+# COM Port rescan button
+button_rescan = Button(root,text="Rescan Ports",width=20,command=RescanCommand)
+button_rescan.config(font="bold")
+button_rescan.place(x=410,y=30)
 
 #Clear Rx Data button
 button_cleardata = Button(root,text="Clear Rx Data",width=20,command=ClearDataCommand)
