@@ -96,7 +96,8 @@
 // External refs
 extern unsigned long getTime(void);
 extern int Secseq[];
-extern char Version[];;
+extern char Version[];
+extern char eevVer[];
 
 // CTOR
 SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)
@@ -173,7 +174,11 @@ void SerialUi::parse_input()
 {
   st_buf[st_ptr]=0;
 
-  if (waitforsec != 0) // Security sequence active? 
+  if ( st_buf[0] == 'V' ) // version req
+  {
+    handle_ver();
+  }
+  else if (waitforsec != 0) // Security sequence active? 
   {
     handle_sec();
   }
@@ -197,6 +202,17 @@ void SerialUi::parse_input()
      }
   }
 }
+
+// Show EE version
+void SerialUi::handle_ver()
+{
+  if (waitforsec != 0)
+    Serial.write('L');
+  else 
+    Serial.write('E');
+  Serial.println(eevVer);
+}
+
 
 // Parse security sequence
 void SerialUi::handle_sec()

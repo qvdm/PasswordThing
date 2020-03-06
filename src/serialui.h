@@ -61,6 +61,7 @@ class SerialUi {
     void handle_input(void);
     void parse_input(void);
 
+    void handle_ver(void);
     void handle_sec(void);
     void handle_slot(void);
     void handle_gen(void);
