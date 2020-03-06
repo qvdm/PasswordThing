@@ -52,6 +52,7 @@
 
 char Version[]=VERSION_SHORT;
 char eedVer[]="V04"; // eeprom dump
+char eevVer[]="01"; // eeprom vars
 
 // Forward declare systick function
 void sysTick();
