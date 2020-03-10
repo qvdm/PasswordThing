@@ -79,7 +79,7 @@ Slot commands have the format:
 
 > <0..5><cmd>[arg]
 
-* #O<passwd> : The **S** command sets the password for the slot selected by **#** to the string specified by **passwd**
+* #S<passwd> : The **S** command sets the password for the slot selected by **#** to the string specified by **passwd**
   - Example: **1Shunter2** - sets the password for slot 1 to "hunter2"
 * #I<userid> : The **I** command sets the userid for the slot selected by **#** to the string specified by **userid**
   - Example: **2Ijoe** - sets the userid for slot 2 to "joe"
