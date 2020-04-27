@@ -9,6 +9,7 @@ import serial
 import threading
 import time
 import queue
+import re
 
 __VERSION__ = '0.1'
 
@@ -49,8 +50,12 @@ class Application(pygubu.TkApplication):
         self.baud=115200
         self.ser=None
 
+        self.ser_open = False;
+        self.ser_rcvstack = []
+
         self.rxqueue = queue.Queue()
         self.txqueue = queue.Queue()
+        self.cmdqueue = queue.Queue()
 
         self.builder = builder = pygubu.Builder()
 
@@ -62,6 +67,8 @@ class Application(pygubu.TkApplication):
 
         self.mainlabel = mainlabel = builder.get_object('lmain', self.master)
         self.builder.tkvariables['strlmain'].set("PwThing Version " + __VERSION__)
+        
+        self.verlabel = verlabel = builder.get_object('lfwver', self.master)
 
         self.portcombo = portcombo = builder.get_object('cport', self.master)
         portcombo['values'] = portlist
@@ -77,6 +84,7 @@ class Application(pygubu.TkApplication):
         led.to_red(on=True)
 
         builder.connect_callbacks(self)
+        self.master.after(100, self.process_serial)
 
        
     def on_mfile_item_clicked(self, itemid):
@@ -104,31 +112,60 @@ class Application(pygubu.TkApplication):
         self.portcombo['values'] = portlist
         self.portcombo.current(0)
 
+    def setversion(self, s) :
+        self.builder.tkvariables['strlver'].set(s)
+
     def open_serial(self):
         self.ser.rts=True
         self.ser.dtr=True
+        self.ser_open = True
+        self.led.to_green(on=True)
 
     def close_serial(self):         
         self.ser.rts=False
         self.ser.dtr=False
-        self.ser.close()
+        self.ser_open = False
+        self.led.to_yellow(on=True)
 
-    def on_read(self):
+    def process_serial(self):
+        out=""
+        if self.ser_open == True:
+            while self.ser.inWaiting() > 0:
+                c = self.ser.read(1).decode('utf8')
+                out += c
+                if (c == '\r') or (c == '\n') :
+                    self.ser_rcvstack.append(out)
+                    self.termbox.insert(tk.INSERT, "!")
+
+            if out != "":
+                self.led.to_green(on=True)
+#            if len(self.ser_rcvstack) > 0 :
+#                s = self.ser_rcvstack.pop()
+#                t=s.rstrip()
+#                if re.search("^V", t) :
+#                    self.setversion(t)
+#                self.termbox.insert(tk.INSERT, s)
+                self.termbox.insert(tk.INSERT, out)
+            self.master.after(20, self.process_serial)
+        else:
+            self.master.after(100, self.process_serial)
+   
+    def on_connect(self): 
         if self.port != None:
             if self.ser == None:
-                self.ser = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
-                self.open_serial()
+                self.ser = serial.Serial(port=self.port, baudrate=self.baud, 
+                                         parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, 
+                                         timeout=0, writeTimeout=0)
+                if self.ser != None:
+                    self.open_serial()
             else:
                 self.close_serial()
-                self.ser = serial.Serial(port=self.port, baudrate=self.baud, timeout=0, writeTimeout=0)
-                self.open_serial()
+                self.ser = serial.Serial(port=self.port, baudrate=self.baud, 
+                                         parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, 
+                                         timeout=0, writeTimeout=0)
+                if self.ser != None:
+                    self.open_serial()
             self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
-
-            while self.ser.inWaiting():
-                text = self.ser.readline(self.ser.inWaiting())
-                self.termbox.insert(tk.INSERT, text)
-
-            self.close_serial()
         else:
             messagebox.showerror('Error', 'No port selected')
 

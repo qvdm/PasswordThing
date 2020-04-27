@@ -252,6 +252,7 @@
             <child>
               <object class="ttk.Label" id="lfwver">
                 <property name="text" translatable="yes">Not connected</property>
+                <property name="textvariable">string:strlver</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="propagate">True</property>
@@ -282,6 +283,17 @@
               <property name="propagate">True</property>
               <property name="row">1</property>
               <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="bconnect">
+            <property name="command">on_connect</property>
+            <property name="text" translatable="yes">Connect</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
