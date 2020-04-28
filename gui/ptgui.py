@@ -128,24 +128,26 @@ class Application(pygubu.TkApplication):
         self.led.to_yellow(on=True)
 
     def process_serial(self):
-        out=""
+        rcv=""
         if self.ser_open == True:
             while self.ser.inWaiting() > 0:
                 c = self.ser.read(1).decode('utf8')
-                out += c
-                if (c == '\r') or (c == '\n') :
-                    self.ser_rcvstack.append(out)
+                rcv += c
+                print("C/RCV: " + c + ":" + rcv + " ")
+                if "\r" in rcv :
+                    self.ser_rcvstack.append(rcv)
                     self.termbox.insert(tk.INSERT, "!")
+                    print("CR:" + rcv + "L: " + str(len(self.ser_rcvstack)))
+                    rcv=""
 
-            if out != "":
+            if len(self.ser_rcvstack) > 0 :
+                s = self.ser_rcvstack.pop(0)
+                print("S: " + s)
+                self.termbox.insert(tk.INSERT, s)
                 self.led.to_green(on=True)
-#            if len(self.ser_rcvstack) > 0 :
-#                s = self.ser_rcvstack.pop()
-#                t=s.rstrip()
+
 #                if re.search("^V", t) :
 #                    self.setversion(t)
-#                self.termbox.insert(tk.INSERT, s)
-                self.termbox.insert(tk.INSERT, out)
             self.master.after(20, self.process_serial)
         else:
             self.master.after(100, self.process_serial)
@@ -169,6 +171,10 @@ class Application(pygubu.TkApplication):
         else:
             messagebox.showerror('Error', 'No port selected')
 
+    def on_sendcr(self):
+        if self.ser_open == True :
+            self.ser.write("\r\n".encode("utf-8"))
+       
 
     def on_close_window(self, event=None):
         if self.dirty:
