@@ -55,6 +55,8 @@ class Application(pygubu.TkApplication):
         self.ser_rcvstack = []
         self.ser_to = 0
 
+        self.wsema = 0
+
         self.rxqueue = queue.Queue()
         self.txqueue = queue.Queue()
         self.cmdqueue = queue.Queue()
@@ -183,6 +185,7 @@ class Application(pygubu.TkApplication):
             s=str + "\r"
             self.ser.write(s.encode("utf-8"))
 
+    
     def on_connect(self): 
         if self.port != None:
             if self.ser == None:
@@ -199,13 +202,25 @@ class Application(pygubu.TkApplication):
                 if self.ser != None:
                     self.open_serial()
             self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
-
-            time.sleep(0.2);
-            self.clear_serial()
+            self.send_serial('')
+            self.master.after(500, self.ask_version)
 
         else:
             messagebox.showerror('Error', 'No port selected')
 
+    def ask_version(self) :
+        self.clear_serial()
+        self.send_serial('V')
+        self.master.after(100, self.get_version)
+
+    def get_version(self) :
+        l = self.get_serial_line()
+        print("GV")
+        if l :
+            self.builder.tkvariables['lfwver'].set(l)     
+            print(l)
+
+    
     def on_sendcr(self):
         if self.ser_open == True :
             self.ser.write("\r".encode("utf-8"))
