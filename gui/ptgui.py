@@ -51,7 +51,9 @@ class Application(pygubu.TkApplication):
         self.ser=None
 
         self.ser_open = False;
+        self.ser_rcv=""
         self.ser_rcvstack = []
+        self.ser_to = 0
 
         self.rxqueue = queue.Queue()
         self.txqueue = queue.Queue()
@@ -128,30 +130,59 @@ class Application(pygubu.TkApplication):
         self.led.to_yellow(on=True)
 
     def process_serial(self):
-        rcv=""
         if self.ser_open == True:
+            self.ser_to = self.ser_to + 1;
             while self.ser.inWaiting() > 0:
+                self.ser_to = 0
                 c = self.ser.read(1).decode('utf8')
-                rcv += c
-                print("C/RCV: " + c + ":" + rcv + " ")
-                if "\r" in rcv :
-                    self.ser_rcvstack.append(rcv)
-                    self.termbox.insert(tk.INSERT, "!")
-                    print("CR:" + rcv + "L: " + str(len(self.ser_rcvstack)))
-                    rcv=""
+                self.ser_rcv += c
+                #self.dbug("C/RCV:" + c + ":" + self.ser_rcv)
+                if "\n" in self.ser_rcv :
+                    self.ser_rcv = self.cleanup_str(self.ser_rcv) 
+                    if len(self.ser_rcv) > 0 :
+                      self.ser_rcvstack.append(self.ser_rcv)
+                      self.led.to_green(on=True)
+                      #self.dbug("!CR:" + self.ser_rcv + "L:" + str(len(self.ser_rcvstack)))
+                    #else :
+                      #self.dbug("!CBL")
+                    self.termbox.insert(tk.INSERT, self.ser_rcv)
+                    self.ser_rcv=""
 
-            if len(self.ser_rcvstack) > 0 :
-                s = self.ser_rcvstack.pop(0)
-                print("S: " + s)
-                self.termbox.insert(tk.INSERT, s)
-                self.led.to_green(on=True)
+            if (self.ser_to > 20) and (len(self.ser_rcv) > 0) :
+                self.ser_rcv = self.cleanup_str(self.ser_rcv) 
+                if len(self.ser_rcv) > 0 :
+                    self.ser_rcvstack.append(self.ser_rcv)
+                    self.led.to_green(on=True)
+                    #self.dbug("!TO:" + self.ser_rcv + "L:" + str(len(self.ser_rcvstack)))
+                #else :
+                    #self.dbug("!TBL")
+                self.termbox.insert(tk.INSERT, self.ser_rcv)
+                self.ser_rcv=""
 
-#                if re.search("^V", t) :
-#                    self.setversion(t)
             self.master.after(20, self.process_serial)
         else:
             self.master.after(100, self.process_serial)
    
+    def clear_serial(self) :
+        while len(self.ser_rcvstack) > 0 :
+            self.ser_rcvstack.pop(0)
+
+    def get_serial_line(self) :
+        l=""
+        if len(self.ser_rcvstack) > 0 :
+            l = self.ser_rcvstack.pop(0)
+        return l
+
+    def serial_avail(self) :
+        if len(self.ser_rcvstack) > 0 :
+            return True
+        return False
+
+    def send_serial(self, str) :
+        if self.ser_open == True :
+            s=str + "\r"
+            self.ser.write(s.encode("utf-8"))
+
     def on_connect(self): 
         if self.port != None:
             if self.ser == None:
@@ -168,12 +199,16 @@ class Application(pygubu.TkApplication):
                 if self.ser != None:
                     self.open_serial()
             self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
+
+            time.sleep(0.2);
+            self.clear_serial()
+
         else:
             messagebox.showerror('Error', 'No port selected')
 
     def on_sendcr(self):
         if self.ser_open == True :
-            self.ser.write("\r\n".encode("utf-8"))
+            self.ser.write("\r".encode("utf-8"))
        
 
     def on_close_window(self, event=None):
@@ -188,6 +223,20 @@ class Application(pygubu.TkApplication):
         # Call destroy on toplevel to finish program
         self.mainwindow.master.destroy()
 
+    def cleanup_str(self, str) :
+        p = re.compile('\r|\n')
+        str = p.sub("", str) 
+        p = re.compile('^\s+')
+        str = p.sub("", str) 
+        p = re.compile('\s+$')
+        str = p.sub("", str) 
+        return str
+    
+    def dbug(self, str) :
+        s=str.replace("\n", "[LF]")
+        s=s.replace("\r", "[CR]")
+        s=s.replace(" ", "[SPC]")
+        print("$"+s+"\n")
 
 if __name__ == '__main__':
     portlist = serial_ports()
