@@ -111,10 +111,11 @@ class Application(pygubu.TkApplication):
         self.port = self.builder.tkvariables.__getitem__('tvport').get() 
 
     def on_rescan_ports(self):
-        portlist = serial_ports()
-        portlist.insert(0,'')
-        self.portcombo['values'] = portlist
-        self.portcombo.current(0)
+        if self.ser_open == False :
+            portlist = serial_ports()
+            portlist.insert(0,'')
+            self.portcombo['values'] = portlist
+            self.portcombo.current(0)
 
     def setversion(self, s) :
         self.builder.tkvariables['strlver'].set(s)
@@ -123,13 +124,13 @@ class Application(pygubu.TkApplication):
         self.ser.rts=True
         self.ser.dtr=True
         self.ser_open = True
-        self.led.to_green(on=True)
+        self.led.to_yellow(on=True)
 
     def close_serial(self):         
         self.ser.rts=False
         self.ser.dtr=False
         self.ser_open = False
-        self.led.to_yellow(on=True)
+        self.led.to_red(on=True)
 
     def process_serial(self):
         if self.ser_open == True:
@@ -147,7 +148,7 @@ class Application(pygubu.TkApplication):
                       #self.dbug("!CR:" + self.ser_rcv + "L:" + str(len(self.ser_rcvstack)))
                     #else :
                       #self.dbug("!CBL")
-                    self.termbox.insert(tk.INSERT, self.ser_rcv)
+                    self.termbox.insert(tk.INSERT, self.ser_rcv + "\n")
                     self.ser_rcv=""
 
             if (self.ser_to > 20) and (len(self.ser_rcv) > 0) :
@@ -171,6 +172,7 @@ class Application(pygubu.TkApplication):
 
     def get_serial_line(self) :
         l=""
+        self.dbug("@"+str(len(self.ser_rcvstack)))
         if len(self.ser_rcvstack) > 0 :
             l = self.ser_rcvstack.pop(0)
         return l
@@ -187,44 +189,58 @@ class Application(pygubu.TkApplication):
 
     
     def on_connect(self): 
-        if self.port != None:
-            if self.ser == None:
-                self.ser = serial.Serial(port=self.port, baudrate=self.baud, 
-                                         parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, 
-                                         timeout=0, writeTimeout=0)
-                if self.ser != None:
-                    self.open_serial()
+        if self.ser_open :
+            self.close_serial()
+            self.builder.tkvariables['strbconn'].set('Connect') 
+        else :
+            if self.port != None:
+                if self.ser == None:
+                    self.ser = serial.Serial(port=self.port, baudrate=self.baud, 
+                                            parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, 
+                                            timeout=0, writeTimeout=0)
+                    if self.ser != None:
+                        self.open_serial()
+                else:
+                    self.close_serial()
+                    self.ser = serial.Serial(port=self.port, baudrate=self.baud, 
+                                            parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, 
+                                            timeout=0, writeTimeout=0)
+                    if self.ser != None:
+                        self.open_serial()
+                self.builder.tkvariables['strbconn'].set('Disconnect') 
+                self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
+                self.send_serial('')
+                self.master.after(500, self.ask_version)
             else:
-                self.close_serial()
-                self.ser = serial.Serial(port=self.port, baudrate=self.baud, 
-                                         parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, 
-                                         timeout=0, writeTimeout=0)
-                if self.ser != None:
-                    self.open_serial()
-            self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
-            self.send_serial('')
-            self.master.after(500, self.ask_version)
+                messagebox.showerror('Error', 'No port selected')
 
-        else:
-            messagebox.showerror('Error', 'No port selected')
 
     def ask_version(self) :
-        self.clear_serial()
         self.send_serial('V')
-        self.master.after(100, self.get_version)
+        self.master.after(500, self.get_version)
 
     def get_version(self) :
         l = self.get_serial_line()
-        print("GV")
+        l = self.get_serial_line()
+        l = self.get_serial_line()
         if l :
-            self.builder.tkvariables['lfwver'].set(l)     
+            self.builder.tkvariables['strlver'].set(l)     
             print(l)
 
-    
     def on_sendcr(self):
         if self.ser_open == True :
             self.ser.write("\r".encode("utf-8"))
        
+
+    def on_read(self) :
+        for slot in range(6) :
+            self.send_serial(str(slot)+"P")  
+            self.master.after(500, self.get_sl1, slot)
+
+    def get_sl1(self, slot) :
+        print(self.get_serial_line())
+        print(self.get_serial_line())
+        print(self.get_serial_line())
 
     def on_close_window(self, event=None):
         if self.dirty:

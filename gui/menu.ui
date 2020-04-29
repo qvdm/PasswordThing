@@ -290,6 +290,7 @@
           <object id="bconnect" class="ttk.Button">
             <property name="command">on_connect</property>
             <property name="text" translatable="yes">Connect</property>
+            <property name="textvariable">string:strbconn</property>
             <layout>
               <property name="column">3</property>
               <property name="propagate">True</property>
