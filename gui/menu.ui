@@ -162,7 +162,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="brescan">
+          <object class="tk.Button" id="brescan">
             <property name="command">on_rescan_ports</property>
             <property name="text" translatable="yes">Rescan Ports</property>
             <layout>
@@ -173,7 +173,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="bread">
+          <object class="tk.Button" id="bread">
             <property name="command">on_read</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Read</property>
@@ -185,7 +185,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="bwrite">
+          <object class="tk.Button" id="bwrite">
             <property name="command">on_write</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Write</property>
@@ -198,7 +198,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="breset">
+          <object class="tk.Button" id="breset">
             <property name="command">on_reset</property>
             <property name="text" translatable="yes">Reset</property>
             <layout>
@@ -290,7 +290,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="bunlock">
+          <object class="tk.Button" id="bunlock">
             <property name="command">on_unlock</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Unlock</property>
@@ -303,7 +303,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Button" id="bconnect">
+          <object class="tk.Button" id="bconnect">
             <property name="command">on_connect</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Connect</property>
@@ -318,7 +318,7 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Button" id="bclear">
+      <object class="tk.Button" id="bclear">
         <property name="text" translatable="yes">Clear</property>
         <layout>
           <property name="column">0</property>
@@ -517,7 +517,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bgen0">
+              <object class="tk.Button" id="bgen0">
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -529,7 +529,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bcpy0">
+              <object class="tk.Button" id="bcpy0">
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -542,7 +542,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bpaste0">
+              <object class="tk.Button" id="bpaste0">
                 <property name="state">disabled</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
@@ -556,7 +556,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr0">
+              <object class="tk.Button" id="bclr0">
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -672,7 +672,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bgen1">
+              <object class="tk.Button" id="bgen1">
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -684,7 +684,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bcpy1">
+              <object class="tk.Button" id="bcpy1">
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -697,7 +697,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bpaste1">
+              <object class="tk.Button" id="bpaste1">
                 <property name="state">disabled</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
@@ -711,7 +711,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr1">
+              <object class="tk.Button" id="bclr1">
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -827,7 +827,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bgen2">
+              <object class="tk.Button" id="bgen2">
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -839,7 +839,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bcpy2">
+              <object class="tk.Button" id="bcpy2">
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -852,7 +852,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bpaste2">
+              <object class="tk.Button" id="bpaste2">
                 <property name="state">disabled</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
@@ -866,7 +866,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr2">
+              <object class="tk.Button" id="bclr2">
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -982,7 +982,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bgen3">
+              <object class="tk.Button" id="bgen3">
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -994,7 +994,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bcpy3">
+              <object class="tk.Button" id="bcpy3">
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -1007,7 +1007,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bpaste3">
+              <object class="tk.Button" id="bpaste3">
                 <property name="state">disabled</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
@@ -1021,7 +1021,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr3">
+              <object class="tk.Button" id="bclr3">
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -1137,7 +1137,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bgen4">
+              <object class="tk.Button" id="bgen4">
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -1149,7 +1149,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bcpy4">
+              <object class="tk.Button" id="bcpy4">
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -1162,7 +1162,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bpaste4">
+              <object class="tk.Button" id="bpaste4">
                 <property name="state">disabled</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
@@ -1176,7 +1176,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr4">
+              <object class="tk.Button" id="bclr4">
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -1292,7 +1292,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bgen5">
+              <object class="tk.Button" id="bgen5">
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -1304,7 +1304,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bcpy5">
+              <object class="tk.Button" id="bcpy5">
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -1317,7 +1317,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bpaste5">
+              <object class="tk.Button" id="bpaste5">
                 <property name="state">disabled</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
@@ -1331,7 +1331,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Button" id="bclr5">
+              <object class="tk.Button" id="bclr5">
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>

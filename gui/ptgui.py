@@ -55,6 +55,7 @@ class Application(pygubu.TkApplication):
         self.ser_rcv=""
         self.ser_rcvstack = []
         self.ser_to = 0
+        self.locked = False
 
         self.ser_parsestring = ""
 
@@ -253,12 +254,18 @@ class Application(pygubu.TkApplication):
         if self.serial_avail() :
             l = self.get_serial_line()
             print("01 "+ l)
-            if l.startswith('E') :
-                self.builder.tkvariables['strlver'].set(l)     
-            if l.startswith('L') :
-                self.builder.tkvariables['strlver'].set(l)     Locked
+            if len(l) == 3 :
+                t, ev = l[:1], l[1:]
+                self.builder.tkvariables['strlver'].set(ev)     
+                if t == 'L' :
+                    self.locked = True
+                    ulbutton = self.builder.get_object('bunlock', self.master)
+                    ulbutton.config(background='red')
+            else :
+                self.master.after(200, self.get_version)
 
-            self.master.after(200, self.get_version)
+# on ul fill...
+#                   ulbutton.config(state=tk.NORMAL)
 
     def on_unlock(self):
         if self.ser_open == True :
