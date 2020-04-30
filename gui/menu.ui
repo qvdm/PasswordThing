@@ -279,7 +279,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Entry" id="ulentry">
+          <object class="tk.Entry" id="ulentry">
             <property name="width">5</property>
             <layout>
               <property name="column">2</property>
@@ -376,7 +376,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Entry" id="elen">
+          <object class="tk.Entry" id="elen">
             <property name="width">3</property>
             <layout>
               <property name="column">3</property>
@@ -460,7 +460,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="ename0">
+              <object class="tk.Entry" id="ename0">
                 <property name="validate">focusout</property>
                 <property name="validatecommand">on_slot0_name</property>
                 <property name="width">8</property>
@@ -484,7 +484,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cuid0">
+              <object class="tk.Entry" id="cuid0">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
@@ -506,7 +506,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cpwd0">
+              <object class="tk.Entry" id="cpwd0">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">6</property>
@@ -617,7 +617,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="ename1">
+              <object class="tk.Entry" id="ename1">
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -639,7 +639,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cuid1">
+              <object class="tk.Entry" id="cuid1">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
@@ -661,7 +661,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cpwd1">
+              <object class="tk.Entry" id="cpwd1">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">6</property>
@@ -772,7 +772,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="ename2">
+              <object class="tk.Entry" id="ename2">
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -794,7 +794,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cuid2">
+              <object class="tk.Entry" id="cuid2">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
@@ -816,7 +816,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cpwd2">
+              <object class="tk.Entry" id="cpwd2">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">6</property>
@@ -927,7 +927,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="ename3">
+              <object class="tk.Entry" id="ename3">
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -949,7 +949,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cuid3">
+              <object class="tk.Entry" id="cuid3">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
@@ -971,7 +971,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cpwd3">
+              <object class="tk.Entry" id="cpwd3">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">6</property>
@@ -1082,7 +1082,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="ename4">
+              <object class="tk.Entry" id="ename4">
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -1104,7 +1104,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cuid4">
+              <object class="tk.Entry" id="cuid4">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
@@ -1126,7 +1126,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cpwd4">
+              <object class="tk.Entry" id="cpwd4">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">6</property>
@@ -1237,7 +1237,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="ename5">
+              <object class="tk.Entry" id="ename5">
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -1259,7 +1259,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cuid5">
+              <object class="tk.Entry" id="cuid5">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
@@ -1281,7 +1281,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cpwd5">
+              <object class="tk.Entry" id="cpwd5">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">6</property>
@@ -1392,7 +1392,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="enamecb">
+              <object class="tk.Entry" id="enamecb">
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -1414,7 +1414,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cuidcb">
+              <object class="tk.Entry" id="cuidcb">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">4</property>
@@ -1436,7 +1436,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="cpwdcb">
+              <object class="tk.Entry" id="cpwdcb">
                 <property name="width">20</property>
                 <layout>
                   <property name="column">6</property>
@@ -1541,7 +1541,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="edto">
+              <object class="tk.Entry" id="edto">
                 <property name="state">normal</property>
                 <property name="width">3</property>
                 <layout>
@@ -1573,7 +1573,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="eito">
+              <object class="tk.Entry" id="eito">
                 <property name="state">normal</property>
                 <property name="width">3</property>
                 <layout>
@@ -1605,7 +1605,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="elto">
+              <object class="tk.Entry" id="elto">
                 <property name="state">normal</property>
                 <property name="width">3</property>
                 <layout>
@@ -1712,7 +1712,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="ekseq">
+              <object class="tk.Entry" id="ekseq">
                 <property name="width">5</property>
                 <layout>
                   <property name="column">1</property>
@@ -1747,7 +1747,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Entry" id="edto_1">
+              <object class="tk.Entry" id="edto_1">
                 <property name="validate">none</property>
                 <property name="width">3</property>
                 <layout>
