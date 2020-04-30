@@ -114,7 +114,7 @@
           </columns>
         </layout>
         <child>
-          <object class="ttk.Label" id="lmain">
+          <object class="tk.Label" id="lmain">
             <property name="compound">top</property>
             <property name="justify">center</property>
             <property name="padding">0</property>
@@ -130,7 +130,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Label" id="lport">
+          <object class="tk.Label" id="lport">
             <property name="padding">0</property>
             <property name="text" translatable="yes">Port:</property>
             <layout>
@@ -242,7 +242,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="lfirmware">
+              <object class="tk.Label" id="lfirmware">
                 <property name="text" translatable="yes">Firmware version:</property>
                 <layout>
                   <property name="column">0</property>
@@ -253,7 +253,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lfwver">
+              <object class="tk.Label" id="lfwver">
                 <property name="text" translatable="yes">Not connected</property>
                 <property name="textvariable">string:strlver</property>
                 <layout>
@@ -267,7 +267,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Label" id="ullabel">
+          <object class="tk.Label" id="ullabel">
             <property name="compound">top</property>
             <property name="cursor">arrow</property>
             <property name="text" translatable="yes">Unlock Code:	</property>
@@ -345,7 +345,7 @@
           </columns>
         </layout>
         <child>
-          <object class="ttk.Label" id="lmode">
+          <object class="tk.Label" id="lmode">
             <property name="text" translatable="yes">Mode:</property>
             <layout>
               <property name="column">0</property>
@@ -366,7 +366,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Label" id="llen">
+          <object class="tk.Label" id="llen">
             <property name="text" translatable="yes">Length:</property>
             <layout>
               <property name="column">2</property>
@@ -437,7 +437,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="ls0">
+              <object class="tk.Label" id="ls0">
                 <property name="text" translatable="yes">Slot 0</property>
                 <property name="width">8</property>
                 <layout>
@@ -449,7 +449,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lname0">
+              <object class="tk.Label" id="lname0">
                 <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
@@ -473,7 +473,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="luid0">
+              <object class="tk.Label" id="luid0">
                 <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
@@ -495,7 +495,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lpwd0">
+              <object class="tk.Label" id="lpwd0">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
                   <property name="column">5</property>
@@ -594,7 +594,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="ls1">
+              <object class="tk.Label" id="ls1">
                 <property name="text" translatable="yes">Slot 1</property>
                 <property name="width">8</property>
                 <layout>
@@ -606,7 +606,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lname1">
+              <object class="tk.Label" id="lname1">
                 <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
@@ -628,7 +628,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="luid1">
+              <object class="tk.Label" id="luid1">
                 <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
@@ -650,7 +650,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lpwd1">
+              <object class="tk.Label" id="lpwd1">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
                   <property name="column">5</property>
@@ -749,7 +749,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="ls2">
+              <object class="tk.Label" id="ls2">
                 <property name="text" translatable="yes">Slot 2</property>
                 <property name="width">8</property>
                 <layout>
@@ -761,7 +761,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lname2">
+              <object class="tk.Label" id="lname2">
                 <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
@@ -783,7 +783,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="luid2">
+              <object class="tk.Label" id="luid2">
                 <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
@@ -805,7 +805,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lpwd2">
+              <object class="tk.Label" id="lpwd2">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
                   <property name="column">5</property>
@@ -904,7 +904,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="ls3">
+              <object class="tk.Label" id="ls3">
                 <property name="text" translatable="yes">Slot 3</property>
                 <property name="width">8</property>
                 <layout>
@@ -916,7 +916,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lname3">
+              <object class="tk.Label" id="lname3">
                 <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
@@ -938,7 +938,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="luid3">
+              <object class="tk.Label" id="luid3">
                 <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
@@ -960,7 +960,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lpwd3">
+              <object class="tk.Label" id="lpwd3">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
                   <property name="column">5</property>
@@ -1059,7 +1059,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="ls4">
+              <object class="tk.Label" id="ls4">
                 <property name="text" translatable="yes">Slot 4</property>
                 <property name="width">8</property>
                 <layout>
@@ -1071,7 +1071,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lname4">
+              <object class="tk.Label" id="lname4">
                 <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
@@ -1093,7 +1093,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="luid4">
+              <object class="tk.Label" id="luid4">
                 <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
@@ -1115,7 +1115,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lpwd4">
+              <object class="tk.Label" id="lpwd4">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
                   <property name="column">5</property>
@@ -1214,7 +1214,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="ls5">
+              <object class="tk.Label" id="ls5">
                 <property name="text" translatable="yes">Slot 5</property>
                 <property name="width">8</property>
                 <layout>
@@ -1226,7 +1226,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lname5">
+              <object class="tk.Label" id="lname5">
                 <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
@@ -1248,7 +1248,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="luid5">
+              <object class="tk.Label" id="luid5">
                 <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
@@ -1270,7 +1270,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lpwd5">
+              <object class="tk.Label" id="lpwd5">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
                   <property name="column">5</property>
@@ -1369,7 +1369,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="lscb">
+              <object class="tk.Label" id="lscb">
                 <property name="text" translatable="yes">Clipboard</property>
                 <property name="width">8</property>
                 <layout>
@@ -1381,7 +1381,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lnamecb">
+              <object class="tk.Label" id="lnamecb">
                 <property name="text" translatable="yes">Name:</property>
                 <layout>
                   <property name="column">1</property>
@@ -1403,7 +1403,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="luidcb">
+              <object class="tk.Label" id="luidcb">
                 <property name="text" translatable="yes">Userid:</property>
                 <layout>
                   <property name="column">3</property>
@@ -1425,7 +1425,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lpwdcb">
+              <object class="tk.Label" id="lpwdcb">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
                   <property name="column">5</property>
@@ -1531,7 +1531,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="ldto">
+              <object class="tk.Label" id="ldto">
                 <property name="text" translatable="yes">Display Timeout:</property>
                 <layout>
                   <property name="column">0</property>
@@ -1552,7 +1552,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="ldto1">
+              <object class="tk.Label" id="ldto1">
                 <property name="text" translatable="yes">seconds</property>
                 <layout>
                   <property name="column">2</property>
@@ -1562,7 +1562,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lito">
+              <object class="tk.Label" id="lito">
                 <property name="text" translatable="yes">LED Timeout:</property>
                 <layout>
                   <property name="column">0</property>
@@ -1584,7 +1584,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lito1">
+              <object class="tk.Label" id="lito1">
                 <property name="text" translatable="yes">seconds</property>
                 <layout>
                   <property name="column">2</property>
@@ -1594,7 +1594,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="llto">
+              <object class="tk.Label" id="llto">
                 <property name="text" translatable="yes">Lock Timeout:</property>
                 <layout>
                   <property name="column">0</property>
@@ -1616,7 +1616,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="llto1">
+              <object class="tk.Label" id="llto1">
                 <property name="text" translatable="yes">minutes</property>
                 <layout>
                   <property name="column">2</property>
@@ -1646,7 +1646,7 @@
               </columns>
             </layout>
             <child>
-              <object class="ttk.Label" id="lbseq">
+              <object class="tk.Label" id="lbseq">
                 <property name="text" translatable="yes">Button Sequence:</property>
                 <property name="underline">0</property>
                 <property name="width">0</property>
@@ -1672,7 +1672,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="llseq">
+              <object class="tk.Label" id="llseq">
                 <property name="text" translatable="yes">LED Sequence:</property>
                 <property name="underline">0</property>
                 <property name="width">0</property>
@@ -1698,7 +1698,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lkseq">
+              <object class="tk.Label" id="lkseq">
                 <property name="text" translatable="yes">Lock Code:</property>
                 <property name="underline">0</property>
                 <property name="width">0</property>
@@ -1723,7 +1723,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="lkerase">
+              <object class="tk.Label" id="lkerase">
                 <property name="font">TkDefaultFont</property>
                 <property name="text" translatable="yes">Unlock failure:	</property>
                 <layout>
