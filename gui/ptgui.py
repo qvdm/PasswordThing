@@ -50,7 +50,8 @@ class Application(pygubu.TkApplication):
         self.baud=115200
         self.ser=None
 
-        self.ser_open = False;
+        self.ser_open = False
+        self.ser_connected = False
         self.ser_rcv=""
         self.ser_rcvstack = []
         self.ser_to = 0
@@ -110,7 +111,36 @@ class Application(pygubu.TkApplication):
         messagebox.showinfo('About', 'You clicked About menuitem')
 
     def on_port_selected(self, event):
+        connect_button = self.builder.get_object('bconnect', self.master)
+
         self.port = self.builder.tkvariables.__getitem__('tvport').get() 
+        if self.port :
+            self.enable_button(connect_button)
+        else :
+            self.disable_button(connect_button)
+
+    def enable_button(self, button) :
+        button.config(state=tk.NORMAL) 
+
+    def disable_button(self, button) :
+        button.config(state=tk.DISABLED) 
+
+    def set_ser_connected(self) :
+        rbutton = self.builder.get_object('brescan', self.master)
+        rbutton.config(state=tk.DISABLED)
+        self.led.to_green(on=True)
+
+
+    def set_ser_disconnected(self) :
+        rbutton = self.builder.get_object('brescan', self.master)
+        rbutton.config(state=tk.NORMAL)
+        self.builder.tkvariables['strbconn'].set('Connect') 
+        self.led.to_red(on=True)
+
+    def set_ser_open(self) :
+        self.builder.tkvariables['strbconn'].set('Disconnect') 
+        self.led.to_yellow(on=True)
+
 
     def on_rescan_ports(self):
         if self.ser_open == False :
@@ -126,13 +156,13 @@ class Application(pygubu.TkApplication):
         self.ser.rts=True
         self.ser.dtr=True
         self.ser_open = True
-        self.led.to_yellow(on=True)
+        self.set_ser_open()
 
     def close_serial(self):         
         self.ser.rts=False
         self.ser.dtr=False
         self.ser_open = False
-        self.led.to_red(on=True)
+        self.set_ser_disconnected()
 
     def process_serial(self):
         if self.ser_open == True:
@@ -146,7 +176,7 @@ class Application(pygubu.TkApplication):
                     self.ser_rcv = self.cleanup_str(self.ser_rcv) 
                     if len(self.ser_rcv) > 0 :
                       self.ser_rcvstack.append(self.ser_rcv)
-                      self.led.to_green(on=True)
+                      self.set_ser_connected()
                       #self.dbug("!CR:" + self.ser_rcv + "L:" + str(len(self.ser_rcvstack)))
                     #else :
                       #self.dbug("!CBL")
@@ -157,7 +187,7 @@ class Application(pygubu.TkApplication):
                 self.ser_rcv = self.cleanup_str(self.ser_rcv) 
                 if len(self.ser_rcv) > 0 :
                     self.ser_rcvstack.append(self.ser_rcv)
-                    self.led.to_green(on=True)
+                    self.set_ser_connected()
                     #self.dbug("!TO:" + self.ser_rcv + "L:" + str(len(self.ser_rcvstack)))
                 #else :
                     #self.dbug("!TBL")
@@ -192,7 +222,6 @@ class Application(pygubu.TkApplication):
     def on_connect(self): 
         if self.ser_open :
             self.close_serial()
-            self.builder.tkvariables['strbconn'].set('Connect') 
         else :
             if self.port != None:
                 if self.ser == None:
@@ -208,7 +237,6 @@ class Application(pygubu.TkApplication):
                                             timeout=0, writeTimeout=0)
                     if self.ser != None:
                         self.open_serial()
-                self.builder.tkvariables['strbconn'].set('Disconnect') 
                 self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
                 self.ser_parsestring = ""
                 self.send_serial('')
@@ -224,15 +252,17 @@ class Application(pygubu.TkApplication):
     def get_version(self) :
         if self.serial_avail() :
             l = self.get_serial_line()
-            #print("01 "+ l)
+            print("01 "+ l)
             if l.startswith('E') :
                 self.builder.tkvariables['strlver'].set(l)     
+            if l.startswith('L') :
+                self.builder.tkvariables['strlver'].set(l)     Locked
 
             self.master.after(200, self.get_version)
 
-    def on_sendcr(self):
+    def on_unlock(self):
         if self.ser_open == True :
-            self.ser.write("\r".encode("utf-8"))
+            self.ser.write("\r".encode("utf-8")) # TBD Unlock
        
 
     def on_read(self) :
@@ -242,7 +272,7 @@ class Application(pygubu.TkApplication):
     def get_dump(self) :
         if self.serial_avail() :
             l = self.get_serial_line()
-            #print("02 "+ l)
+            print("02 "+ l)
             if l.startswith('V') :
                 self.master.after(200, self.parse_dump, l);
             else :
