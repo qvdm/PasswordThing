@@ -55,7 +55,9 @@ class Application(pygubu.TkApplication):
         self.ser_rcvstack = []
         self.ser_to = 0
 
-        self.wsema = 0
+        self.ser_parsestring = ""
+
+
 
         self.rxqueue = queue.Queue()
         self.txqueue = queue.Queue()
@@ -172,7 +174,7 @@ class Application(pygubu.TkApplication):
 
     def get_serial_line(self) :
         l=""
-        self.dbug("@"+str(len(self.ser_rcvstack)))
+        #self.dbug("@"+str(len(self.ser_rcvstack)))
         if len(self.ser_rcvstack) > 0 :
             l = self.ser_rcvstack.pop(0)
         return l
@@ -187,7 +189,6 @@ class Application(pygubu.TkApplication):
             s=str + "\r"
             self.ser.write(s.encode("utf-8"))
 
-    
     def on_connect(self): 
         if self.ser_open :
             self.close_serial()
@@ -209,6 +210,7 @@ class Application(pygubu.TkApplication):
                         self.open_serial()
                 self.builder.tkvariables['strbconn'].set('Disconnect') 
                 self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.port,"info")
+                self.ser_parsestring = ""
                 self.send_serial('')
                 self.master.after(500, self.ask_version)
             else:
@@ -220,12 +222,13 @@ class Application(pygubu.TkApplication):
         self.master.after(500, self.get_version)
 
     def get_version(self) :
-        l = self.get_serial_line()
-        l = self.get_serial_line()
-        l = self.get_serial_line()
-        if l :
-            self.builder.tkvariables['strlver'].set(l)     
-            print(l)
+        if self.serial_avail() :
+            l = self.get_serial_line()
+            #print("01 "+ l)
+            if l.startswith('E') :
+                self.builder.tkvariables['strlver'].set(l)     
+
+            self.master.after(200, self.get_version)
 
     def on_sendcr(self):
         if self.ser_open == True :
@@ -233,14 +236,55 @@ class Application(pygubu.TkApplication):
        
 
     def on_read(self) :
-        for slot in range(6) :
-            self.send_serial(str(slot)+"P")  
-            self.master.after(500, self.get_sl1, slot)
+        self.send_serial("EB")  
+        self.master.after(500, self.get_dump)
 
-    def get_sl1(self, slot) :
-        print(self.get_serial_line())
-        print(self.get_serial_line())
-        print(self.get_serial_line())
+    def get_dump(self) :
+        if self.serial_avail() :
+            l = self.get_serial_line()
+            #print("02 "+ l)
+            if l.startswith('V') :
+                self.master.after(200, self.parse_dump, l);
+            else :
+                self.master.after(200, self.get_dump)
+
+    def parse_dump(self, v) :
+        pw_sl = []
+        var_s=''
+        crc_s=''
+        sem_s=''
+        sig_s=''
+
+        print("PDV " + v + "\n");
+        s = self.get_serial_line()
+        print("PDS " + s + "\n")
+        self.get_serial_line()
+        if len(s) > 6 :
+            for i in range(8) :
+                splitat = 140
+                l, r = s[:splitat], s[splitat:]
+                s=r
+                pw_sl.append(l)
+                print(l+"\n")
+            splitat = 32
+            var_s, r = s[:splitat], s[splitat:]
+            print(var_s+"\n")
+            s=r
+            splitat = 8
+            crc_s, r = s[:splitat], s[splitat:]
+            print(crc_s+"\n")
+            s=r
+            splitat = 16
+            sem_s, sig_s = s[:splitat], s[splitat:]
+            print(sem_s+"\n")
+            print(sig_s+"\n")
+
+        
+
+
+
+
+
 
     def on_close_window(self, event=None):
         if self.dirty:
