@@ -117,7 +117,6 @@
           <object class="tk.Label" id="lmain">
             <property name="compound">top</property>
             <property name="justify">center</property>
-            <property name="padding">0</property>
             <property name="text" translatable="yes">PWT configurator version 0</property>
             <property name="textvariable">string:strlmain</property>
             <property name="width">0</property>
@@ -131,7 +130,6 @@
         </child>
         <child>
           <object class="tk.Label" id="lport">
-            <property name="padding">0</property>
             <property name="text" translatable="yes">Port:</property>
             <layout>
               <property name="column">1</property>
@@ -280,7 +278,10 @@
         </child>
         <child>
           <object class="tk.Entry" id="ulentry">
+            <property name="insertborderwidth">0</property>
+            <property name="textvariable">string:strlentry</property>
             <property name="width">5</property>
+            <bind add="" handler="" sequence="" />
             <layout>
               <property name="column">2</property>
               <property name="propagate">True</property>

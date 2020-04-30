@@ -87,8 +87,10 @@
  * MR - Reset
  * ML - Toggle logo display at startup
  * MS<nnnn> : W1231 - Set security seq to 1231
- * MS - show
-* 
+ * MS - show security seq
+ * 
+ * V - Show EEprom version
+ * R - Show Software release
  */
 
 #include "serialui.h"
@@ -174,9 +176,13 @@ void SerialUi::parse_input()
 {
   st_buf[st_ptr]=0;
 
-  if ( st_buf[0] == 'V' ) // version req
+  if ( st_buf[0] == 'V' ) // EE version req
   {
     handle_ver();
+  }
+  else if ( st_buf[0] == 'R' ) // SW release req
+  {
+    handle_rel();
   }
   else if (waitforsec != 0) // Security sequence active? 
   {
@@ -211,6 +217,12 @@ void SerialUi::handle_ver()
   else 
     Serial.write('E');
   Serial.println(eevVer);
+}
+
+// Show SW version
+void SerialUi::handle_rel()
+{
+  Serial.println(Version);
 }
 
 

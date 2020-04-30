@@ -164,6 +164,10 @@ Commands in the Maintenance group have the format:
 * MS[sequence] : The **S** command shows or sets sthe security code/sequence
   - Examples: **MS1231** - sets the security sequence to "1-2-3-1", **MS** - shows the current security sequence
   
+## Version commands
+
+* V : The **V** command displays the eeprom layout version of the software.  Backups and restores are not compatible across eeprom versions
+* R : The **R** command displays the release number of the running software
 
 # Configuration interface issues
 The configuration user interface is intended to be a machine-to-machine interface and

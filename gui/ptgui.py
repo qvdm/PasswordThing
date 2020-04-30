@@ -135,6 +135,11 @@ class Application(pygubu.TkApplication):
     def set_ser_disconnected(self) :
         rbutton = self.builder.get_object('brescan', self.master)
         rbutton.config(state=tk.NORMAL)
+        ulbutton = self.builder.get_object('bunlock', self.master)
+        ulbutton.config(fg='black', state=tk.DISABLED)
+        rdbutton = self.builder.get_object('bread', self.master)
+        rdbutton.config(state=tk.DISABLED)
+
         self.builder.tkvariables['strbconn'].set('Connect') 
         self.led.to_red(on=True)
 
@@ -257,19 +262,30 @@ class Application(pygubu.TkApplication):
             if len(l) == 3 :
                 t, ev = l[:1], l[1:]
                 self.builder.tkvariables['strlver'].set(ev)     
+                ulbutton = self.builder.get_object('bunlock', self.master)
                 if t == 'L' :
                     self.locked = True
-                    ulbutton = self.builder.get_object('bunlock', self.master)
-                    ulbutton.config(background='red')
+                    ulbutton.config(fg='red', state=tk.NORMAL)
+                elif t == 'E' :
+                    self.locked = False
+                    ulbutton.config(fg='black', state=tk.DISABLED)
+                    rdbutton = self.builder.get_object('bread', self.master)
+                    rdbutton.config(state=tk.NORMAL)
             else :
                 self.master.after(200, self.get_version)
 
-# on ul fill...
-#                   ulbutton.config(state=tk.NORMAL)
+    def lc_valid(self, code, search=re.compile(r'^[1-3]{4}').search) :
+        return bool(search(code))
 
     def on_unlock(self):
-        if self.ser_open == True :
-            self.ser.write("\r".encode("utf-8")) # TBD Unlock
+        if self.locked :
+            entry = self.builder.tkvariables['strlentry'].get() 
+            if (len(entry) < 4) or not self.lc_valid(entry) :
+                messagebox.showerror('Error', 'Code must be 4 digits in [1..3]')
+                return
+
+            self.send_serial(entry)
+            self.master.after(200, self.ask_version)
        
 
     def on_read(self) :
@@ -316,13 +332,7 @@ class Application(pygubu.TkApplication):
             print(sem_s+"\n")
             print(sig_s+"\n")
 
-        
-
-
-
-
-
-
+  
     def on_close_window(self, event=None):
         if self.dirty:
             msg = messagebox.askquestion ('Exit Configurator','There are unsaved changes.  Are you sure you want to exit',icon = 'warning')
