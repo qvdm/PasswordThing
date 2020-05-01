@@ -10,13 +10,8 @@ from tkinter import messagebox
 # globals
 serialPort = serial_rx_tx.SerialPort()
 portlist = serialPort.PortList()
-portlist.insert(0, " ")
-comport=' '
+comport=''
 ledcolor='red'
-
-# Set port variable callback
-def set_port(port):
-    comport = port
 
 # serial data callback 
 def OnReceiveSerialData(message):
