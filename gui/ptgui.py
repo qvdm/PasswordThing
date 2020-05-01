@@ -10,8 +10,10 @@ import threading
 import time
 import queue
 import re
+import binascii
 
-__VERSION__ = '0.1'
+__VERSION__ = '0.2'
+__EEVER__ =  '01'
 
 def serial_ports():
     """ Lists serial port names
@@ -59,7 +61,10 @@ class Application(pygubu.TkApplication):
 
         self.ser_parsestring = ""
 
-
+        self.lctable = [0,
+            1111,1112,1113,1121,1122,1123,1131,1132,1133,1211,1212,1213,1221,1222,1223,1231,1232,1233,1311,1312,1313,1321,1322,1323,1331,1332,1333,
+            2111,2112,2113,2121,2122,2123,2131,2132,2133,2211,2212,2213,2221,2222,2223,2231,2232,2233,2311,2312,2313,2321,2322,2323,2331,2332,2333,
+            3111,3112,3113,3121,3122,3123,3131,3132,3133,3211,3212,3213,3221,3222,3223,3231,3232,3233,3311,3312,3313,3321,3322,3323,3331,3332,3333 ]
 
         self.rxqueue = queue.Queue()
         self.txqueue = queue.Queue()
@@ -74,13 +79,18 @@ class Application(pygubu.TkApplication):
         self.set_menu(menu)
 
         self.mainlabel = mainlabel = builder.get_object('lmain', self.master)
-        self.builder.tkvariables['strlmain'].set("PwThing Version " + __VERSION__)
+        self.builder.tkvariables['strlmain'].set("PWT Configurator Version " + __VERSION__)
         
         self.verlabel = verlabel = builder.get_object('lfwver', self.master)
 
         self.portcombo = portcombo = builder.get_object('cport', self.master)
-        portcombo['values'] = portlist
-        portcombo.current(0)
+        self.portcombo['values'] = portlist
+        self.portcombo.current(0)
+
+        self.gencombo = gencombo = builder.get_object('cmode', self.master)
+        self.gencombo.current(2)
+        self.builder.tkvariables['selen'].set('20') 
+
     
         self.master.protocol("WM_DELETE_WINDOW", self.on_close_window)
 
@@ -262,6 +272,10 @@ class Application(pygubu.TkApplication):
             if len(l) == 3 :
                 t, ev = l[:1], l[1:]
                 self.builder.tkvariables['strlver'].set(ev)     
+                if (ev != __EEVER__ ) : 
+                    messagebox.showerror('Error', 'Incompatible EE schema ' + ev + ' vs ' + __EEVER__)
+                    return
+
                 ulbutton = self.builder.get_object('bunlock', self.master)
                 if t == 'L' :
                     self.locked = True
@@ -279,7 +293,7 @@ class Application(pygubu.TkApplication):
 
     def on_unlock(self):
         if self.locked :
-            entry = self.builder.tkvariables['strlentry'].get() 
+            entry = self.builder.tkvariables['strlentry'].get()
             if (len(entry) < 4) or not self.lc_valid(entry) :
                 messagebox.showerror('Error', 'Code must be 4 digits in [1..3]')
                 return
@@ -332,7 +346,103 @@ class Application(pygubu.TkApplication):
             print(sem_s+"\n")
             print(sig_s+"\n")
 
-  
+            self.populate_pw(pw_sl)
+            self.populate_var(var_s)
+            self.set_crc(crc_s)
+
+    def populate_pw(self, pwlist) :
+        for i in range(6) :
+            s = pwlist[i]
+            #print('x01 s ' + s + '\n')
+            splitat = 2
+            l, r = s[:splitat], s[splitat:]
+            s=r
+            #print('x02 ul ' + l + '\n')
+            uidlen=int(l, 16)
+            l, r = s[:splitat], s[splitat:]
+            s=r
+            #print('x03 pl ' + l + '\n')
+            pwdlen=int(l, 16)
+            splitat = 16
+            l, r = s[:splitat], s[splitat:]
+            s=r
+            #print('x04 sn ' + l + '\n')
+            slotname = binascii.unhexlify(l).decode('utf-8')
+            splitat = 60
+            l, r = s[:splitat], s[splitat:]
+            if uidlen :
+                #print('x05 ui ' + l + '\n')
+                uid = binascii.unhexlify(l).decode('utf-8')
+            else :
+                uid = ''
+            if pwdlen :
+                #print('x06 pw ' + r + '\n')
+                pwd = binascii.unhexlify(r).decode('utf-8')
+            else :
+                pwd = ''
+            setter="self.builder.tkvariables[\'sename"+str(i)+"\'].set(slotname)"
+            eval(setter)
+            setter="self.builder.tkvariables[\'suid"+str(i)+"\'].set(uid)"
+            eval(setter)
+            setter="self.builder.tkvariables[\'spwd"+str(i)+"\'].set(pwd)"
+            eval(setter)
+
+
+    def populate_var(self, vars) :
+        r=vars
+        l, r = r[:2], r[2:]
+        url=bool(int(l, 16)) 
+        self.builder.tkvariables['bcblogo'].set(url)   
+
+        l, r = r[:2], r[2:]
+        dflip=bool(int(l, 16))            
+        print(str(dflip)+'\n')
+        self.builder.tkvariables['bcbflip'].set(dflip)   
+
+        l, r = r[:2], r[2:]
+        ssec=int(l, 16)
+        if ssec :
+            self.builder.tkvariables['strlentry'].set(self.lctable[ssec])
+        else :
+            self.builder.tkvariables['strlentry'].set('')
+
+        l, r = r[:2], r[2:]
+        dto=int(l, 16)
+        print(str(dto)+'\n')
+        self.builder.tkvariables['sedto'].set(dto)   
+
+        l, r = r[:2], r[2:]
+        lto=int(l, 16)
+        self.builder.tkvariables['seito'].set(lto)   
+
+        l, r = r[:2], r[2:]
+        bseq=int(l, 16)
+        print(str(bseq)+'\n')
+        bscombo = self.builder.get_object('cbseq', self.master)
+        bscombo.current(bseq)
+        
+        l, r = r[:2], r[2:]
+        lseq=int(l, 16)
+        clcombo = self.builder.get_object('clseq', self.master)
+        clcombo.current(lseq)
+
+        l, r = r[:2], r[2:]
+        rpw=bool(int(l, 16))    
+        self.builder.tkvariables['bcbrevert'].set(rpw)   
+
+        l, r = r[:2], r[2:]
+        ltry=int(l, 16)
+        self.builder.tkvariables['sektry'].set(ltry)   #!! remove and merge with fail
+
+        l, r = r[:2], r[2:]
+        lfail=int(l, 16)
+        ufcombo = self.builder.get_object('ckfail', self.master)
+        ufcombo.current(lfail)
+
+    def set_crc(self, crc) :
+        return
+
+
     def on_close_window(self, event=None):
         if self.dirty:
             msg = messagebox.askquestion ('Exit Configurator','There are unsaved changes.  Are you sure you want to exit',icon = 'warning')
@@ -359,6 +469,14 @@ class Application(pygubu.TkApplication):
         s=s.replace("\r", "[CR]")
         s=s.replace(" ", "[SPC]")
         print("$"+s+"\n")
+
+
+#def pwgen_alnum(length=20):
+#    chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
+#    password = ''
+#    for i in range(length):
+#       password += chars[ord(os.urandom(1)) % len(chars)]
+#    return password
 
 if __name__ == '__main__':
     portlist = serial_ports()
