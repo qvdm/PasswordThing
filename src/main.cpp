@@ -22,7 +22,7 @@
  * 
  * TBD
  *      Create desktop configuration sw with upload facility
- *      Implement EE erase after N bad tries - EEVAR_TRIES = done - test
+ *      Sort out EE vers
  * 
  * BUGS:
  * 
@@ -51,8 +51,8 @@
 #include "serialui.h"
 
 char Version[]=VERSION_SHORT;
-char eedVer[]="V04"; // eeprom dump
-char eevVer[]="01"; // eeprom vars
+char eedVer[]="V04"; // eeprom dump schema version
+char eevVer[]="04"; // eeprom vars schema version
 
 // Forward declare systick function
 void sysTick();

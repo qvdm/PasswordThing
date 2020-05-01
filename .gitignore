@@ -5,6 +5,9 @@
 # Mkdocs
 site/
 
+# Python
+__pycache__/
+
 # Prerequisites
 *.d
 
