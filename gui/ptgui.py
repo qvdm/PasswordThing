@@ -433,13 +433,13 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['bcbrevert'].set(rpw)   
 
         l, r = r[:2], r[2:]
-        ltry=int(l, 16)
-        self.builder.tkvariables['sektry'].set(ltry)   #!! remove and merge with fail
+        lfail=int(l, 16)
+        lfcombo = self.builder.get_object('ckfail', self.master)
+        lfcombo.current(lfail)
 
         l, r = r[:2], r[2:]
-        lfail=int(l, 16)
-        ufcombo = self.builder.get_object('ckfail', self.master)
-        ufcombo.current(lfail)
+        slto=int(l, 16)
+        self.builder.tkvariables['selto'].set(slto*10)   
 
     def set_crc(self, crc) :
         return

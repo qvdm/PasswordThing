@@ -100,6 +100,7 @@ extern unsigned long getTime(void);
 extern int Secseq[];
 extern char Version[];
 extern char eevVer[];
+extern char eedVer[];
 
 // CTOR
 SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)
@@ -176,9 +177,13 @@ void SerialUi::parse_input()
 {
   st_buf[st_ptr]=0;
 
-  if ( st_buf[0] == 'V' ) // EE version req
+  if ( st_buf[0] == 'V' ) // EE var version req
   {
     handle_ver();
+  }
+  else if ( st_buf[0] == 'S' ) // EE schema/layout version request
+  {
+    handle_sch();
   }
   else if ( st_buf[0] == 'R' ) // SW release req
   {
@@ -209,7 +214,7 @@ void SerialUi::parse_input()
   }
 }
 
-// Show EE version
+// Show EE var version
 void SerialUi::handle_ver()
 {
   if (waitforsec != 0)
@@ -222,7 +227,14 @@ void SerialUi::handle_ver()
 // Show SW version
 void SerialUi::handle_rel()
 {
+  Serial.print('R');
   Serial.println(Version);
+}
+
+// Show EE schema version
+void SerialUi::handle_sch()
+{
+  Serial.println(eedVer);
 }
 
 
