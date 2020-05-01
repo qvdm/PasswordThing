@@ -366,8 +366,10 @@ class Application(pygubu.TkApplication):
             splitat = 16
             l, r = s[:splitat], s[splitat:]
             s=r
+            l = l.split('00')[0]
             #print('x04 sn ' + l + '\n')
             slotname = binascii.unhexlify(l).decode('utf-8')
+
             splitat = 60
             l, r = s[:splitat], s[splitat:]
             if uidlen :
@@ -402,18 +404,18 @@ class Application(pygubu.TkApplication):
         l, r = r[:2], r[2:]
         ssec=int(l, 16)
         if ssec :
-            self.builder.tkvariables['strlentry'].set(self.lctable[ssec])
+            self.builder.tkvariables['strlentry'].set(self.lctable[ssec+1])
         else :
             self.builder.tkvariables['strlentry'].set('')
 
         l, r = r[:2], r[2:]
         dto=int(l, 16)
         print(str(dto)+'\n')
-        self.builder.tkvariables['sedto'].set(dto)   
+        self.builder.tkvariables['sedto'].set(dto*10)   
 
         l, r = r[:2], r[2:]
         lto=int(l, 16)
-        self.builder.tkvariables['seito'].set(lto)   
+        self.builder.tkvariables['seito'].set(lto*10)   
 
         l, r = r[:2], r[2:]
         bseq=int(l, 16)
