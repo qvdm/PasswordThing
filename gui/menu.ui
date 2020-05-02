@@ -129,11 +129,23 @@
           </object>
         </child>
         <child>
+          <object class="tk.Button" id="brescan">
+            <property name="command">on_rescan_ports</property>
+            <property name="text" translatable="yes">Rescan Ports</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
           <object class="tk.Label" id="lport">
             <property name="compound">top</property>
             <property name="text" translatable="yes">Port:</property>
             <layout>
-              <property name="column">1</property>
+              <property name="column">2</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
@@ -152,7 +164,7 @@
             <property name="width">16</property>
             <bind add="" handler="on_port_selected" sequence="&lt;&lt;ComboboxSelected&gt;&gt;" />
             <layout>
-              <property name="column">2</property>
+              <property name="column">3</property>
               <property name="columnspan">2</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
@@ -161,14 +173,16 @@
           </object>
         </child>
         <child>
-          <object class="tk.Button" id="brescan">
-            <property name="command">on_rescan_ports</property>
-            <property name="text" translatable="yes">Rescan Ports</property>
+          <object class="tk.Button" id="bconnect">
+            <property name="command">on_connect</property>
+            <property name="state">disabled</property>
+            <property name="text" translatable="yes">Connect</property>
+            <property name="textvariable">string:strbconn</property>
             <layout>
-              <property name="column">4</property>
+              <property name="column">5</property>
+              <property name="padx">20</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
-              <property name="sticky">w</property>
             </layout>
           </object>
         </child>
@@ -178,9 +192,23 @@
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Read</property>
             <layout>
-              <property name="column">5</property>
+              <property name="column">6</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Button" id="bvalidate">
+            <property name="command">on_validate</property>
+            <property name="state">disabled</property>
+            <property name="text" translatable="yes">Validate</property>
+            <layout>
+              <property name="column">7</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
             </layout>
           </object>
         </child>
@@ -190,10 +218,11 @@
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Write</property>
             <layout>
-              <property name="column">6</property>
+              <property name="column">8</property>
               <property name="padx">5</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
+              <property name="sticky">w</property>
             </layout>
           </object>
         </child>
@@ -202,8 +231,8 @@
             <property name="command">on_reset</property>
             <property name="text" translatable="yes">Reset</property>
             <layout>
-              <property name="column">7</property>
-              <property name="padx">40</property>
+              <property name="column">9</property>
+              <property name="padx">20</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
@@ -213,9 +242,10 @@
         <child>
           <object class="tk.Button" id="bclear">
             <property name="command">on_clear</property>
-            <property name="text" translatable="yes">Clear</property>
+            <property name="state">disabled</property>
+            <property name="text" translatable="yes">Clear Device</property>
             <layout>
-              <property name="column">8</property>
+              <property name="column">10</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
@@ -228,7 +258,7 @@
             <property name="takefocus">true</property>
             <property name="width">20</property>
             <layout>
-              <property name="column">7</property>
+              <property name="column">11</property>
               <property name="padx">5</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
@@ -237,10 +267,13 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Frame" id="ffw">
-            <property name="width">600</property>
+          <object class="ttk.Labelframe" id="fdevice">
+            <property name="height">50</property>
+            <property name="text" translatable="yes">PWT Versions</property>
             <layout>
               <property name="column">0</property>
+              <property name="ipadx">5</property>
+              <property name="ipady">5</property>
               <property name="propagate">True</property>
               <property name="row">1</property>
               <property name="sticky">w</property>
@@ -248,150 +281,207 @@
                 <column id="0">
                   <property name="pad">10</property>
                 </column>
+              </columns>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="lfw">
+                <property name="text" translatable="yes">FW Version:</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="lfwver">
+                <property name="text" translatable="yes">NC</property>
+                <property name="width">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Separator" id="sep1">
+                <property name="orient">vertical</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="padx">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="tk.Label" id="lvar">
+                <property name="text" translatable="yes">Var Schema:</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="tk.Label" id="lvarver">
+                <property name="text" translatable="yes">NC</property>
+                <property name="textvariable">string:strlver</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Separator" id="sep2">
+                <property name="orient">vertical</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="padx">10</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="tk.Label" id="lee">
+                <property name="text" translatable="yes">EE Schema:</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="leever">
+                <property name="text" translatable="yes">NC</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Labelframe" id="funlock">
+            <property name="height">50</property>
+            <property name="text" translatable="yes">Unlock Code</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="ipadx">5</property>
+              <property name="ipady">5</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+            </layout>
+            <child>
+              <object class="tk.Entry" id="ulentry">
+                <property name="insertborderwidth">0</property>
+                <property name="justify">left</property>
+                <property name="textvariable">string:strlentry</property>
+                <property name="width">5</property>
+                <bind add="" handler="" sequence="" />
+                <layout>
+                  <property name="column">2</property>
+                  <property name="columnspan">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="tk.Button" id="bunlock">
+                <property name="command">on_unlock</property>
+                <property name="state">disabled</property>
+                <property name="text" translatable="yes">Unlock</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Labelframe" id="fgenerator">
+            <property name="height">50</property>
+            <property name="text" translatable="yes">Password Generator</property>
+            <property name="width">200</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="columnspan">4</property>
+              <property name="ipadx">5</property>
+              <property name="ipady">5</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+              <columns>
                 <column id="1">
-                  <property name="pad">0</property>
+                  <property name="pad">10</property>
                 </column>
               </columns>
             </layout>
             <child>
-              <object class="tk.Label" id="lfirmware">
-                <property name="text" translatable="yes">Schema Version:</property>
+              <object class="tk.Label" id="lmode">
+                <property name="text" translatable="yes">Mode:</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
-                  <property name="row">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="cmode">
+                <property name="textvariable">string:sgmode</property>
+                <property name="values">Alpha Numeric Alphanumeric Symbols</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
             <child>
-              <object class="tk.Label" id="lfwver">
-                <property name="text" translatable="yes">Not connected</property>
-                <property name="textvariable">string:strlver</property>
+              <object class="tk.Label" id="llen">
+                <property name="text" translatable="yes">Length:</property>
                 <layout>
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="propagate">True</property>
-                  <property name="row">1</property>
-                  <property name="sticky">w</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Label" id="ullabel">
-            <property name="compound">top</property>
-            <property name="cursor">arrow</property>
-            <property name="text" translatable="yes">Unlock Code:</property>
-            <layout>
-              <property name="column">1</property>
-              <property name="columnspan">1</property>
-              <property name="propagate">True</property>
-              <property name="row">1</property>
-              <property name="sticky">w</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Entry" id="ulentry">
-            <property name="insertborderwidth">0</property>
-            <property name="textvariable">string:strlentry</property>
-            <property name="width">5</property>
-            <bind add="" handler="" sequence="" />
-            <layout>
-              <property name="column">2</property>
-              <property name="columnspan">1</property>
-              <property name="propagate">True</property>
-              <property name="row">1</property>
-              <property name="sticky">w</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Button" id="bunlock">
-            <property name="command">on_unlock</property>
-            <property name="state">disabled</property>
-            <property name="text" translatable="yes">Unlock</property>
-            <layout>
-              <property name="column">3</property>
-              <property name="propagate">True</property>
-              <property name="row">1</property>
-              <property name="sticky">w</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Button" id="bconnect">
-            <property name="command">on_connect</property>
-            <property name="state">disabled</property>
-            <property name="text" translatable="yes">Connect</property>
-            <property name="textvariable">string:strbconn</property>
-            <layout>
-              <property name="column">4</property>
-              <property name="propagate">True</property>
-              <property name="row">1</property>
-            </layout>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="ttk.Labelframe" id="fgenerator">
-        <property name="height">51</property>
-        <property name="text" translatable="yes">Password Generator</property>
-        <property name="width">600</property>
-        <layout>
-          <property name="column">0</property>
-          <property name="propagate">True</property>
-          <property name="row">1</property>
-          <property name="sticky">w</property>
-          <columns>
-            <column id="1">
-              <property name="pad">10</property>
-            </column>
-          </columns>
-        </layout>
-        <child>
-          <object class="tk.Label" id="lmode">
-            <property name="text" translatable="yes">Mode:</property>
-            <layout>
-              <property name="column">0</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="ttk.Combobox" id="cmode">
-            <property name="textvariable">string:sgmode</property>
-            <property name="values">Alpha Numeric Alphanumeric Symbols</property>
-            <layout>
-              <property name="column">1</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-              <property name="sticky">w</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Label" id="llen">
-            <property name="text" translatable="yes">Length:</property>
-            <layout>
-              <property name="column">2</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Entry" id="elen">
-            <property name="textvariable">string:selen</property>
-            <property name="width">3</property>
-            <layout>
-              <property name="column">3</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-            </layout>
+            <child>
+              <object class="tk.Entry" id="elen">
+                <property name="textvariable">string:selen</property>
+                <property name="width">3</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
           </object>
         </child>
       </object>
@@ -406,12 +496,6 @@
           <property name="propagate">True</property>
           <property name="row">2</property>
           <property name="sticky">w</property>
-          <columns>
-            <column id="0">
-              <property name="minsize">0</property>
-              <property name="pad">10</property>
-            </column>
-          </columns>
           <rows>
             <row id="5">
               <property name="pad">0</property>
@@ -420,6 +504,12 @@
               <property name="pad">20</property>
             </row>
           </rows>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">10</property>
+            </column>
+          </columns>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs0">
@@ -470,9 +560,10 @@
             </child>
             <child>
               <object class="tk.Entry" id="ename0">
+                <property name="justify">left</property>
                 <property name="textvariable">string:sename0</property>
-                <property name="validate">focusout</property>
-                <property name="validatecommand">on_slot0_name</property>
+                <property name="validate">key</property>
+                <property name="validatecommand">setdirty</property>
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -495,6 +586,7 @@
             </child>
             <child>
               <object class="tk.Entry" id="cuid0">
+                <property name="justify">left</property>
                 <property name="textvariable">string:suid0</property>
                 <property name="width">20</property>
                 <layout>
@@ -518,6 +610,7 @@
             </child>
             <child>
               <object class="tk.Entry" id="cpwd0">
+                <property name="justify">left</property>
                 <property name="textvariable">string:spwd0</property>
                 <property name="width">32</property>
                 <layout>

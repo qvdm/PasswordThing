@@ -81,7 +81,7 @@ class Application(pygubu.TkApplication):
         self.mainlabel = mainlabel = builder.get_object('lmain', self.master)
         self.builder.tkvariables['strlmain'].set("PWT Configurator Version " + __VERSION__)
         
-        self.verlabel = verlabel = builder.get_object('lfwver', self.master)
+        self.verlabel = verlabel = builder.get_object('lvarver', self.master)
 
         self.portcombo = portcombo = builder.get_object('cport', self.master)
         self.portcombo['values'] = portlist
@@ -121,35 +121,48 @@ class Application(pygubu.TkApplication):
     def on_about_clicked(self):
         messagebox.showinfo('About', 'You clicked About menuitem')
 
-    def on_port_selected(self, event):
-        connect_button = self.builder.get_object('bconnect', self.master)
-
-        self.port = self.builder.tkvariables.__getitem__('tvport').get() 
-        if self.port :
-            self.enable_button(connect_button)
-        else :
-            self.disable_button(connect_button)
-
     def enable_button(self, button) :
-        button.config(state=tk.NORMAL) 
+        buttonobj = self.builder.get_object(button, self.master)
+        buttonobj.config(state=tk.NORMAL) 
 
     def disable_button(self, button) :
-        button.config(state=tk.DISABLED) 
+        buttonobj = self.builder.get_object(button, self.master)
+        buttonobj.config(state=tk.DISABLED) 
+
+    def red_button(self, button) :
+        buttonobj = self.builder.get_object(button, self.master)
+        buttonobj.config(fg='red')
+
+    def green_button(self, button) :
+        buttonobj = self.builder.get_object(button, self.master)
+        buttonobj.config(fg='green')
+
+    def black_button(self, button) :
+        buttonobj = self.builder.get_object(button, self.master)
+        buttonobj.config(fg='black')
+
+    def set_combo_current(self, cbname, indx) :
+        comboobj = self.builder.get_object(cbname, self.master)
+        comboobj.current(indx)
+
+    def on_port_selected(self, event):
+        self.port = self.builder.tkvariables.__getitem__('tvport').get() 
+        if self.port :
+            self.enable_button('bconnect')
+        else :
+            self.disable_button('bconnect')
 
     def set_ser_connected(self) :
-        rbutton = self.builder.get_object('brescan', self.master)
-        rbutton.config(state=tk.DISABLED)
+        self.disable_button('brescan')
         self.led.to_green(on=True)
 
 
     def set_ser_disconnected(self) :
-        rbutton = self.builder.get_object('brescan', self.master)
-        rbutton.config(state=tk.NORMAL)
-        ulbutton = self.builder.get_object('bunlock', self.master)
-        ulbutton.config(fg='black', state=tk.DISABLED)
-        rdbutton = self.builder.get_object('bread', self.master)
-        rdbutton.config(state=tk.DISABLED)
-
+        self.enable_button('brescan')
+        self.disable_button('bunlock')
+        self.disable_button('bread')
+        self.disable_button('bvalidate')
+        self.disable_button('bwrite')
         self.builder.tkvariables['strbconn'].set('Connect') 
         self.led.to_red(on=True)
 
@@ -276,15 +289,15 @@ class Application(pygubu.TkApplication):
                     messagebox.showerror('Error', 'Incompatible EE schema ' + ev + ' vs ' + __EEVER__)
                     return
 
-                ulbutton = self.builder.get_object('bunlock', self.master)
                 if t == 'L' :
                     self.locked = True
-                    ulbutton.config(fg='red', state=tk.NORMAL)
+                    self.red_button('bunlock')
+                    self.enable_button('bunlock')
                 elif t == 'E' :
                     self.locked = False
-                    ulbutton.config(fg='black', state=tk.DISABLED)
-                    rdbutton = self.builder.get_object('bread', self.master)
-                    rdbutton.config(state=tk.NORMAL)
+                    self.black_button('bunlock')
+                    self.disable_button('bunlock')
+                    self.enable_button('bread')
             else :
                 self.master.after(200, self.get_version)
 
@@ -303,6 +316,8 @@ class Application(pygubu.TkApplication):
        
 
     def on_read(self) :
+        self.disable_button('bvalidate')
+        self.disable_button('bwrite')
         self.send_serial("EB")  
         self.master.after(500, self.get_dump)
 
@@ -311,6 +326,7 @@ class Application(pygubu.TkApplication):
             l = self.get_serial_line()
             print("02 "+ l)
             if l.startswith('V') :
+                # Got a dump - parse it
                 self.master.after(200, self.parse_dump, l);
             else :
                 self.master.after(200, self.get_dump)
@@ -323,25 +339,25 @@ class Application(pygubu.TkApplication):
         sig_s=''
 
         print("PDV " + v + "\n");
-        s = self.get_serial_line()
+        s = self.get_serial_line() # s has the entire dump
         print("PDS " + s + "\n")
         self.get_serial_line()
         if len(s) > 6 :
             for i in range(8) :
-                splitat = 140
+                splitat = 140 # pwd field is 70 bytes
                 l, r = s[:splitat], s[splitat:]
                 s=r
                 pw_sl.append(l)
                 print(l+"\n")
-            splitat = 32
+            splitat = 32 # variable field is 16 bytes 
             var_s, r = s[:splitat], s[splitat:]
             print(var_s+"\n")
             s=r
-            splitat = 8
+            splitat = 8 # crc field is 4 bytes
             crc_s, r = s[:splitat], s[splitat:]
             print(crc_s+"\n")
             s=r
-            splitat = 16
+            splitat = 16 # semaphore field is 8 bytes, signature is final 4 bytes
             sem_s, sig_s = s[:splitat], s[splitat:]
             print(sem_s+"\n")
             print(sig_s+"\n")
@@ -354,7 +370,7 @@ class Application(pygubu.TkApplication):
         for i in range(6) :
             s = pwlist[i]
             #print('x01 s ' + s + '\n')
-            splitat = 2
+            splitat = 2 # userid len and pw len are  2 bytes each
             l, r = s[:splitat], s[splitat:]
             s=r
             #print('x02 ul ' + l + '\n')
@@ -363,23 +379,23 @@ class Application(pygubu.TkApplication):
             s=r
             #print('x03 pl ' + l + '\n')
             pwdlen=int(l, 16)
-            splitat = 16
+            splitat = 16 # name is 8 bytes
             l, r = s[:splitat], s[splitat:]
             s=r
             l = l.split('00')[0]
             #print('x04 sn ' + l + '\n')
-            slotname = binascii.unhexlify(l).decode('utf-8')
+            slotname = binascii.unhexlify(l).decode('utf-8').rstrip()
 
-            splitat = 60
+            splitat = 60 # userid and pw are 30 bytes each
             l, r = s[:splitat], s[splitat:]
             if uidlen :
                 #print('x05 ui ' + l + '\n')
-                uid = binascii.unhexlify(l).decode('utf-8')
+                uid = binascii.unhexlify(l).decode('utf-8')[:uidlen]
             else :
                 uid = ''
             if pwdlen :
                 #print('x06 pw ' + r + '\n')
-                pwd = binascii.unhexlify(r).decode('utf-8')
+                pwd = binascii.unhexlify(r).decode('utf-8')[:pwdlen]
             else :
                 pwd = ''
             setter="self.builder.tkvariables[\'sename"+str(i)+"\'].set(slotname)"
@@ -393,56 +409,97 @@ class Application(pygubu.TkApplication):
     def populate_var(self, vars) :
         r=vars
         l, r = r[:2], r[2:]
-        url=bool(int(l, 16)) 
+        url=bool(int(l, 16)) # display logo flag
         self.builder.tkvariables['bcblogo'].set(url)   
 
         l, r = r[:2], r[2:]
-        dflip=bool(int(l, 16))            
+        dflip=bool(int(l, 16)) # flip display flag
         print(str(dflip)+'\n')
         self.builder.tkvariables['bcbflip'].set(dflip)   
 
         l, r = r[:2], r[2:]
-        ssec=int(l, 16)
+        ssec=int(l, 16) # security code index
         if ssec :
             self.builder.tkvariables['strlentry'].set(self.lctable[ssec+1])
         else :
             self.builder.tkvariables['strlentry'].set('')
 
         l, r = r[:2], r[2:]
-        dto=int(l, 16)
+        dto=int(l, 16) # display timeout
         print(str(dto)+'\n')
         self.builder.tkvariables['sedto'].set(dto*10)   
 
         l, r = r[:2], r[2:]
-        lto=int(l, 16)
+        lto=int(l, 16) # led timeout
         self.builder.tkvariables['seito'].set(lto*10)   
 
         l, r = r[:2], r[2:]
-        bseq=int(l, 16)
+        bseq=int(l, 16) # button sequence index
         print(str(bseq)+'\n')
-        bscombo = self.builder.get_object('cbseq', self.master)
-        bscombo.current(bseq)
-        
-        l, r = r[:2], r[2:]
-        lseq=int(l, 16)
-        clcombo = self.builder.get_object('clseq', self.master)
-        clcombo.current(lseq)
+        self.set_combo_current('cbseq', bseq)
 
         l, r = r[:2], r[2:]
-        rpw=bool(int(l, 16))    
+        lseq=int(l, 16) # led sequence index
+        self.set_combo_current('clseq', lseq)
+
+        l, r = r[:2], r[2:]
+        rpw=bool(int(l, 16)) # pw revert flag
         self.builder.tkvariables['bcbrevert'].set(rpw)   
 
         l, r = r[:2], r[2:]
-        lfail=int(l, 16)
-        lfcombo = self.builder.get_object('ckfail', self.master)
-        lfcombo.current(lfail)
+        lfail=int(l, 16) # security code fail action index
+        self.set_combo_current('ckfail', lfail)
 
         l, r = r[:2], r[2:]
-        slto=int(l, 16)
+        slto=int(l, 16) # security lock timeout
         self.builder.tkvariables['selto'].set(slto*10)   
 
     def set_crc(self, crc) :
+        #TBD
+        self.enable_button('bvalidate')
         return
+
+    def on_validate(self) :
+        # TBD
+        snm=re.compile("^(?:\w|\-|\ ){0,8}$")
+        uim=re.compile("^(?:\w|\-|\ |\@|\+|\.){0,30}$")
+        pwm=re.compile("^(?:[\ -\~]){0,30}$")
+
+        for i in range(6) :
+            getter="self.builder.tkvariables[\'sename"+str(i)+"\'].get()"
+            slotname = eval(getter)
+            if re.match(snm, slotname) == None :
+                messagebox.showerror('Error', 'Username must be 0 to 8 alphanumeric characters: slot ' + str(i))
+                return
+
+            getter="self.builder.tkvariables[\'suid"+str(i)+"\'].get()"
+            uid = eval(getter)
+            if re.match(uim, uid) == None :
+                print("*"+uid+"* "+str(re.match(uim, uid))+"\n")
+                messagebox.showerror('Error', 'Userid must be 0 to 30 letters, numbers, @, -, + or .: slot ' + str(i))
+                return
+
+            getter="self.builder.tkvariables[\'suid"+str(i)+"\'].get()"
+            pwd = eval(getter)
+            if re.match(pwm, pwd) == None :
+                messagebox.showerror('Error', 'Password must be 0 to 30 printable ASCII characters: slot ' + str(i))
+                return
+
+        # more
+
+        self.enable_button('bwrite')
+        self.green_button('bvalidate')
+        self.dirty=False
+       
+    def on_write(self) :
+        self.disable_button('bwrite')
+        return
+
+    def setdirty(self) :
+        self.dirty=True
+        self.disable_button('bwrite')
+        self.black_button('bvalidate')
+        print("SetDirty\n")
 
 
     def on_close_window(self, event=None):
