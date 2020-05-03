@@ -6,14 +6,15 @@ from tkinter import messagebox
 import tk_tools
 import pygubu
 import serial
-import threading
 import time
-import queue
 import re
 import binascii
 
 __VERSION__ = '0.2'
-__EEVER__ =  '01'
+__EEVVER__ =  '01'
+__EESVER__ =  '04'
+
+## TBD: /root/wip/pygubu-develop/pygubu/ui2code.py ./menu.ui > ./menu.py && get rid of pygubu
 
 def serial_ports():
     """ Lists serial port names
@@ -47,7 +48,7 @@ def serial_ports():
 class Application(pygubu.TkApplication):
 
     def _create_ui(self):
-        self.dirty=False
+        self.valid=False
         self.port=None
         self.baud=115200
         self.ser=None
@@ -66,9 +67,25 @@ class Application(pygubu.TkApplication):
             2111,2112,2113,2121,2122,2123,2131,2132,2133,2211,2212,2213,2221,2222,2223,2231,2232,2233,2311,2312,2313,2321,2322,2323,2331,2332,2333,
             3111,3112,3113,3121,3122,3123,3131,3132,3133,3211,3212,3213,3221,3222,3223,3231,3232,3233,3311,3312,3313,3321,3322,3323,3331,3332,3333 ]
 
-        self.rxqueue = queue.Queue()
-        self.txqueue = queue.Queue()
-        self.cmdqueue = queue.Queue()
+        self.g_eesver=''
+
+        self.g_ucode=0
+        self.g_slotname= []
+        self.g_uid = []
+        self.g_pwd = []
+        self.g_dto = 0
+        self.g_ito = 0
+        self.g_lto = 0
+        self.g_flip = False
+        self.g_revert = False
+        self.g_logo = False
+        self.g_bseq = 0
+        self.g_lseq = 0
+        self.g_kfail = 0
+        self.g_semas = '0000000000000000'
+        self.g_sig = 'EFBEADDE'
+
+        self.g_eedata = bytearray()
 
         self.builder = builder = pygubu.Builder()
 
@@ -100,11 +117,30 @@ class Application(pygubu.TkApplication):
         self.led = led = tk_tools.Led(canvas, size=15)
         led.pack()
         led.to_red(on=True)
+    
+        self.pwframe = pwframe = builder.get_object('fslots', self.master)
+
+        self.vcmd = (self.pwframe.register(self.setdirty), '%P')
 
         builder.connect_callbacks(self)
         self.master.after(100, self.process_serial)
 
-       
+    def clear_device_data(self) :
+        self.g_ucode=0
+        self.g_slotname= []
+        self.g_uid = []
+        self.g_pwd = []
+        self.g_dto = 0
+        self.g_ito = 0
+        self.g_lto = 0
+        self.g_flip = False
+        self.g_revert = False
+        self.g_logo = False
+        self.g_bseq = 0
+        self.g_lseq = 0
+        self.g_kfail = 0
+
+
     def on_mfile_item_clicked(self, itemid):
         if itemid == 'mfile_open':
             messagebox.showinfo('File', 'You clicked Open menuitem')
@@ -285,8 +321,8 @@ class Application(pygubu.TkApplication):
             if len(l) == 3 :
                 t, ev = l[:1], l[1:]
                 self.builder.tkvariables['strlver'].set(ev)     
-                if (ev != __EEVER__ ) : 
-                    messagebox.showerror('Error', 'Incompatible EE schema ' + ev + ' vs ' + __EEVER__)
+                if (ev != __EEVVER__ ) : 
+                    messagebox.showerror('Error', 'Incompatible EE variable schema ' + ev + ' vs ' + __EEVER__)
                     return
 
                 if t == 'L' :
@@ -339,6 +375,7 @@ class Application(pygubu.TkApplication):
         sig_s=''
 
         print("PDV " + v + "\n");
+        self.g_eesver=v[1:];
         s = self.get_serial_line() # s has the entire dump
         print("PDS " + s + "\n")
         self.get_serial_line()
@@ -355,16 +392,25 @@ class Application(pygubu.TkApplication):
             s=r
             splitat = 8 # crc field is 4 bytes
             crc_s, r = s[:splitat], s[splitat:]
-            print(crc_s+"\n")
+            #print(crc_s+"\n")
             s=r
             splitat = 16 # semaphore field is 8 bytes, signature is final 4 bytes
             sem_s, sig_s = s[:splitat], s[splitat:]
-            print(sem_s+"\n")
-            print(sig_s+"\n")
+            #print(sem_s+"\n")
+            #print(sig_s+"\n")
+
+            self.g_semas = sem_s
+            self.g_sig = sig_s
+
+            self.builder.tkvariables['sdcrc'].set(crc_s)
+            self.builder.tkvariables['ssema'].set(sem_s)
+            self.builder.tkvariables['ssig'].set(sig_s)
 
             self.populate_pw(pw_sl)
             self.populate_var(var_s)
             self.set_crc(crc_s)
+
+            #TBD semas and sig
 
     def populate_pw(self, pwlist) :
         for i in range(6) :
@@ -414,7 +460,7 @@ class Application(pygubu.TkApplication):
 
         l, r = r[:2], r[2:]
         dflip=bool(int(l, 16)) # flip display flag
-        print(str(dflip)+'\n')
+        #print(str(dflip)+'\n')
         self.builder.tkvariables['bcbflip'].set(dflip)   
 
         l, r = r[:2], r[2:]
@@ -426,16 +472,16 @@ class Application(pygubu.TkApplication):
 
         l, r = r[:2], r[2:]
         dto=int(l, 16) # display timeout
-        print(str(dto)+'\n')
-        self.builder.tkvariables['sedto'].set(dto*10)   
+        #print(str(dto)+'\n')
+        self.builder.tkvariables['sedto'].set(dto)   
 
         l, r = r[:2], r[2:]
         lto=int(l, 16) # led timeout
-        self.builder.tkvariables['seito'].set(lto*10)   
+        self.builder.tkvariables['seito'].set(lto)   
 
         l, r = r[:2], r[2:]
         bseq=int(l, 16) # button sequence index
-        print(str(bseq)+'\n')
+        #print(str(bseq)+'\n')
         self.set_combo_current('cbseq', bseq)
 
         l, r = r[:2], r[2:]
@@ -452,62 +498,166 @@ class Application(pygubu.TkApplication):
 
         l, r = r[:2], r[2:]
         slto=int(l, 16) # security lock timeout
-        self.builder.tkvariables['selto'].set(slto*10)   
+        self.builder.tkvariables['selto'].set(slto)   
 
     def set_crc(self, crc) :
         #TBD
         self.enable_button('bvalidate')
         return
 
+    def set_invalid(self, error) :
+        messagebox.showerror('Error', error)
+        self.red_button('bvalidate')
+        self.disable_button('b_write')
+
     def on_validate(self) :
-        # TBD
-        snm=re.compile("^(?:\w|\-|\ ){0,8}$")
-        uim=re.compile("^(?:\w|\-|\ |\@|\+|\.){0,30}$")
-        pwm=re.compile("^(?:[\ -\~]){0,30}$")
+    
+        snm = re.compile(r"^(?:\w|\-|\ ){0,8}$")
+        uim = re.compile(r"^(?:\w|\-|\ |\@|\+|\.){0,30}$")
+        pwm = re.compile(r"^(?:[\ -\~]){0,30}$")
+        dig = re.compile(r"^(?:\d){0,4}$")
+
+        self.valid=False
+        self.clear_device_data()
+
+        ucode = self.builder.tkvariables['strlentry'].get()
+        if (len(ucode) > 0) and  ((len(ucode) < 4) or (not int(ucode) in self.lctable) or (int(ucode) == 0) ) :
+            self.set_invalid('Unlock code must be exactly 4 digits in [1..3] ')
+            return
+        if ucode == '' :
+            ucodei = 0
+        else :
+            ucodei = int(ucode)
+        self.g_ucode = self.lctable.index(ucodei)
+        #print("UC: " + str(self.g_ucode) + "\n")
 
         for i in range(6) :
             getter="self.builder.tkvariables[\'sename"+str(i)+"\'].get()"
             slotname = eval(getter)
             if re.match(snm, slotname) == None :
-                messagebox.showerror('Error', 'Username must be 0 to 8 alphanumeric characters: slot ' + str(i))
+                self.set_invalid('Username must be 0 to 8 alphanumeric characters: slot ' + str(i))
                 return
+            self.g_slotname.append(slotname)
+            #print("SN: " + str(i) + " " + self.g_slotname[i] + "\n")
 
             getter="self.builder.tkvariables[\'suid"+str(i)+"\'].get()"
             uid = eval(getter)
             if re.match(uim, uid) == None :
-                print("*"+uid+"* "+str(re.match(uim, uid))+"\n")
-                messagebox.showerror('Error', 'Userid must be 0 to 30 letters, numbers, @, -, + or .: slot ' + str(i))
+                self.set_invalid('Userid must be 0 to 30 letters, numbers, @, -, + or .: slot ' + str(i))
                 return
+            self.g_uid.append(uid)
 
-            getter="self.builder.tkvariables[\'suid"+str(i)+"\'].get()"
+            getter="self.builder.tkvariables[\'spwd"+str(i)+"\'].get()"
             pwd = eval(getter)
             if re.match(pwm, pwd) == None :
-                messagebox.showerror('Error', 'Password must be 0 to 30 printable ASCII characters: slot ' + str(i))
+                self.set_invalid('Password must be 0 to 30 printable ASCII characters: slot ' + str(i))
                 return
+            self.g_pwd.append(pwd)
 
-        # more
+        # Add 'phantom' entries (reserved space) to make the buffer complete later
+        for i in range(2) :
+            self.g_slotname.append('')
+            self.g_uid.append('')
+            self.g_pwd.append('')
+        
+
+        dto = self.builder.tkvariables['sedto'].get()
+        if ((re.match(dig, dto) == None) or (int(dto) > 255) ) :
+            self.set_invalid('Display timeout must be 0 or less than 256 ')
+            return
+        self.g_dto = int(dto)
+        #print("DT: " + str(self.g_dto) + "\n")
+
+        ito = self.builder.tkvariables['seito'].get()
+        if ((re.match(dig, ito) == None) or (int(ito) > 255) ) :
+            self.set_invalid('LED timeout must be 0 or less than 256 ')
+            return
+        self.g_ito = int(ito)
+
+        lto = self.builder.tkvariables['selto'].get()
+        if ((re.match(dig, lto) == None) or (int(lto) > 255) ) :
+            self.set_invalid('Lock timeout must be 0 or less than 256 ')
+            return
+        self.g_lto = int(lto)
+
+        self.g_flip = self.builder.tkvariables['bcbflip'].get()
+        #print("FL: " + str(self.g_flip) + "\n")
+        self.g_revert = self.builder.tkvariables['bcbrevert'].get()
+        self.g_logo = self.builder.tkvariables['bcblogo'].get()
+
+        cbseqobj = self.builder.get_object('cbseq', self.master)
+        self.g_bseq = cbseqobj.current()
+        #print("BS: " + str(self.g_bseq) + "\n")
+
+        clseqobj = self.builder.get_object('clseq', self.master)
+        self.g_lseq = clseqobj.current()
+
+        ckfailobj = self.builder.get_object('ckfail', self.master)
+        self.g_kfail = ckfailobj.current()
+
+        self.g_eedata = bytearray()
+
+        for i in range(8) : # include phantom entries
+            self.g_eedata += bytearray(len(self.g_uid[i]).to_bytes(1, byteorder='little'))
+            self.g_eedata += bytearray(len(self.g_pwd[i]).to_bytes(1, byteorder='little'))
+            self.g_eedata += self.g_slotname[i].ljust(8,'\0').encode('utf-8')
+            self.g_eedata += self.g_uid[i].ljust(30,'\0').encode('utf-8')
+            self.g_eedata += self.g_pwd[i].ljust(30,'\0').encode('utf-8')
+
+        self.g_eedata += bytearray(self.g_logo.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_flip.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_ucode.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_dto.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_ito.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_bseq.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_lseq.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_revert.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_kfail.to_bytes(1, byteorder='little'))
+        self.g_eedata += bytearray(self.g_lto.to_bytes(1, byteorder='little'))
+        # Pad out unused variables (6)
+        zero = 0
+        self.g_eedata += bytearray(zero.to_bytes(6, byteorder='little'))
+
+        crc = binascii.crc32(self.g_eedata) ^ 0xFFFFFFFF
+        crcb = crc.to_bytes(4, byteorder='little')
+        self.builder.tkvariables['slcrc'].set(binascii.hexlify(crcb))
+        self.g_eedata += crcb
+
+        print(binascii.hexlify(self.g_eedata))
+
 
         self.enable_button('bwrite')
         self.green_button('bvalidate')
-        self.dirty=False
+        self.valid=True
        
     def on_write(self) :
-        self.disable_button('bwrite')
+
+        self.on_validate()
+        if self.valid :
+            #TBD
+            #print("EESV"+self.g_eesver+"\n")
+            buf = "V%02X\n" % int(self.g_eesver)
+
+
         return
 
     def setdirty(self) :
-        self.dirty=True
+        self.valid=Falsie
         self.disable_button('bwrite')
         self.black_button('bvalidate')
         print("SetDirty\n")
+        return True
 
+    def on_reset(self) :
+        self.clear_device_data()
+        # TBD handle reset button
+        return
+
+    def on_clear(self) :
+        # TBD handle clear button
+        return
 
     def on_close_window(self, event=None):
-        if self.dirty:
-            msg = messagebox.askquestion ('Exit Configurator','There are unsaved changes.  Are you sure you want to exit',icon = 'warning')
-            if msg != 'yes':
-                return
-
         if self.ser != None:
             self.close_serial()
         
