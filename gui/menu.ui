@@ -621,6 +621,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bgen0">
+                <property name="command">on_generate0</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -633,6 +634,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bcpy0">
+                <property name="command">on_copy0</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -646,7 +648,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bpaste0">
-                <property name="state">disabled</property>
+                <property name="command">on_paste0</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
@@ -660,6 +662,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bclr0">
+                <property name="command">on_clear0</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -779,6 +782,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bgen1">
+                <property name="command">on_generate1</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -791,6 +795,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bcpy1">
+                <property name="command">on_copy1</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -804,7 +809,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bpaste1">
-                <property name="state">disabled</property>
+                <property name="command">on_paste1</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
@@ -818,6 +823,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bclr1">
+                <property name="command">on_clear1</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -937,6 +943,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bgen2">
+                <property name="command">on_generate2</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -949,6 +956,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bcpy2">
+                <property name="command">on_copy2</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -962,7 +970,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bpaste2">
-                <property name="state">disabled</property>
+                <property name="command">on_paste2</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
@@ -976,6 +984,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bclr2">
+                <property name="command">on_clear2</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -1095,6 +1104,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bgen3">
+                <property name="command">on_generate3</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -1107,6 +1117,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bcpy3">
+                <property name="command">on_copy3</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -1120,7 +1131,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bpaste3">
-                <property name="state">disabled</property>
+                <property name="command">on_paste3</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
@@ -1134,6 +1145,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bclr3">
+                <property name="command">on_clear3</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -1253,6 +1265,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bgen4">
+                <property name="command">on_generate4</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -1265,6 +1278,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bcpy4">
+                <property name="command">on_copy4</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -1278,7 +1292,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bpaste4">
-                <property name="state">disabled</property>
+                <property name="command">on_paste4</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
@@ -1292,6 +1306,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bclr4">
+                <property name="command">on_clear4</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
@@ -1411,6 +1426,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bgen5">
+                <property name="command">on_generate5</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
                   <property name="column">7</property>
@@ -1423,6 +1439,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bcpy5">
+                <property name="command">on_copy5</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
@@ -1436,7 +1453,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bpaste5">
-                <property name="state">disabled</property>
+                <property name="command">on_paste5</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
@@ -1450,6 +1467,7 @@
             </child>
             <child>
               <object class="tk.Button" id="bclr5">
+                <property name="command">on_clear5</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>

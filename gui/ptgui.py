@@ -9,12 +9,18 @@ import serial
 import time
 import re
 import binascii
+import string
+import secrets
+
 
 __VERSION__ = '0.2'
 __EEVVER__ =  '01'
 __EESVER__ =  '04'
 
+
 ## TBD: /root/wip/pygubu-develop/pygubu/ui2code.py ./menu.ui > ./menu.py && get rid of pygubu
+
+#TBD: Fix CRC, complete write, fix runtime errors, scroll terminal area
 
 def serial_ports():
     """ Lists serial port names
@@ -510,6 +516,8 @@ class Application(pygubu.TkApplication):
         self.red_button('bvalidate')
         self.disable_button('b_write')
 
+
+
     def on_validate(self) :
     
         snm = re.compile(r"^(?:\w|\-|\ ){0,8}$")
@@ -618,7 +626,7 @@ class Application(pygubu.TkApplication):
         zero = 0
         self.g_eedata += bytearray(zero.to_bytes(6, byteorder='little'))
 
-        crc = binascii.crc32(self.g_eedata) ^ 0xFFFFFFFF
+        crc = self.calc_crc()
         crcb = crc.to_bytes(4, byteorder='little')
         self.builder.tkvariables['slcrc'].set(binascii.hexlify(crcb))
         self.g_eedata += crcb
@@ -642,7 +650,7 @@ class Application(pygubu.TkApplication):
         return
 
     def setdirty(self) :
-        self.valid=Falsie
+        self.valid=False
         self.disable_button('bwrite')
         self.black_button('bvalidate')
         print("SetDirty\n")
@@ -679,13 +687,155 @@ class Application(pygubu.TkApplication):
         s=s.replace(" ", "[SPC]")
         print("$"+s+"\n")
 
+    def calc_crc(self) :
+        
+        crc_table =  [0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
+                      0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
+                      0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
+                      0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c ]
+        crc = 0xFFFFFFFF;
 
-#def pwgen_alnum(length=20):
-#    chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
-#    password = ''
-#    for i in range(length):
-#       password += chars[ord(os.urandom(1)) % len(chars)]
-#    return password
+        for index in range(576) :
+            eebyte = self.g_eedata[index]
+            
+            crc = crc_table[(crc ^ eebyte) & 0x0f] ^ (crc >> 4);
+            crc = crc_table[(crc ^ (eebyte >> 4)) & 0x0f] ^ (crc >> 4);
+            crc = ~crc;
+
+        return crc & 0xFFFFFFFF;
+
+
+    def generate_pw(self) :
+        mode = self.builder.tkvariables['sgmode'].get()
+        len = int(self.builder.tkvariables['selen'].get())
+
+        if (len < 6) or (len > 28) :
+            messagebox.showwarning('Warning', 'Selected password length out of range - adjusting')
+            if (len < 6) :
+                len = 6
+                self.builder.tkvariables['selen'].set(str(6))
+            elif (len > 28) :
+                len = 28
+                self.builder.tkvariables['selen'].set(str(28))
+  
+        if mode == 'Numeric' : 
+            return ''.join(secrets.choice(string.digits) for i in range(len))
+        elif mode == 'Alpha' :
+            return ''.join(secrets.choice(string.ascii_letters) for i in range(len))
+        elif mode == 'Alphanumeric' :
+            return ''.join(secrets.choice(string.ascii_letters+string.digits) for i in range(len))
+        elif mode == 'Symbols' :
+            return ''.join(secrets.choice(string.ascii_letters+string.digits+string.punctuation) for i in range(len))
+        return ''
+
+    def on_copy0(self) :
+        self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename0'].get())
+        self.builder.tkvariables['suidcb'].set(self.builder.tkvariables['suid0'].get())
+        self.builder.tkvariables['spwdcb'].set(self.builder.tkvariables['spwd0'].get())
+
+    def on_paste0(self) :
+        self.builder.tkvariables['sename0'].set(self.builder.tkvariables['senamecb'].get())
+        self.builder.tkvariables['suid0'].set(self.builder.tkvariables['suidcb'].get())
+        self.builder.tkvariables['spwd0'].set(self.builder.tkvariables['spwdcb'].get())
+
+    def on_clear0(self) :
+        self.builder.tkvariables['sename0'].set('')
+        self.builder.tkvariables['suid0'].set('')
+        self.builder.tkvariables['spwd0'].set('')
+
+    def on_generate0(self) :
+        self.builder.tkvariables['spwd0'].set(self.generate_pw())
+
+    def on_copy1(self) :
+        self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename1'].get())
+        self.builder.tkvariables['suidcb'].set(self.builder.tkvariables['suid1'].get())
+        self.builder.tkvariables['spwdcb'].set(self.builder.tkvariables['spwd1'].get())
+
+    def on_paste1(self) :
+        self.builder.tkvariables['sename1'].set(self.builder.tkvariables['senamecb'].get())
+        self.builder.tkvariables['suid1'].set(self.builder.tkvariables['suidcb'].get())
+        self.builder.tkvariables['spwd1'].set(self.builder.tkvariables['spwdcb'].get())
+
+    def on_clear1(self) :
+        self.builder.tkvariables['sename1'].set('')
+        self.builder.tkvariables['suid1'].set('')
+        self.builder.tkvariables['spwd1'].set('')
+
+    def on_generate1(self) :
+        self.builder.tkvariables['spwd1'].set(self.generate_pw())
+
+    def on_copy2(self) :
+        self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename2'].get())
+        self.builder.tkvariables['suidcb'].set(self.builder.tkvariables['suid2'].get())
+        self.builder.tkvariables['spwdcb'].set(self.builder.tkvariables['spwd2'].get())
+
+    def on_paste2(self) :
+        self.builder.tkvariables['sename2'].set(self.builder.tkvariables['senamecb'].get())
+        self.builder.tkvariables['suid2'].set(self.builder.tkvariables['suidcb'].get())
+        self.builder.tkvariables['spwd2'].set(self.builder.tkvariables['spwdcb'].get())
+
+    def on_clear2(self) :
+        self.builder.tkvariables['sename2'].set('')
+        self.builder.tkvariables['suid2'].set('')
+        self.builder.tkvariables['spwd2'].set('')
+
+    def on_generate2(self) :
+        self.builder.tkvariables['spwd2'].set(self.generate_pw())
+
+    def on_copy3(self) :
+        self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename3'].get())
+        self.builder.tkvariables['suidcb'].set(self.builder.tkvariables['suid3'].get())
+        self.builder.tkvariables['spwdcb'].set(self.builder.tkvariables['spwd3'].get())
+
+    def on_paste3(self) :
+        self.builder.tkvariables['sename3'].set(self.builder.tkvariables['senamecb'].get())
+        self.builder.tkvariables['suid3'].set(self.builder.tkvariables['suidcb'].get())
+        self.builder.tkvariables['spwd3'].set(self.builder.tkvariables['spwdcb'].get())
+
+    def on_clear3(self) :
+        self.builder.tkvariables['sename3'].set('')
+        self.builder.tkvariables['suid3'].set('')
+        self.builder.tkvariables['spwd3'].set('')
+
+    def on_generate3(self) :
+        self.builder.tkvariables['spwd3'].set(self.generate_pw())     
+
+    def on_copy4(self) :
+        self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename4'].get())
+        self.builder.tkvariables['suidcb'].set(self.builder.tkvariables['suid4'].get())
+        self.builder.tkvariables['spwdcb'].set(self.builder.tkvariables['spwd4'].get())
+
+    def on_paste4(self) :
+        self.builder.tkvariables['sename4'].set(self.builder.tkvariables['senamecb'].get())
+        self.builder.tkvariables['suid4'].set(self.builder.tkvariables['suidcb'].get())
+        self.builder.tkvariables['spwd4'].set(self.builder.tkvariables['spwdcb'].get())
+
+    def on_clear4(self) :
+        self.builder.tkvariables['sename4'].set('')
+        self.builder.tkvariables['suid4'].set('')
+        self.builder.tkvariables['spwd4'].set('')
+
+    def on_generate4(self) :
+        self.builder.tkvariables['spwd4'].set(self.generate_pw())
+
+    def on_copy5(self) :
+        self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename5'].get())
+        self.builder.tkvariables['suidcb'].set(self.builder.tkvariables['suid5'].get())
+        self.builder.tkvariables['spwdcb'].set(self.builder.tkvariables['spwd5'].get())
+
+    def on_paste5(self) :
+        self.builder.tkvariables['sename5'].set(self.builder.tkvariables['senamecb'].get())
+        self.builder.tkvariables['suid5'].set(self.builder.tkvariables['suidcb'].get())
+        self.builder.tkvariables['spwd5'].set(self.builder.tkvariables['spwdcb'].get())
+
+    def on_clear5(self) :
+        self.builder.tkvariables['sename5'].set('')
+        self.builder.tkvariables['suid5'].set('')
+        self.builder.tkvariables['spwd5'].set('')
+
+    def on_generate5(self) :
+        self.builder.tkvariables['spwd5'].set(self.generate_pw())
+
 
 if __name__ == '__main__':
     portlist = serial_ports()
