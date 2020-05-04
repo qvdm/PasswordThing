@@ -115,12 +115,12 @@ unsigned long Eeprom::calc_crc(void)
   
   for (int index = 0 ; index < EE_CRCLOC  ; ++index) {
     byte eebyte = EEPROM.readByte(index);
-     
-    crc = crc_table[(crc ^ eebyte) & 0x0f] ^ (crc >> 4);
-    crc = crc_table[(crc ^ (eebyte >> 4)) & 0x0f] ^ (crc >> 4);
-    crc = ~crc;
+
+    crc ^= eebyte; 
+    crc = crc_table[crc & 0x0f] ^ (crc >> 4);
+    crc = crc_table[crc & 0x0f] ^ (crc >> 4);
   }
-  return crc;
+  return (crc ^ 0xFFFFFFFF);
 }
 
 // Checks if a password and/or UID entry is valid

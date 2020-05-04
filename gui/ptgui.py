@@ -147,22 +147,6 @@ class Application(pygubu.TkApplication):
         self.g_kfail = 0
 
 
-    def on_mfile_item_clicked(self, itemid):
-        if itemid == 'mfile_open':
-            messagebox.showinfo('File', 'You clicked Open menuitem')
-
-        if itemid == 'mfile_quit':
-            self.on_close_window();
-
-    def on_mtools_item_clicked(self, itemid):
-        if itemid == 'mtools_dump':
-            messagebox.showinfo('File', 'You clicked Dump menuitem')
-        elif itemid == 'mtools_clear':
-            messagebox.showinfo('File', 'You clicked Clear menuitem')
-
-    def on_about_clicked(self):
-        messagebox.showinfo('About', 'You clicked About menuitem')
-
     def enable_button(self, button) :
         buttonobj = self.builder.get_object(button, self.master)
         buttonobj.config(state=tk.NORMAL) 
@@ -728,6 +712,28 @@ class Application(pygubu.TkApplication):
             return ''.join(secrets.choice(string.ascii_letters+string.digits+string.punctuation) for i in range(len))
         return ''
 
+
+    def on_mfile_item_clicked(self, itemid):
+        if itemid == 'mfile_open':
+            #messagebox.showinfo('File', 'You clicked Open menuitem')
+            options = {}
+            f = tkinter.filedialog.askopenfile(mode="r", **options)
+        elif itemid == 'mfile_save':
+            messagebox.showinfo('File', 'You clicked Save menuitem')
+        elif itemid == 'mfile_quit':
+            self.on_close_window();
+
+    def on_mtools_item_clicked(self, itemid):
+        if itemid == 'mtools_dump':
+            messagebox.showinfo('File', 'You clicked Dump menuitem')
+        elif itemid == 'mtools_clear':
+            messagebox.showinfo('File', 'You clicked Clear menuitem')
+
+    def on_about_clicked(self):
+        messagebox.showinfo('About', 'You clicked About menuitem')
+
+    # Copy/paste/clear/generate handlers
+    #  need to do in a stupid way due to pygubu limitations - refactor when changing UI framework
     def on_copy0(self) :
         self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename0'].get())
         self.builder.tkvariables['suidcb'].set(self.builder.tkvariables['suid0'].get())
