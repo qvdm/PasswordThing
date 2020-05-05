@@ -3,6 +3,7 @@ import sys
 import glob
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import filedialog
 import tk_tools
 import pygubu
 import serial
@@ -753,8 +754,8 @@ class Application(pygubu.TkApplication):
     def on_mfile_item_clicked(self, itemid):
         if itemid == 'mfile_open':
             #messagebox.showinfo('File', 'You clicked Open menuitem')
-            options = {}
-            f = tkinter.filedialog.askopenfile(mode="r", **options)
+            filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("dump files","*.pwd"),("text files","*.txt"),("all files","*.*")))
+            print (filename)
         elif itemid == 'mfile_save':
             messagebox.showinfo('File', 'You clicked Save menuitem')
         elif itemid == 'mfile_quit':
