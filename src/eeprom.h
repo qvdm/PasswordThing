@@ -7,6 +7,8 @@
 #include "hardware.h"
 #include "utils.h"
 
+#define OLDCRCVER  1 // Last version with bad CRC calculation|0T|QyQR#jD2q<C=myN9
+
 #define EE_PWLEN   30 // Max space for uid/pwd
 #define EE_SNLEN    8 // Slot name
 #define EE_ULLEN    1 // Space for UID length

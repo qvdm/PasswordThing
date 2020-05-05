@@ -18,6 +18,13 @@ the OLED:
 	git submodule update
 
 
+The configurator GUI requires [pygubu](https://github.com/alejandroautalan/pygubu)
+and Python >= 3.6 with tkinter, tk_tools and pySerial installed.  To build
+in Platformio, ensure that the correct Python runtime is selected, load
+ptgui.py in the editor and press the Run button.  It will fail the first
+time, after which you can type 'cd gui' in the newly opened Terminal and run
+the program again.
+
 See the docs directory for a manual, which is published at 
 https://qvdm.github.io/PasswordThing/
 and can be generated with **mkdocs gh-deploy**

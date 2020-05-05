@@ -432,7 +432,8 @@ class Application(pygubu.TkApplication):
 
             self.builder.tkvariables['sdcrc'].set(crc_s)
             self.builder.tkvariables['ssema'].set(sem_s)
-            self.builder.tkvariables['ssig'].set(sig_s)
+            ss = "".join(reversed([sig_s[i:i+2] for i in range(0, len(sig_s), 2)]))
+            self.builder.tkvariables['ssig'].set(ss.upper())
 
             self.populate_pw(pw_sl)
             self.populate_var(var_s)
@@ -650,10 +651,9 @@ class Application(pygubu.TkApplication):
 
         crc = self.calc_crc()
         crcb = crc.to_bytes(4, byteorder='little')
-        self.builder.tkvariables['slcrc'].set(binascii.hexlify(crcb))
+        s=binascii.hexlify(crcb).decode("utf-8").upper()
+        self.builder.tkvariables['slcrc'].set(s)
         self.g_eedata += crcb
-
-        print(binascii.hexlify(self.g_eedata))
 
         if not self.g_badver :
             self.enable_button('bwrite')
@@ -665,8 +665,9 @@ class Application(pygubu.TkApplication):
         self.on_validate()
         if self.valid :
             #TBD
-            print("EESV"+self.g_eesver+"\n")
-            buf = "V%02X\n" % int(self.g_eesver)
+            print("EEVV"+self.g_eevver+"\n")
+            buf = "V%02X\n" % int(self.g_eevver)
+            
 
 
         return
@@ -718,14 +719,12 @@ class Application(pygubu.TkApplication):
         crc = 0xFFFFFFFF;
 
         for index in range(576) :
-            eebyte = self.g_eedata[index]
-            
-            crc = crc_table[(crc ^ eebyte) & 0x0f] ^ (crc >> 4);
-            crc = crc_table[(crc ^ (eebyte >> 4)) & 0x0f] ^ (crc >> 4);
-            crc = ~crc;
+            crc ^= self.g_eedata[index];
+            crc = crc_table[crc & 0x0f] ^ (crc >> 4);
+            crc = crc_table[crc & 0x0f] ^ (crc >> 4);
 
-        return crc & 0xFFFFFFFF;
 
+        return crc ^ 0xFFFFFFFF;
 
     def generate_pw(self) :
         mode = self.builder.tkvariables['sgmode'].get()

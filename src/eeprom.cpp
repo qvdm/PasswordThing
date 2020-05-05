@@ -107,7 +107,7 @@ void Eeprom::upgrade_schema(void)
 {
   byte oldver = getsema(EESEM_EEVER);
   
-  if ( (oldver < 5) && (eevVer >= 5) )
+  if ( (oldver < OLDCRCVER) && (eevVer >= OLDCRCVER) )
   {
     update_crc();
   }
