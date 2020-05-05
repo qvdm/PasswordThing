@@ -108,6 +108,7 @@ typedef unsigned char byte;
 // EEPROM semaphores
 #define EESEM_SERMODE  0 // Reboot into serial mode
 #define EESEM_BADLCK   1 // # of bad unlock attempts
+#define EESEM_EEVER    2 // EEprom schema version
   
 // # of possible security seqs and seq length
 #define NSSEQ 81 

@@ -37,7 +37,8 @@
 
 #include "eeprom.h"
 
-extern char eedVer[];
+extern byte eedVer;
+extern byte eevVer;
 
 Eeprom::Eeprom()
 {
@@ -97,6 +98,21 @@ void Eeprom::zero()
   }
   
   update_crc();
+  storesema(EESEM_EEVER, eevVer);
+  write_signature();
+
+}
+
+void Eeprom::upgrade_schema(void)
+{
+  byte oldver = getsema(EESEM_EEVER);
+  
+  if ( (oldver < 5) && (eevVer >= 5) )
+  {
+    update_crc();
+  }
+
+  storesema(EESEM_EEVER, eevVer);
 }
 
 // Calculate CRC
@@ -348,7 +364,8 @@ void Eeprom::dump()
 void Eeprom::backup()
 {
   Serial.begin(115200);  while (!Serial);
-  Serial.println(eedVer); 
+  sprintf(eo_buf, "V%02d", eedVer);
+  Serial.println(eo_buf); 
 
   for (int i = 0 ; i < EE_USED  ; ++i)
   {
@@ -378,12 +395,14 @@ void Eeprom::restore()
   parsebuf[2] = Serial.read();
   Serial.read();
 
-  if (strcmp(parsebuf, eedVer) != 0)
+  sprintf(eo_buf, "V%02d", eedVer);
+  
+  if (strcmp(parsebuf, eo_buf) != 0)
   {
     Serial.print("Wrong Version, got ");
     Serial.print(parsebuf);
     Serial.print(" expected ");
-    Serial.println(eedVer);
+    Serial.println(eo_buf);
     Serial.flush();
     return;
   }

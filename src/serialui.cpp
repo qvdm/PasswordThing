@@ -99,8 +99,8 @@
 extern unsigned long getTime(void);
 extern int Secseq[];
 extern char Version[];
-extern char eevVer[];
-extern char eedVer[];
+extern byte eevVer;
+extern byte eedVer;
 
 // CTOR
 SerialUi::SerialUi(Led& rl, Display &rd, Random& rr, Eeprom& ee) : led(rl), disp(rd), rand(rr), eeprom(ee)
@@ -221,19 +221,22 @@ void SerialUi::handle_ver()
     Serial.write('L');
   else 
     Serial.write('E');
+  if (eevVer < 10) Serial.write('0');
   Serial.println(eevVer);
 }
 
 // Show SW version
 void SerialUi::handle_rel()
 {
-  Serial.print('R');
+  Serial.write('R');
   Serial.println(Version);
 }
 
 // Show EE schema version
 void SerialUi::handle_sch()
 {
+  Serial.write('V');
+  if (eedVer < 10) Serial.write('0');
   Serial.println(eedVer);
 }
 

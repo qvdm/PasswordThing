@@ -12,15 +12,22 @@ import binascii
 import string
 import secrets
 
+# Versions:
+#
+# 1. VERSION = GUI SW Version
+# 2. EEDVER = EEprom dump version, describes the dump format
+# 3. EEVVER = EEprom variable schema version, describes eeprom variables
+# 4. PWTVER = Device SW Version
+#
 
-__VERSION__ = '0.2'
-__EEVVER__ =  '01'
-__EESVER__ =  '04'
+__VERSION__ = '0.3'
+__EEDVER__ =  4
+__EEVVER__ =  2
 
 
 ## TBD: /root/wip/pygubu-develop/pygubu/ui2code.py ./menu.ui > ./menu.py && get rid of pygubu
 
-#TBD: Fix CRC, complete write, fix runtime errors, scroll terminal area
+#TBD: Fix CRC, complete write, fix runtime errors, scroll terminal area, get versions
 
 def serial_ports():
     """ Lists serial port names
@@ -73,7 +80,9 @@ class Application(pygubu.TkApplication):
             2111,2112,2113,2121,2122,2123,2131,2132,2133,2211,2212,2213,2221,2222,2223,2231,2232,2233,2311,2312,2313,2321,2322,2323,2331,2332,2333,
             3111,3112,3113,3121,3122,3123,3131,3132,3133,3211,3212,3213,3221,3222,3223,3231,3232,3233,3311,3312,3313,3321,3322,3323,3331,3332,3333 ]
 
-        self.g_eesver=''
+        self.g_eedver=0
+        self.g_eevver=0
+        self.g_badver = False
 
         self.g_ucode=0
         self.g_slotname= []
@@ -307,13 +316,14 @@ class Application(pygubu.TkApplication):
     def get_version(self) :
         if self.serial_avail() :
             l = self.get_serial_line()
-            print("01 "+ l)
+            #print("01 "+ l)
             if len(l) == 3 :
                 t, ev = l[:1], l[1:]
                 self.builder.tkvariables['strlver'].set(ev)     
-                if (ev != __EEVVER__ ) : 
-                    messagebox.showerror('Error', 'Incompatible EE variable schema ' + ev + ' vs ' + __EEVER__)
-                    return
+                self.g_eevver = int(ev)
+                if self.g_eevver < __EEVVER__ :
+                    messagebox.showwarning('Warning', 'Device EEprom schema is too old.  You will not be able to write to the device unless you upgrade its firmware first.')
+                    self.g_badver = True
 
                 if t == 'L' :
                     self.locked = True
@@ -324,8 +334,28 @@ class Application(pygubu.TkApplication):
                     self.black_button('bunlock')
                     self.disable_button('bunlock')
                     self.enable_button('bread')
+
+                if (self.g_eevver > 1) : # Release available
+                    self.master.after(500, self.ask_release)
+                else :
+                    self.builder.tkvariables['sfwver'].set('N/A')     
+
+
             else :
                 self.master.after(200, self.get_version)
+
+    def ask_release(self) :
+        self.send_serial('R')
+        self.master.after(500, self.get_release)
+
+    def get_release(self) :
+        if self.serial_avail() :
+            l = self.get_serial_line()
+            if len(l) >= 3 :
+                self.builder.tkvariables['sfwver'].set(l[2:])     
+            else :
+                self.master.after(200, self.get_release)
+
 
     def lc_valid(self, code, search=re.compile(r'^[1-3]{4}').search) :
         return bool(search(code))
@@ -350,7 +380,7 @@ class Application(pygubu.TkApplication):
     def get_dump(self) :
         if self.serial_avail() :
             l = self.get_serial_line()
-            print("02 "+ l)
+            #print("02 "+ l)
             if l.startswith('V') :
                 # Got a dump - parse it
                 self.master.after(200, self.parse_dump, l);
@@ -365,20 +395,27 @@ class Application(pygubu.TkApplication):
         sig_s=''
 
         print("PDV " + v + "\n");
-        self.g_eesver=v[1:];
+        self.g_eedver=int(v[1:]);
         s = self.get_serial_line() # s has the entire dump
         print("PDS " + s + "\n")
         self.get_serial_line()
+
+        self.builder.tkvariables['seedver'].set(str(self.g_eedver).zfill(2))  
+        if int(self.g_eedver) != __EEDVER__ :
+            messagebox.showerror('Error', 'Incompatible eeprom dump format.')
+            self.g_badver = True
+            return
+
         if len(s) > 6 :
             for i in range(8) :
                 splitat = 140 # pwd field is 70 bytes
                 l, r = s[:splitat], s[splitat:]
                 s=r
                 pw_sl.append(l)
-                print(l+"\n")
+                #print(l+"\n")
             splitat = 32 # variable field is 16 bytes 
             var_s, r = s[:splitat], s[splitat:]
-            print(var_s+"\n")
+            #print(var_s+"\n")
             s=r
             splitat = 8 # crc field is 4 bytes
             crc_s, r = s[:splitat], s[splitat:]
@@ -400,10 +437,10 @@ class Application(pygubu.TkApplication):
             self.populate_var(var_s)
             self.set_crc(crc_s)
 
-            #TBD semas and sig
 
     def populate_pw(self, pwlist) :
         for i in range(6) :
+            # print(i)
             s = pwlist[i]
             #print('x01 s ' + s + '\n')
             splitat = 2 # userid len and pw len are  2 bytes each
@@ -434,7 +471,7 @@ class Application(pygubu.TkApplication):
                 pwd = binascii.unhexlify(r).decode('utf-8')[:pwdlen]
             else :
                 pwd = ''
-            setter="self.builder.tkvariables[\'sename"+str(i)+"\'].set(slotname)"
+            setter="self.builder.tkvariables[\'sename"+str(i)+"\'].set(slotname)" # goes wrong for 0
             eval(setter)
             setter="self.builder.tkvariables[\'suid"+str(i)+"\'].set(uid)"
             eval(setter)
@@ -617,8 +654,8 @@ class Application(pygubu.TkApplication):
 
         print(binascii.hexlify(self.g_eedata))
 
-
-        self.enable_button('bwrite')
+        if not self.g_badver :
+            self.enable_button('bwrite')
         self.green_button('bvalidate')
         self.valid=True
        
@@ -627,7 +664,7 @@ class Application(pygubu.TkApplication):
         self.on_validate()
         if self.valid :
             #TBD
-            #print("EESV"+self.g_eesver+"\n")
+            print("EESV"+self.g_eesver+"\n")
             buf = "V%02X\n" % int(self.g_eesver)
 
 
@@ -637,7 +674,7 @@ class Application(pygubu.TkApplication):
         self.valid=False
         self.disable_button('bwrite')
         self.black_button('bvalidate')
-        print("SetDirty\n")
+        #print("SetDirty\n")
         return True
 
     def on_reset(self) :

@@ -51,8 +51,8 @@
 #include "serialui.h"
 
 char Version[]=VERSION_SHORT;
-char eedVer[]="V04"; // eeprom dump schema version
-char eevVer[]="04"; // eeprom vars schema version
+byte eedVer = 4; // eeprom dump format version
+byte eevVer = 2; // eeprom vars schema version
 
 // Forward declare systick function
 void sysTick();
@@ -116,15 +116,28 @@ void setup()
     cLed.ledcolor(COL_WHT, BLNK_ON, true);
   }
   
-  // Check EEPROM signature and crc - if not valid, zero EEPROM and write signature
-  if (!cEeprom.valid() || !cEeprom.check_signature())
+  // Check EEPROM signature if not valid, zero EEPROM and write signature
+  if (!cEeprom.check_signature())
   {
     // Cyan led indicates eeprom kerfuffling
     cLed.ledcolor(COL_CYA, BLNK_ON, true);
     cEeprom.zero();
-    cEeprom.write_signature();
     cLed.ledcolor(COL_BLU, BLNK_ON, true);
   }
+
+  int eesver = cEeprom.getsema(EESEM_EEVER);
+  if (eesver < eevVer)
+  {
+    cEeprom.upgrade_schema();
+  }
+
+  if (!cEeprom.valid() )
+  {
+    cLed.ledcolor(COL_CYA, BLNK_ON, true);
+    cEeprom.zero();
+    cLed.ledcolor(COL_BLU, BLNK_ON, true);
+  }
+
 
   // Get security seq
   sseq = cEeprom.getvar(EEVAR_SEC); // Security Seq

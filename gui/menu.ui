@@ -283,7 +283,7 @@
             </layout>
             <child>
               <object class="ttk.Label" id="lfw">
-                <property name="text" translatable="yes">FW Version:</property>
+                <property name="text" translatable="yes">Firmware:</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>
@@ -295,7 +295,8 @@
             <child>
               <object class="ttk.Label" id="lfwver">
                 <property name="text" translatable="yes">NC</property>
-                <property name="width">3</property>
+                <property name="textvariable">string:sfwver</property>
+                <property name="width">8</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="propagate">True</property>
@@ -318,7 +319,8 @@
             </child>
             <child>
               <object class="tk.Label" id="lvar">
-                <property name="text" translatable="yes">Var Schema:</property>
+                <property name="text" translatable="yes">EEV Schema:</property>
+                <property name="textvariable">string:svarver</property>
                 <layout>
                   <property name="column">3</property>
                   <property name="propagate">True</property>
@@ -353,7 +355,7 @@
             </child>
             <child>
               <object class="tk.Label" id="lee">
-                <property name="text" translatable="yes">EE Schema:</property>
+                <property name="text" translatable="yes">EED Ver:</property>
                 <layout>
                   <property name="column">6</property>
                   <property name="propagate">True</property>
@@ -365,6 +367,7 @@
             <child>
               <object class="ttk.Label" id="leever">
                 <property name="text" translatable="yes">NC</property>
+                <property name="textvariable">string:seedver</property>
                 <layout>
                   <property name="column">7</property>
                   <property name="propagate">True</property>

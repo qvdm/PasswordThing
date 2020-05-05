@@ -70,6 +70,8 @@ class Eeprom {
     void restore();
     bool check_signature();
     void write_signature();
+    void upgrade_schema(void);
+
 
 
   private:
