@@ -102,7 +102,7 @@ class Application(pygubu.TkApplication):
         self.g_sig = 'EFBEADDE'
 
         self.g_eedata = bytearray()
-
+        self.g_wrbuf = ''
         self.builder = builder = pygubu.Builder()
 
         builder.add_from_file('menu.ui')
@@ -245,7 +245,8 @@ class Application(pygubu.TkApplication):
                       #self.dbug("!CR:" + self.ser_rcv + "L:" + str(len(self.ser_rcvstack)))
                     #else :
                       #self.dbug("!CBL")
-                    self.termbox.insert(tk.INSERT, self.ser_rcv + "\n")
+                    self.termbox.insert(tk.END, self.ser_rcv + "\n")
+                    self.termbox.see(tk.END)
                     self.ser_rcv=""
 
             if (self.ser_to > 20) and (len(self.ser_rcv) > 0) :
@@ -256,7 +257,8 @@ class Application(pygubu.TkApplication):
                     #self.dbug("!TO:" + self.ser_rcv + "L:" + str(len(self.ser_rcvstack)))
                 #else :
                     #self.dbug("!TBL")
-                self.termbox.insert(tk.INSERT, self.ser_rcv)
+                self.termbox.insert(tk.END, self.ser_rcv)
+                self.termbox.see(tk.END)
                 self.ser_rcv=""
 
             self.master.after(20, self.process_serial)
@@ -395,10 +397,10 @@ class Application(pygubu.TkApplication):
         sem_s=''
         sig_s=''
 
-        print("PDV " + v + "\n");
+        print(v + "\n");
         self.g_eedver=int(v[1:]);
         s = self.get_serial_line() # s has the entire dump
-        print("PDS " + s + "\n")
+        print(s + "\n")
         self.get_serial_line()
 
         self.builder.tkvariables['seedver'].set(str(self.g_eedver).zfill(2))  
@@ -649,11 +651,13 @@ class Application(pygubu.TkApplication):
         zero = 0
         self.g_eedata += bytearray(zero.to_bytes(6, byteorder='little'))
 
-        crc = self.calc_crc()
+        crc = binascii.crc32(self.g_eedata)
         crcb = crc.to_bytes(4, byteorder='little')
         s=binascii.hexlify(crcb).decode("utf-8").upper()
         self.builder.tkvariables['slcrc'].set(s)
         self.g_eedata += crcb
+
+        #!!!TBD validate semas
 
         if not self.g_badver :
             self.enable_button('bwrite')
@@ -664,13 +668,25 @@ class Application(pygubu.TkApplication):
 
         self.on_validate()
         if self.valid :
-            #TBD
-            print("EEVV"+self.g_eevver+"\n")
-            buf = "V%02X\n" % int(self.g_eevver)
+            self.disable_button('bwrite')
+            self.black_button('bvalidate')
+
+            self.g_wrbuf = "V%02X\n" % int(self.g_eedver)
+            self.g_wrbuf += binascii.hexlify(self.g_eedata).decode("utf-8").upper() + self.g_semas + self.g_sig
+            print(self.g_wrbuf)
+            self.master.after(200, self.request_restore)
+
+    def request_restore(self) :
+        self.send_serial("ER")
+        self.master.after(200, self.clear_serial)
+        self.master.after(400, self.do_restore)
+
+    def do_restore(self) :
+         self.send_serial(self.g_wrbuf)
+         self.master.after(600, self.clear_serial)
+         self.master.after(900, self.on_read)
+
             
-
-
-        return
 
     def setdirty(self) :
         self.valid=False
@@ -709,22 +725,6 @@ class Application(pygubu.TkApplication):
         s=s.replace("\r", "[CR]")
         s=s.replace(" ", "[SPC]")
         print("$"+s+"\n")
-
-    def calc_crc(self) :
-        
-        crc_table =  [0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
-                      0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
-                      0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
-                      0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c ]
-        crc = 0xFFFFFFFF;
-
-        for index in range(576) :
-            crc ^= self.g_eedata[index];
-            crc = crc_table[crc & 0x0f] ^ (crc >> 4);
-            crc = crc_table[crc & 0x0f] ^ (crc >> 4);
-
-
-        return crc ^ 0xFFFFFFFF;
 
     def generate_pw(self) :
         mode = self.builder.tkvariables['sgmode'].get()
