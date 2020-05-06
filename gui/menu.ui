@@ -33,26 +33,6 @@
       </object>
     </child>
     <child>
-      <object class="tk.Menuitem.Submenu" id="mtools">
-        <property name="label" translatable="yes">Tools</property>
-        <property name="tearoff">0</property>
-        <child>
-          <object class="tk.Menuitem.Command" id="mtools_dump">
-            <property name="command">on_mtools_item_clicked</property>
-            <property name="command_id_arg">True</property>
-            <property name="label" translatable="yes">Dump Eeprom</property>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Menuitem.Command" id="mtools_clear">
-            <property name="command">on_mtools_item_clicked</property>
-            <property name="command_id_arg">True</property>
-            <property name="label" translatable="yes">Clear Eeprom</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
       <object class="tk.Menuitem.Submenu" id="mhelp">
         <property name="label" translatable="yes">Help</property>
         <property name="tearoff">0</property>
@@ -185,6 +165,20 @@
           </object>
         </child>
         <child>
+          <object class="tk.Canvas" id="cvled">
+            <property name="height">20</property>
+            <property name="takefocus">true</property>
+            <property name="width">20</property>
+            <layout>
+              <property name="column">6</property>
+              <property name="padx">5</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
           <object class="tk.Button" id="bread">
             <property name="command">on_read</property>
             <property name="state">disabled</property>
@@ -227,7 +221,8 @@
         <child>
           <object class="tk.Button" id="breset">
             <property name="command">on_reset</property>
-            <property name="text" translatable="yes">Reset</property>
+            <property name="state">disabled</property>
+            <property name="text" translatable="yes">Reset </property>
             <layout>
               <property name="column">10</property>
               <property name="padx">20</property>
@@ -241,23 +236,9 @@
           <object class="tk.Button" id="bclear">
             <property name="command">on_clear</property>
             <property name="state">disabled</property>
-            <property name="text" translatable="yes">Clear Device</property>
+            <property name="text" translatable="yes">Zero</property>
             <layout>
               <property name="column">11</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-              <property name="sticky">w</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="tk.Canvas" id="cvled">
-            <property name="height">20</property>
-            <property name="takefocus">true</property>
-            <property name="width">20</property>
-            <layout>
-              <property name="column">6</property>
-              <property name="padx">5</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
@@ -497,12 +478,6 @@
           <property name="propagate">True</property>
           <property name="row">2</property>
           <property name="sticky">w</property>
-          <columns>
-            <column id="0">
-              <property name="minsize">0</property>
-              <property name="pad">10</property>
-            </column>
-          </columns>
           <rows>
             <row id="5">
               <property name="pad">0</property>
@@ -511,6 +486,12 @@
               <property name="pad">20</property>
             </row>
           </rows>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">10</property>
+            </column>
+          </columns>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs0">

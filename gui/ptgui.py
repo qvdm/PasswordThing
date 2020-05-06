@@ -1,5 +1,6 @@
 # menu.py
 import sys
+from os import path
 import glob
 import tkinter as tk
 from tkinter import messagebox
@@ -28,7 +29,7 @@ __EEVVER__ =  2
 
 ## TBD: /root/wip/pygubu-develop/pygubu/ui2code.py ./menu.ui > ./menu.py && get rid of pygubu
 
-#TBD: Fix CRC, complete write, fix runtime errors, scroll terminal area, get versions
+#TBD: fix runtime errors, remove prints, reset after write, check  unlock code zero case, , implement Zero
 
 def serial_ports():
     """ Lists serial port names
@@ -84,6 +85,9 @@ class Application(pygubu.TkApplication):
         self.g_eedver=0
         self.g_eevver=0
         self.g_badver = False
+
+        self.rdb_ver=''
+        self.rdb_body=''
 
         self.g_ucode=0
         self.g_slotname= []
@@ -332,12 +336,15 @@ class Application(pygubu.TkApplication):
                     self.locked = True
                     self.red_button('bunlock')
                     self.enable_button('bunlock')
+                    self.enable_button('bclear')
                 elif t == 'E' :
                     self.locked = False
                     self.black_button('bunlock')
                     self.disable_button('bunlock')
+                    self.disable_button('bclear')
                     self.enable_button('bread')
 
+                self.enable_button('breset')
                 if (self.g_eevver > 1) : # Release available
                     self.master.after(500, self.ask_release)
                 else :
@@ -376,32 +383,37 @@ class Application(pygubu.TkApplication):
 
     def on_read(self) :
         self.disable_button('bvalidate')
+        self.black_button('bvalidate')
         self.disable_button('bwrite')
         self.send_serial("EB")  
-        self.master.after(500, self.get_dump)
+        self.master.after(500, self.get_dump_v)
 
-    def get_dump(self) :
+    def get_dump_v(self) :
         if self.serial_avail() :
-            l = self.get_serial_line()
-            #print("02 "+ l)
-            if l.startswith('V') :
-                # Got a dump - parse it
-                self.master.after(200, self.parse_dump, l);
+            v = self.get_serial_line()
+            if v.startswith('V') :
+                print(v + "\n");
+                self.rdb_ver=v
+                # Got a dump version - get the body
+                self.master.after(200, self.get_dump_b);
             else :
-                self.master.after(200, self.get_dump)
+                self.master.after(200, self.get_dump_v)
 
-    def parse_dump(self, v) :
+    def get_dump_b(self) :
+        b = self.get_serial_line() # s has the entire dump
+        print(b + "\n")
+        self.get_serial_line()
+        self.rdb_body = b
+        self.parse_dump()
+
+    def parse_dump(self) :
         pw_sl = []
         var_s=''
         crc_s=''
         sem_s=''
         sig_s=''
 
-        print(v + "\n");
-        self.g_eedver=int(v[1:]);
-        s = self.get_serial_line() # s has the entire dump
-        print(s + "\n")
-        self.get_serial_line()
+        self.g_eedver=int(self.rdb_ver[1:]);
 
         self.builder.tkvariables['seedver'].set(str(self.g_eedver).zfill(2))  
         if int(self.g_eedver) != __EEDVER__ :
@@ -409,6 +421,7 @@ class Application(pygubu.TkApplication):
             self.g_badver = True
             return
 
+        s = self.rdb_body
         if len(s) > 6 :
             for i in range(8) :
                 splitat = 140 # pwd field is 70 bytes
@@ -439,7 +452,8 @@ class Application(pygubu.TkApplication):
 
             self.populate_pw(pw_sl)
             self.populate_var(var_s)
-            self.set_crc(crc_s)
+
+            self.enable_button('bvalidate')
 
 
     def populate_pw(self, pwlist) :
@@ -486,7 +500,7 @@ class Application(pygubu.TkApplication):
     def populate_var(self, vars) :
         r=vars
         l, r = r[:2], r[2:]
-        url=bool(int(l, 16)) # display logo flag
+        url=not bool(int(l, 16)) # display logo flag
         self.builder.tkvariables['bcblogo'].set(url)   
 
         l, r = r[:2], r[2:]
@@ -531,24 +545,21 @@ class Application(pygubu.TkApplication):
         slto=int(l, 16) # security lock timeout
         self.builder.tkvariables['selto'].set(slto)   
 
-    def set_crc(self, crc) :
-        #TBD
-        self.enable_button('bvalidate')
-        return
-
     def set_invalid(self, error) :
         messagebox.showerror('Error', error)
         self.red_button('bvalidate')
-        self.disable_button('b_write')
+        self.disable_button('bwrite')
 
 
 
     def on_validate(self) :
     
-        snm = re.compile(r"^(?:\w|\-|\ ){0,8}$")
-        uim = re.compile(r"^(?:\w|\-|\ |\@|\+|\.){0,30}$")
-        pwm = re.compile(r"^(?:[\ -\~]){0,30}$")
-        dig = re.compile(r"^(?:\d){0,4}$")
+        # Compile regexes for validation
+        snm = re.compile(r"^(?:\w|\-|\ ){0,8}$")            # Slot name
+        uim = re.compile(r"^(?:\w|\-|\ |\@|\+|\.){0,30}$")  # Userid
+        pwm = re.compile(r"^(?:[\ -\~]){0,30}$")            # Password
+        dig = re.compile(r"^(?:\d){0,4}$")                  # digits
+        sem = re.compile(r"^(?:[A-F]|\d){16}$")
 
         self.valid=False
         self.clear_device_data()
@@ -561,8 +572,8 @@ class Application(pygubu.TkApplication):
             ucodei = 0
         else :
             ucodei = int(ucode)
-        self.g_ucode = self.lctable.index(ucodei)
-        #print("UC: " + str(self.g_ucode) + "\n")
+        self.g_ucode = self.lctable.index(ucodei)-1 #!!! check zero case
+        #print("UC: " + str(self.g_ucode) + "\n") 
 
         for i in range(6) :
             getter="self.builder.tkvariables[\'sename"+str(i)+"\'].get()"
@@ -593,7 +604,6 @@ class Application(pygubu.TkApplication):
             self.g_uid.append('')
             self.g_pwd.append('')
         
-
         dto = self.builder.tkvariables['sedto'].get()
         if ((re.match(dig, dto) == None) or (int(dto) > 255) ) :
             self.set_invalid('Display timeout must be 0 or less than 256 ')
@@ -616,7 +626,7 @@ class Application(pygubu.TkApplication):
         self.g_flip = self.builder.tkvariables['bcbflip'].get()
         #print("FL: " + str(self.g_flip) + "\n")
         self.g_revert = self.builder.tkvariables['bcbrevert'].get()
-        self.g_logo = self.builder.tkvariables['bcblogo'].get()
+        self.g_logo = not self.builder.tkvariables['bcblogo'].get()
 
         cbseqobj = self.builder.get_object('cbseq', self.master)
         self.g_bseq = cbseqobj.current()
@@ -657,7 +667,10 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['slcrc'].set(s)
         self.g_eedata += crcb
 
-        #!!!TBD validate semas
+        semas = self.builder.tkvariables['ssema'].get()
+        if re.match(sem, semas) == None :
+            self.set_invalid('Semaphore list must be 8 2-digit uppercase hex bytes')
+        self.g_semas = semas
 
         if not self.g_badver :
             self.enable_button('bwrite')
@@ -752,22 +765,38 @@ class Application(pygubu.TkApplication):
 
     def on_mfile_item_clicked(self, itemid):
         if itemid == 'mfile_open':
-            #messagebox.showinfo('File', 'You clicked Open menuitem')
-            filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("dump files","*.pwd"),("text files","*.txt"),("all files","*.*")))
-            print (filename)
+            filename =  filedialog.askopenfilename(initialdir = "%USERPROFILE%/Documents",title = "Select file",filetypes = (("text files","*.txt"),("all files","*.*")))
+            if filename : 
+                f = open(filename, "r")
+                self.rdb_ver = f.readline()
+                self.rdb_body = f.readline()
+                print(self.rdb_ver)
+                print(self.rdb_body)
+                f.close()
+                self.black_button('bvalidate')
+                self.disable_button('bwrite')
+                self.parse_dump() 
+
         elif itemid == 'mfile_save':
-            messagebox.showinfo('File', 'You clicked Save menuitem')
+            self.on_validate()
+            if self.valid :
+                filename =  filedialog.asksaveasfilename(initialdir = "%USERPROFILE%/Documents",title = "Select file",filetypes = (("text files","*.txt"),("all files","*.*")))
+                if filename : 
+                    if not '.' in filename :
+                        filename += '.txt'
+                    f = open(filename, "w")
+                    l=[]
+                    l.append("V%02X" % int(self.g_eedver) + '\n')
+                    l.append(binascii.hexlify(self.g_eedata).decode("utf-8").upper() + self.g_semas + self.g_sig + '\n')
+                    f.writelines(l)
+                    f.close()
+
+
         elif itemid == 'mfile_quit':
             self.on_close_window();
 
-    def on_mtools_item_clicked(self, itemid):
-        if itemid == 'mtools_dump':
-            messagebox.showinfo('File', 'You clicked Dump menuitem')
-        elif itemid == 'mtools_clear':
-            messagebox.showinfo('File', 'You clicked Clear menuitem')
-
     def on_about_clicked(self):
-        messagebox.showinfo('About', 'You clicked About menuitem')
+        messagebox.showinfo('About', 'PWT Configurator.  See https://ayb.ca/pwt')
 
     # Copy/paste/clear/generate handlers
     #  need to do in a stupid way due to pygubu limitations - refactor when changing UI framework
