@@ -137,8 +137,6 @@ class Application(pygubu.TkApplication):
     
         self.pwframe = pwframe = builder.get_object('fslots', self.master)
 
-        self.vcmd = (self.pwframe.register(self.setdirty), '%P')
-
         builder.connect_callbacks(self)
         self.master.after(100, self.process_serial)
 
@@ -212,7 +210,7 @@ class Application(pygubu.TkApplication):
         self.led.to_red(on=True)
 
     def on_rescan_ports(self):
-        if self.ser_connected == False :
+        if self.g_serial == False :
             portlist = serial_ports()
             portlist.insert(0,'')
             self.portcombo['values'] = portlist
@@ -690,20 +688,7 @@ class Application(pygubu.TkApplication):
         #TBD
         self.master.after(200, self.close_serial)
 
-
-            
-
-    def setdirty(self) :
-        self.valid=False
-        self.disable_button('bwrite')
-        self.black_button('bvalidate')
-        return True
-
-    def on_reset(self) :
-        # TBD handle reset button
-        self.clear_device_data()
-        return
-
+          
     def on_clear(self) :
         # TBD handle clear button
         self.clear_device_data()
