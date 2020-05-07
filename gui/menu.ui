@@ -233,8 +233,8 @@
           </object>
         </child>
         <child>
-          <object class="tk.Button" id="bclear">
-            <property name="command">on_clear</property>
+          <object class="tk.Button" id="bzero">
+            <property name="command">on_zero</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Zero</property>
             <layout>
@@ -545,7 +545,6 @@
                 <property name="justify">left</property>
                 <property name="textvariable">string:sename0</property>
                 <property name="validate">all</property>
-                <property name="validatecommand"></property>
                 <property name="width">8</property>
                 <layout>
                   <property name="column">2</property>
@@ -580,10 +579,22 @@
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="cbtab0">
+                <property name="text" translatable="yes">Tab</property>
+                <property name="variable">boolean:btab0</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="tk.Label" id="lpwd0">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -596,7 +607,7 @@
                 <property name="textvariable">string:spwd0</property>
                 <property name="width">32</property>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -608,7 +619,7 @@
                 <property name="command">on_generate0</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -622,7 +633,7 @@
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">8</property>
+                  <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -636,7 +647,7 @@
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">9</property>
+                  <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -650,7 +661,7 @@
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">10</property>
+                  <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -742,10 +753,22 @@
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="cbtab1">
+                <property name="text" translatable="yes">Tab</property>
+                <property name="variable">boolean:btab1</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="tk.Label" id="lpwd1">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -757,7 +780,7 @@
                 <property name="textvariable">string:spwd1</property>
                 <property name="width">32</property>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -769,7 +792,7 @@
                 <property name="command">on_generate1</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -783,7 +806,7 @@
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">8</property>
+                  <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -797,7 +820,7 @@
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">9</property>
+                  <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -811,7 +834,7 @@
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">10</property>
+                  <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -903,10 +926,22 @@
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="cbtab2">
+                <property name="text" translatable="yes">Tab</property>
+                <property name="variable">boolean:btab2</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="tk.Label" id="lpwd2">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -918,7 +953,7 @@
                 <property name="textvariable">string:spwd2</property>
                 <property name="width">32</property>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -930,7 +965,7 @@
                 <property name="command">on_generate2</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -944,7 +979,7 @@
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">8</property>
+                  <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -958,7 +993,7 @@
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">9</property>
+                  <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -972,7 +1007,7 @@
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">10</property>
+                  <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1064,10 +1099,22 @@
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="cbtab3">
+                <property name="text" translatable="yes">Tab</property>
+                <property name="variable">boolean:btab3</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="tk.Label" id="lpwd3">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1079,7 +1126,7 @@
                 <property name="textvariable">string:spwd3</property>
                 <property name="width">32</property>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1091,7 +1138,7 @@
                 <property name="command">on_generate3</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1105,7 +1152,7 @@
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">8</property>
+                  <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1119,7 +1166,7 @@
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">9</property>
+                  <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1133,7 +1180,7 @@
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">10</property>
+                  <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1225,10 +1272,22 @@
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="cbtab4">
+                <property name="text" translatable="yes">Tab</property>
+                <property name="variable">boolean:btab4</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="tk.Label" id="lpwd4">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1240,7 +1299,7 @@
                 <property name="textvariable">string:spwd4</property>
                 <property name="width">32</property>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1252,7 +1311,7 @@
                 <property name="command">on_generate4</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1266,7 +1325,7 @@
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">8</property>
+                  <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1280,7 +1339,7 @@
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">9</property>
+                  <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1294,7 +1353,7 @@
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">10</property>
+                  <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1386,10 +1445,22 @@
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="cbtab5">
+                <property name="text" translatable="yes">Tab</property>
+                <property name="variable">boolean:btab5</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="tk.Label" id="lpwd5">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1401,7 +1472,7 @@
                 <property name="textvariable">string:spwd5</property>
                 <property name="width">32</property>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1413,7 +1484,7 @@
                 <property name="command">on_generate5</property>
                 <property name="text" translatable="yes">Generate</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1427,7 +1498,7 @@
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">8</property>
+                  <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1441,7 +1512,7 @@
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">9</property>
+                  <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1455,7 +1526,7 @@
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
                 <layout>
-                  <property name="column">10</property>
+                  <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1547,10 +1618,22 @@
               </object>
             </child>
             <child>
+              <object class="ttk.Checkbutton" id="cbtabcb">
+                <property name="text" translatable="yes">Tab</property>
+                <property name="variable">boolean:btabcb</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="tk.Label" id="lpwdcb">
                 <property name="text" translatable="yes">Password:</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
@@ -1562,7 +1645,7 @@
                 <property name="textvariable">string:spwdcb</property>
                 <property name="width">32</property>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
