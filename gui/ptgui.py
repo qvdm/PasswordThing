@@ -483,7 +483,7 @@ class Application(pygubu.TkApplication):
                 setter="self.builder.tkvariables[\'btab"+str(i)+"\'].set(False)" 
             eval(setter)
 
-            setter="self.builder.tkvariables[\'sename"+str(i)+"\'].set(slotname)" # goes wrong for 0
+            setter="self.builder.tkvariables[\'sename"+str(i)+"\'].set(slotname)" # throws exception for 0
             eval(setter)
             setter="self.builder.tkvariables[\'suid"+str(i)+"\'].set(uid)"
             eval(setter)
@@ -567,7 +567,7 @@ class Application(pygubu.TkApplication):
 
         for i in range(6) :
             getter="self.builder.tkvariables[\'sename"+str(i)+"\'].get()"
-            slotname = eval(getter)
+            slotname = eval(getter).rstrip()
             if re.match(snm, slotname) == None :
                 self.set_invalid('Username must be 0 to 8 alphanumeric characters: slot ' + str(i))
                 return
@@ -577,7 +577,8 @@ class Application(pygubu.TkApplication):
             tab = eval(getter)
 
             getter="self.builder.tkvariables[\'suid"+str(i)+"\'].get()"
-            uid = eval(getter)
+            uid = eval(getter).rstrip()
+            print(str(i) + ": *" + uid + "*")
             if re.match(uim, uid) == None :
                 self.set_invalid('Userid must be 0 to 30 letters, numbers, @, -, + or .: slot ' + str(i))
                 return
@@ -586,7 +587,7 @@ class Application(pygubu.TkApplication):
             self.g_uid.append(uid)
 
             getter="self.builder.tkvariables[\'spwd"+str(i)+"\'].get()"
-            pwd = eval(getter)
+            pwd = eval(getter).rstrip()
             if re.match(pwm, pwd) == None :
                 self.set_invalid('Password must be 0 to 30 printable ASCII characters: slot ' + str(i))
                 return
@@ -636,6 +637,7 @@ class Application(pygubu.TkApplication):
             self.g_eedata += bytearray(len(self.g_pwd[i]).to_bytes(1, byteorder='little'))
             self.g_eedata += self.g_slotname[i].ljust(8,'\0').encode('utf-8')
             self.g_eedata += self.g_uid[i].ljust(30,'\0').encode('utf-8')
+            print(str(i) + ": *" + str(self.g_uid[i].ljust(30,'\0').encode('utf-8')) + "*")
             self.g_eedata += self.g_pwd[i].ljust(30,'\0').encode('utf-8')
 
         self.g_eedata += bytearray(self.g_logo.to_bytes(1, byteorder='little'))
