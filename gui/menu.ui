@@ -478,12 +478,6 @@
           <property name="propagate">True</property>
           <property name="row">2</property>
           <property name="sticky">w</property>
-          <columns>
-            <column id="0">
-              <property name="minsize">0</property>
-              <property name="pad">10</property>
-            </column>
-          </columns>
           <rows>
             <row id="5">
               <property name="pad">0</property>
@@ -492,6 +486,12 @@
               <property name="pad">20</property>
             </row>
           </rows>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">10</property>
+            </column>
+          </columns>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs0">
@@ -2055,7 +2055,7 @@
     </child>
     <child>
       <object class="ttk.Frame" id="fterm">
-        <property name="height">200</property>
+        <property name="height">300</property>
         <property name="width">250</property>
         <layout>
           <property name="column">0</property>
@@ -2064,10 +2064,11 @@
         </layout>
         <child>
           <object class="tk.Text" id="tterm">
-            <property name="height">10</property>
+            <property name="height">18</property>
             <property name="insertofftime">0</property>
-            <property name="width">132</property>
-            <property name="wrap">char</property>
+            <property name="state">normal</property>
+            <property name="width">112</property>
+            <property name="wrap">word</property>
             <layout>
               <property name="column">0</property>
               <property name="columnspan">1</property>
@@ -2092,8 +2093,8 @@
             </layout>
             <child>
               <object class="tk.Text" id="tee">
-                <property name="height">10</property>
-                <property name="width">50</property>
+                <property name="height">18</property>
+                <property name="width">70</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="propagate">True</property>

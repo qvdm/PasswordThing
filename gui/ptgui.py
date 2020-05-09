@@ -10,7 +10,6 @@
 #
 # Bugs: fix runtime errors, 
 #       read enable not always properly called
-#       tab not properly encoded into eedata for writing to file
 #       Pylint
 #     
 #
@@ -115,6 +114,7 @@ class Application(pygubu.TkApplication):
         self.master.protocol("WM_DELETE_WINDOW", self.on_close_window)
 
         self.termbox = builder.get_object('tterm', self.master)
+        self.eebox = builder.get_object('tee', self.master)
 
         self.canvas = canvas = builder.get_object('cvled', self.master)
         self.led = led = tk_tools.Led(canvas, size=15)
@@ -408,6 +408,10 @@ class Application(pygubu.TkApplication):
         sem_s=''
         sig_s=''
 
+        self.eebox.delete("1.0",tk.END)
+        self.eebox.insert(tk.END, self.g_rdb_ver + '\n')
+        self.eebox.insert(tk.END, self.g_rdb_body)
+
         self.g_eedver=int(self.g_rdb_ver[1:]);
 
         self.builder.tkvariables['seedver'].set(str(self.g_eedver).zfill(2))  
@@ -547,7 +551,7 @@ class Application(pygubu.TkApplication):
     
         # Compile regexes for validation
         snm = re.compile(r"^(?:\w|\-|\ ){0,8}$")            # Slot name
-        uim = re.compile(r"^(?:\w|\-|\ |\@|\+|\.){0,30}$")  # Userid
+        uim = re.compile(r"^(?:\w|\-|\ |\@|\+|\.){0,29}$")  # Userid
         pwm = re.compile(r"^(?:[\ -\~]){0,30}$")            # Password
         dig = re.compile(r"^(?:\d){0,4}$")                  # digits
         sem = re.compile(r"^(?:[A-F]|\d){16}$")
@@ -578,9 +582,8 @@ class Application(pygubu.TkApplication):
 
             getter="self.builder.tkvariables[\'suid"+str(i)+"\'].get()"
             uid = eval(getter).rstrip()
-            print(str(i) + ": *" + uid + "*")
             if re.match(uim, uid) == None :
-                self.set_invalid('Userid must be 0 to 30 letters, numbers, @, -, + or .: slot ' + str(i))
+                self.set_invalid('Userid must be 0 to 29 letters, numbers, @, -, + or .: slot ' + str(i))
                 return
             if tab :
                 uid += '\t'
@@ -637,7 +640,6 @@ class Application(pygubu.TkApplication):
             self.g_eedata += bytearray(len(self.g_pwd[i]).to_bytes(1, byteorder='little'))
             self.g_eedata += self.g_slotname[i].ljust(8,'\0').encode('utf-8')
             self.g_eedata += self.g_uid[i].ljust(30,'\0').encode('utf-8')
-            print(str(i) + ": *" + str(self.g_uid[i].ljust(30,'\0').encode('utf-8')) + "*")
             self.g_eedata += self.g_pwd[i].ljust(30,'\0').encode('utf-8')
 
         self.g_eedata += bytearray(self.g_logo.to_bytes(1, byteorder='little'))
@@ -665,8 +667,14 @@ class Application(pygubu.TkApplication):
             self.set_invalid('Semaphore list must be 8 2-digit uppercase hex bytes')
         self.g_semas = semas
 
+        self.eebox.delete("1.0",tk.END)
         if not self.g_badver :
             self.enable_button('bwrite')
+            self.g_wrbuf = "V%02X\n" % int(self.g_eedver)
+            self.g_wrbuf += binascii.hexlify(self.g_eedata).decode("utf-8").upper() + self.g_semas + self.g_sig
+            self.eebox.insert(tk.END, self.g_wrbuf)
+
+
         self.green_button('bvalidate')
         self.g_valid=True
        
@@ -675,9 +683,6 @@ class Application(pygubu.TkApplication):
         if self.g_valid :
             self.disable_button('bwrite')
             self.black_button('bvalidate')
-
-            self.g_wrbuf = "V%02X\n" % int(self.g_eedver)
-            self.g_wrbuf += binascii.hexlify(self.g_eedata).decode("utf-8").upper() + self.g_semas + self.g_sig
             self.master.after(200, self.request_restore)
 
     def request_restore(self) :
@@ -754,8 +759,8 @@ class Application(pygubu.TkApplication):
             filename =  filedialog.askopenfilename(initialdir = "%USERPROFILE%/Documents",title = "Select file",filetypes = (("text files","*.txt"),("all files","*.*")))
             if filename : 
                 f = open(filename, "r")
-                self.g_rdb_ver = f.readline()
-                self.g_rdb_body = f.readline()
+                self.g_rdb_ver = f.readline().rstrip()
+                self.g_rdb_body = f.readline().rstrip()
                 f.close()
                 self.black_button('bvalidate')
                 self.disable_button('bwrite')
@@ -793,13 +798,13 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['sename0'].set(self.builder.tkvariables['senamecb'].get())
         self.builder.tkvariables['suid0'].set(self.builder.tkvariables['suidcb'].get())
         self.builder.tkvariables['spwd0'].set(self.builder.tkvariables['spwdcb'].get())
-        self.builder.tkvariables['stab0'].set(self.builder.tkvariables['stabcb'].get())
+        self.builder.tkvariables['btab0'].set(self.builder.tkvariables['btabcb'].get())
 
     def on_clear0(self) :
         self.builder.tkvariables['sename0'].set('')
         self.builder.tkvariables['suid0'].set('')
         self.builder.tkvariables['spwd0'].set('')
-        self.builder.tkvariables['stab0'].set('')
+        self.builder.tkvariables['btab0'].set('')
 
     def on_generate0(self) :
         self.builder.tkvariables['spwd0'].set(self.generate_pw())
@@ -814,13 +819,13 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['sename1'].set(self.builder.tkvariables['senamecb'].get())
         self.builder.tkvariables['suid1'].set(self.builder.tkvariables['suidcb'].get())
         self.builder.tkvariables['spwd1'].set(self.builder.tkvariables['spwdcb'].get())
-        self.builder.tkvariables['stab1'].set(self.builder.tkvariables['stabcb'].get())
+        self.builder.tkvariables['btab1'].set(self.builder.tkvariables['btabcb'].get())
 
     def on_clear1(self) :
         self.builder.tkvariables['sename1'].set('')
         self.builder.tkvariables['suid1'].set('')
         self.builder.tkvariables['spwd1'].set('')
-        self.builder.tkvariables['stab1'].set('')
+        self.builder.tkvariables['btab1'].set('')
 
     def on_generate1(self) :
         self.builder.tkvariables['spwd1'].set(self.generate_pw())
@@ -835,13 +840,13 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['sename2'].set(self.builder.tkvariables['senamecb'].get())
         self.builder.tkvariables['suid2'].set(self.builder.tkvariables['suidcb'].get())
         self.builder.tkvariables['spwd2'].set(self.builder.tkvariables['spwdcb'].get())
-        self.builder.tkvariables['stab2'].set(self.builder.tkvariables['stabcb'].get())
+        self.builder.tkvariables['btab2'].set(self.builder.tkvariables['btabcb'].get())
 
     def on_clear2(self) :
         self.builder.tkvariables['sename2'].set('')
         self.builder.tkvariables['suid2'].set('')
         self.builder.tkvariables['spwd2'].set('')
-        self.builder.tkvariables['stab2'].set('')
+        self.builder.tkvariables['btab2'].set('')
 
     def on_generate2(self) :
         self.builder.tkvariables['spwd2'].set(self.generate_pw())
@@ -856,16 +861,16 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['sename3'].set(self.builder.tkvariables['senamecb'].get())
         self.builder.tkvariables['suid3'].set(self.builder.tkvariables['suidcb'].get())
         self.builder.tkvariables['spwd3'].set(self.builder.tkvariables['spwdcb'].get())
-        self.builder.tkvariables['stab3'].set(self.builder.tkvariables['stabcb'].get())
+        self.builder.tkvariables['btab3'].set(self.builder.tkvariables['btabcb'].get())
 
     def on_clear3(self) :
         self.builder.tkvariables['sename3'].set('')
         self.builder.tkvariables['suid3'].set('')
         self.builder.tkvariables['spwd3'].set('')
-        self.builder.tkvariables['stab3'].set('')
+        self.builder.tkvariables['btab3'].set('')
 
     def on_generate3(self) :
-        self.builder.tkvariables['spwd3'].set(self.generate_pw())     
+        self.builder.tkvariables['spwd3'].set(self.generate_pw())
 
     def on_copy4(self) :
         self.builder.tkvariables['senamecb'].set(self.builder.tkvariables['sename4'].get())
@@ -877,13 +882,13 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['sename4'].set(self.builder.tkvariables['senamecb'].get())
         self.builder.tkvariables['suid4'].set(self.builder.tkvariables['suidcb'].get())
         self.builder.tkvariables['spwd4'].set(self.builder.tkvariables['spwdcb'].get())
-        self.builder.tkvariables['stab4'].set(self.builder.tkvariables['stabcb'].get())
+        self.builder.tkvariables['btab4'].set(self.builder.tkvariables['btabcb'].get())
 
     def on_clear4(self) :
         self.builder.tkvariables['sename4'].set('')
         self.builder.tkvariables['suid4'].set('')
         self.builder.tkvariables['spwd4'].set('')
-        self.builder.tkvariables['stab4'].set('')
+        self.builder.tkvariables['btab4'].set('')
 
     def on_generate4(self) :
         self.builder.tkvariables['spwd4'].set(self.generate_pw())
@@ -898,13 +903,13 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['sename5'].set(self.builder.tkvariables['senamecb'].get())
         self.builder.tkvariables['suid5'].set(self.builder.tkvariables['suidcb'].get())
         self.builder.tkvariables['spwd5'].set(self.builder.tkvariables['spwdcb'].get())
-        self.builder.tkvariables['stab5'].set(self.builder.tkvariables['stabcb'].get())
+        self.builder.tkvariables['btab5'].set(self.builder.tkvariables['btabcb'].get())
 
     def on_clear5(self) :
         self.builder.tkvariables['sename5'].set('')
         self.builder.tkvariables['suid5'].set('')
         self.builder.tkvariables['spwd5'].set('')
-        self.builder.tkvariables['stab5'].set('')
+        self.builder.tkvariables['btab5'].set('')
 
     def on_generate5(self) :
         self.builder.tkvariables['spwd5'].set(self.generate_pw())
