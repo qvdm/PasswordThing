@@ -5,6 +5,8 @@
 # PT needs to be in serial mode (hold middle button while plugging into USB port,
 #   LED should be white)
 #
+# Building EXE:  C:\Python38\Scripts\pyinstaller.exe ptgui.py
+#
 # Future enhancements: ##  pygubu-develop/pygubu/ui2code.py ./menu.ui > ./menu.py &&
 #   get rid of pygubu
 #
@@ -14,13 +16,16 @@
 #       read enable not always properly called
 #       Pylint
 #
-#
+# Notes:
+# 
+
 
 import sys
 import glob
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
+from pygubu.builder import ttkstdwidgets
 import re
 import binascii
 import string
@@ -49,7 +54,7 @@ class Application(pygubu.TkApplication):
     ###
     # GUI Entry point
     def _create_ui(self):
-        self.g_valid = False
+        self.g_valid = False 
         self.g_port = None
         self.g_serial = None
         self.g_ser_rcv = ""

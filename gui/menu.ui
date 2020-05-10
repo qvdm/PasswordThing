@@ -377,7 +377,6 @@
                 <property name="justify">left</property>
                 <property name="textvariable">string:strlentry</property>
                 <property name="width">5</property>
-                <bind add="" handler="" sequence="" />
                 <layout>
                   <property name="column">2</property>
                   <property name="columnspan">1</property>
