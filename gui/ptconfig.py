@@ -1,16 +1,16 @@
 #############################################################################################
 #
-# PTGUI.PY - PasswordThing configurator
+# PTCONFIG.PY - PasswordThing configurator
 #
 # PT needs to be in serial mode (hold middle button while plugging into USB port,
 #   LED should be white)
 #
-# Building EXE:  C:\Python38\Scripts\pyinstaller.exe ptgui.py
+# Building EXE:  >C:\Python38\Scripts\pyinstaller.exe --onefile --windowed --icon=pt.ico ptconfig.py
 #
-# Future enhancements: ##  pygubu-develop/pygubu/ui2code.py ./menu.ui > ./menu.py &&
+# Future enhancements: ##  pygubu-develop/pygubu/ui2code.py ./ptconfig.ui > ./uo.py &&
 #   get rid of pygubu
 #
-# TODO:  Implement UID<TAB> - validation and input
+# TODO:  Set main window title to something other than TK
 #
 # Bugs: fix runtime errors,
 #       read enable not always properly called
@@ -54,13 +54,14 @@ class Application(pygubu.TkApplication):
     ###
     # GUI Entry point
     def _create_ui(self):
-        self.g_valid = False 
         self.g_port = None
         self.g_serial = None
         self.g_ser_rcv = ""
         self.g_ser_rcvstack = []
         self.g_ser_to = 0
         self.g_locked = False
+
+        self.g_valid = False 
 
         self.g_ser_parsestring = ""
 
@@ -101,7 +102,7 @@ class Application(pygubu.TkApplication):
 
         self.builder = builder = pygubu.Builder()
 
-        builder.add_from_file('menu.ui')
+        builder.add_from_file('ptconfig.ui')
 
         self.mainwindow = builder.get_object('mainwindow', self.master)
         self.mainmenu = menu = builder.get_object('mainmenu', self.master)
@@ -957,5 +958,6 @@ if __name__ == '__main__':
 
     # Create and start the GUI environment
     root = tk.Tk()
+    root.iconbitmap(default='pt.ico')
     app = Application(root)
     app.run()
