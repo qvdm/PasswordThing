@@ -21,8 +21,7 @@
  * loop - Arduino loop
  * 
  * TBD
- *      Create desktop configuration sw with upload facility
- *      Sort out EE vers
+ *      Firmware upload for pwtgui
  * 
  * BUGS:
  * 
@@ -50,9 +49,9 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]=VERSION_SHORT;
+char Version[]=VERSION_SHORT; // PWT s/w version
 byte eedVer = 4; // eeprom dump format version
-byte eevVer = 2; // eeprom vars schema version
+byte eevVer = 2; // eeprom vars schema version, stored in EE semaphore area
 
 // Forward declare systick function
 void sysTick();
