@@ -20,19 +20,19 @@
 # 
 
 
-import sys
-import glob
-import tkinter as tk
-from tkinter import messagebox
-from tkinter import filedialog
-from pygubu.builder import ttkstdwidgets
-import re
 import binascii
-import string
+import glob
+import re
 import secrets
-import tk_tools
+import string
+import sys
+import tkinter as tk
+from tkinter import filedialog
+from tkinter import messagebox
+
 import pygubu
 import serial
+import tk_tools
 
 # Versions:
 #
@@ -46,10 +46,10 @@ __VERSION__ = '0.3'
 __EEDVER__ = 4
 __EEVVER__ = 2
 
+
 ###
 # GUI App Class
 class Application(pygubu.TkApplication):
-
 
     ###
     # GUI Entry point
@@ -61,18 +61,18 @@ class Application(pygubu.TkApplication):
         self.g_ser_to = 0
         self.g_locked = False
 
-        self.g_valid = False 
+        self.g_valid = False
 
         self.g_ser_parsestring = ""
 
         self.g_lctable = [0,
-            1111, 1112, 1113, 1121, 1122, 1123, 1131, 1132, 1133, 1211, 1212, 1213, 1221,
-            1222, 1223, 1231, 1232, 1233, 1311, 1312, 1313, 1321, 1322, 1323, 1331, 1332,
-            1333, 2111, 2112, 2113, 2121, 2122, 2123, 2131, 2132, 2133, 2211, 2212, 2213,
-            2221, 2222, 2223, 2231, 2232, 2233, 2311, 2312, 2313, 2321, 2322, 2323, 2331,
-            2332, 2333, 3111, 3112, 3113, 3121, 3122, 3123, 3131, 3132, 3133, 3211, 3212,
-            3213, 3221, 3222, 3223, 3231, 3232, 3233, 3311, 3312, 3313, 3321, 3322, 3323,
-            3331, 3332, 3333 ]
+                          1111, 1112, 1113, 1121, 1122, 1123, 1131, 1132, 1133, 1211, 1212, 1213, 1221,
+                          1222, 1223, 1231, 1232, 1233, 1311, 1312, 1313, 1321, 1322, 1323, 1331, 1332,
+                          1333, 2111, 2112, 2113, 2121, 2122, 2123, 2131, 2132, 2133, 2211, 2212, 2213,
+                          2221, 2222, 2223, 2231, 2232, 2233, 2311, 2312, 2313, 2321, 2322, 2323, 2331,
+                          2332, 2333, 3111, 3112, 3113, 3121, 3122, 3123, 3131, 3132, 3133, 3211, 3212,
+                          3213, 3221, 3222, 3223, 3231, 3232, 3233, 3311, 3312, 3313, 3321, 3322, 3323,
+                          3331, 3332, 3333]
 
         self.g_eedver = 0
         self.g_eevver = 0
@@ -121,7 +121,6 @@ class Application(pygubu.TkApplication):
         self.gencombo.current(2)
         self.builder.tkvariables['selen'].set('20')
 
-
         self.master.protocol("WM_DELETE_WINDOW", self.on_close_window)
 
         self.termbox = builder.get_object('tterm', self.master)
@@ -151,7 +150,6 @@ class Application(pygubu.TkApplication):
         self.g_bseq = 0
         self.g_lseq = 0
         self.g_kfail = 0
-
 
     def enable_button(self, button):
         buttonobj = self.builder.get_object(button, self.master)
@@ -191,11 +189,9 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['strbconn'].set('Disconnect')
         self.led.to_yellow(on=True)
 
-
     def set_ser_active(self):
         self.disable_button('brescan')
         self.led.to_green(on=True)
-
 
     def set_ser_disconnected(self):
         self.enable_button('brescan')
@@ -207,12 +203,11 @@ class Application(pygubu.TkApplication):
         self.led.to_red(on=True)
         self.clear_device_data()
 
-
     def on_rescan_ports(self):
-        if self.g_serial == False:
-            u_portlist = scan_serial_ports()
-            u_portlist.insert(0,'')
-            self.portcombo['values'] = u_portlist
+        if not self.g_serial:
+            self.u_portlist = scan_serial_ports()
+            self.u_portlist.insert(0, '')
+            self.portcombo['values'] = self.u_portlist
             self.portcombo.current(0)
 
     def setversion(self, s):
@@ -221,9 +216,10 @@ class Application(pygubu.TkApplication):
     def open_serial(self):
         if self.g_serial:
             self.close_serial()
-        if self.g_port != None:
+        if self.g_port is not None:
             self.g_serial = serial.Serial(port=self.g_port, baudrate=115200,
-                                          parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,
+                                          parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE,
+                                          bytesize=serial.EIGHTBITS,
                                           timeout=0, writeTimeout=0)
             if self.g_serial:
                 self.g_serial.rts = True
@@ -247,19 +243,19 @@ class Application(pygubu.TkApplication):
                 self.g_ser_to = 0
                 c = self.g_serial.read(1).decode('utf8')
                 self.g_ser_rcv += c
-                #self.dbug("C/RCV:" + c + ":" + self.g_ser_rcv)
+                # self.dbug("C/RCV:" + c + ":" + self.g_ser_rcv)
                 if "\n" in self.g_ser_rcv:
                     self.g_ser_rcv = self.cleanup_str(self.g_ser_rcv)
                     if len(self.g_ser_rcv) > 0:
-                      self.g_ser_rcvstack.append(self.g_ser_rcv)
-                      self.set_ser_active()
-                      if self.g_ser_rcv.startswith('#') and not self.g_locked:
-                          self.set_locked()
-                      elif self.g_ser_rcv.startswith('>') and self.g_locked:
-                          self.set_unlocked()
-                      #self.dbug("!CR:" + self.g_ser_rcv + "L:" + str(len(self.g_ser_rcvstack)))
-                    #else:
-                      #self.dbug("!CBL")
+                        self.g_ser_rcvstack.append(self.g_ser_rcv)
+                        self.set_ser_active()
+                        if self.g_ser_rcv.startswith('#') and not self.g_locked:
+                            self.set_locked()
+                        elif self.g_ser_rcv.startswith('>') and self.g_locked:
+                            self.set_unlocked()
+                        # self.dbug("!CR:" + self.g_ser_rcv + "L:" + str(len(self.g_ser_rcvstack)))
+                    # else:
+                    # self.dbug("!CBL")
                     self.termbox.insert(tk.END, self.g_ser_rcv + "\n")
                     self.termbox.see(tk.END)
                     self.g_ser_rcv = ""
@@ -269,9 +265,9 @@ class Application(pygubu.TkApplication):
                 if len(self.g_ser_rcv) > 0:
                     self.g_ser_rcvstack.append(self.g_ser_rcv)
                     self.set_ser_active()
-                    #self.dbug("!TO:" + self.g_ser_rcv + "L:" + str(len(self.g_ser_rcvstack)))
-                #else:
-                    #self.dbug("!TBL")
+                    # self.dbug("!TO:" + self.g_ser_rcv + "L:" + str(len(self.g_ser_rcvstack)))
+                # else:
+                # self.dbug("!TBL")
                 self.termbox.insert(tk.END, self.g_ser_rcv)
                 self.termbox.see(tk.END)
                 self.g_ser_rcv = ""
@@ -300,18 +296,18 @@ class Application(pygubu.TkApplication):
                 return True
         return False
 
-    def send_serial(self, str):
+    def send_serial(self, sstr):
         if self.g_serial:
-            s = str + "\r"
+            s = sstr + "\r"
             self.g_serial.write(s.encode("utf-8"))
 
-    def on_connect(self): # Could be disconnect or connect, depending on previous serial port state
+    def on_connect(self):  # Could be disconnect or connect, depending on previous serial port state
         if self.g_serial:
             self.close_serial()
         else:
             self.open_serial()
             if self.g_serial:
-                self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n"%self.g_port,"info")
+                self.termbox.insert(tk.INSERT, "===========Port %s opened>>>\n" % self.g_port, "info")
                 self.g_ser_parsestring = ""
                 self.send_serial('')
                 self.master.after(500, self.ask_version)
@@ -331,7 +327,6 @@ class Application(pygubu.TkApplication):
         self.disable_button('bzero')
         self.enable_button('bread')
 
-
     def ask_version(self):
         self.send_serial('V')
         self.master.after(500, self.get_version)
@@ -344,7 +339,8 @@ class Application(pygubu.TkApplication):
                 self.builder.tkvariables['strlver'].set(ev)
                 self.g_eevver = int(ev)
                 if self.g_eevver < __EEVVER__:
-                    messagebox.showwarning('Warning', 'Device EEprom schema is too old.  You will not be able to write to the device unless you upgrade its firmware first.')
+                    messagebox.showwarning('Warning',
+                                           'Device EEprom schema is too old.  You will not be able to write to the device unless you upgrade its firmware first.')
                     self.g_badver = True
 
                 if t == 'L':
@@ -353,13 +349,11 @@ class Application(pygubu.TkApplication):
                     self.set_unlocked()
 
                 self.enable_button('breset')
-                if self.g_eevver > 1: # Release available
+                if self.g_eevver > 1:  # Release available
                     self.master.after(500, self.ask_release)
                 else:
                     self.builder.tkvariables['sfwver'].set('N/A')
-
-
-            else:
+           else:
                 self.master.after(200, self.get_version)
 
     def ask_release(self):
@@ -374,8 +368,8 @@ class Application(pygubu.TkApplication):
             else:
                 self.master.after(200, self.get_release)
 
-
-    def lc_valid(self, code, search=re.compile(r'^[1-3]{4}').search):
+    @staticmethod
+    def lc_valid(code, search=re.compile(r'^[1-3]{4}').search):
         return bool(search(code))
 
     def on_unlock(self):
@@ -387,7 +381,6 @@ class Application(pygubu.TkApplication):
 
             self.send_serial(entry)
             self.master.after(400, self.ask_version)
-
 
     def on_read(self):
         self.disable_button('bvalidate')
@@ -407,17 +400,13 @@ class Application(pygubu.TkApplication):
                 self.master.after(200, self.get_dump_v)
 
     def get_dump_b(self):
-        b = self.get_serial_line() # s has the entire dump
+        b = self.get_serial_line()  # s has the entire dump
         self.get_serial_line()
         self.g_rdb_body = b
         self.parse_dump()
 
     def parse_dump(self):
         pw_sl = []
-        var_s = ''
-        crc_s = ''
-        sem_s = ''
-        sig_s = ''
 
         self.eebox.delete("1.0", tk.END)
         self.eebox.insert(tk.END, self.g_rdb_ver + '\n')
@@ -434,17 +423,17 @@ class Application(pygubu.TkApplication):
         s = self.g_rdb_body
         if len(s) > 6:
             for i in range(8):
-                splitat = 140 # pwd field is 70 bytes
+                splitat = 140  # pwd field is 70 bytes
                 l, r = s[:splitat], s[splitat:]
                 s = r
                 pw_sl.append(l)
-            splitat = 32 # variable field is 16 bytes
+            splitat = 32  # variable field is 16 bytes
             var_s, r = s[:splitat], s[splitat:]
             s = r
-            splitat = 8 # crc field is 4 bytes
+            splitat = 8  # crc field is 4 bytes
             crc_s, r = s[:splitat], s[splitat:]
             s = r
-            splitat = 16 # semaphore field is 8 bytes, signature is final 4 bytes
+            splitat = 16  # semaphore field is 8 bytes, signature is final 4 bytes
             sem_s, sig_s = s[:splitat], s[splitat:]
 
             self.g_semas = sem_s
@@ -452,7 +441,7 @@ class Application(pygubu.TkApplication):
 
             self.builder.tkvariables['sdcrc'].set(crc_s)
             self.builder.tkvariables['ssema'].set(sem_s)
-            ss = "".join(reversed([sig_s[i:i+2] for i in range(0, len(sig_s), 2)]))
+            ss = "".join(reversed([sig_s[i:i + 2] for i in range(0, len(sig_s), 2)]))
             self.builder.tkvariables['ssig'].set(ss.upper())
 
             self.populate_pw(pw_sl)
@@ -460,11 +449,10 @@ class Application(pygubu.TkApplication):
 
             self.enable_button('bvalidate')
 
-
     def populate_pw(self, pwlist):
         for i in range(6):
             s = pwlist[i]
-            splitat = 2 # userid len and pw len are  2 bytes each
+            splitat = 2  # userid len and pw len are  2 bytes each
             l, r = s[:splitat], s[splitat:]
             s = r
 
@@ -473,14 +461,14 @@ class Application(pygubu.TkApplication):
             s = r
 
             pwdlen = int(l, 16)
-            splitat = 16 # name is 8 bytes
+            splitat = 16  # name is 8 bytes
             l, r = s[:splitat], s[splitat:]
             s = r
             l = l.split('00')[0]
 
             slotname = binascii.unhexlify(l).decode('utf-8').rstrip()
 
-            splitat = 60 # userid and pw are 30 bytes each
+            splitat = 60  # userid and pw are 30 bytes each
             l, r = s[:splitat], s[splitat:]
             if uidlen:
                 uid = binascii.unhexlify(l).decode('utf-8')[:uidlen]
@@ -492,63 +480,62 @@ class Application(pygubu.TkApplication):
                 pwd = ''
 
             if uid.endswith('\t'):
-                setter = "self.builder.tkvariables[\'btab"+str(i)+"\'].set(True)"
+                setter = "self.builder.tkvariables[\'btab" + str(i) + "\'].set(True)"
                 uid = uid[:-1]
             else:
-                setter = "self.builder.tkvariables[\'btab"+str(i)+"\'].set(False)"
+                setter = "self.builder.tkvariables[\'btab" + str(i) + "\'].set(False)"
             eval(setter)
 
-            setter = "self.builder.tkvariables[\'sename"+str(i)+"\'].set(slotname)" # throws exception for 0
+            setter = "self.builder.tkvariables[\'sename" + str(i) + "\'].set(slotname)"  # throws exception for 0
             eval(setter)
-            setter = "self.builder.tkvariables[\'suid"+str(i)+"\'].set(uid)"
+            setter = "self.builder.tkvariables[\'suid" + str(i) + "\'].set(uid)"
             eval(setter)
-            setter = "self.builder.tkvariables[\'spwd"+str(i)+"\'].set(pwd)"
+            setter = "self.builder.tkvariables[\'spwd" + str(i) + "\'].set(pwd)"
             eval(setter)
 
-
-    def populate_var(self, vars):
-        r = vars
+    def populate_var(self, pvars):
+        r = pvars
         l, r = r[:2], r[2:]
-        url = not bool(int(l, 16)) # display logo flag
+        url = not bool(int(l, 16))  # display logo flag
         self.builder.tkvariables['bcblogo'].set(url)
 
         l, r = r[:2], r[2:]
-        dflip = bool(int(l, 16)) # flip display flag
+        dflip = bool(int(l, 16))  # flip display flag
         self.builder.tkvariables['bcbflip'].set(dflip)
 
         l, r = r[:2], r[2:]
-        ssec = int(l, 16) # security code index
+        ssec = int(l, 16)  # security code index
         if ssec:
-            self.builder.tkvariables['strlentry'].set(self.g_lctable[ssec+1])
+            self.builder.tkvariables['strlentry'].set(self.g_lctable[ssec + 1])
         else:
             self.builder.tkvariables['strlentry'].set('')
 
         l, r = r[:2], r[2:]
-        dto = int(l, 16) # display timeout
+        dto = int(l, 16)  # display timeout
         self.builder.tkvariables['sedto'].set(dto)
 
         l, r = r[:2], r[2:]
-        lto = int(l, 16) # led timeout
+        lto = int(l, 16)  # led timeout
         self.builder.tkvariables['seito'].set(lto)
 
         l, r = r[:2], r[2:]
-        bseq = int(l, 16) # button sequence index
+        bseq = int(l, 16)  # button sequence index
         self.set_combo_current('cbseq', bseq)
 
         l, r = r[:2], r[2:]
-        lseq = int(l, 16) # led sequence index
+        lseq = int(l, 16)  # led sequence index
         self.set_combo_current('clseq', lseq)
 
         l, r = r[:2], r[2:]
-        rpw = bool(int(l, 16)) # pw revert flag
+        rpw = bool(int(l, 16))  # pw revert flag
         self.builder.tkvariables['bcbrevert'].set(rpw)
 
         l, r = r[:2], r[2:]
-        lfail = int(l, 16) # security code fail action index
+        lfail = int(l, 16)  # security code fail action index
         self.set_combo_current('ckfail', lfail)
 
         l, r = r[:2], r[2:]
-        slto = int(l, 16) # security lock timeout
+        slto = int(l, 16)  # security lock timeout
         self.builder.tkvariables['selto'].set(slto)
 
     def set_invalid(self, error):
@@ -556,53 +543,51 @@ class Application(pygubu.TkApplication):
         self.red_button('bvalidate')
         self.disable_button('bwrite')
 
-
-
     def on_validate(self):
 
         # Compile regexes for validation
-        snm = re.compile(r"^(?:\w|\-|\ ){0,8}$")            # Slot name
-        uim = re.compile(r"^(?:\w|\-|\ |\@|\+|\.){0,29}$")  # Userid
-        pwm = re.compile(r"^(?:[\ -\~]){0,30}$")            # Password
-        dig = re.compile(r"^(?:\d){0,4}$")                  # digits
+        snm = re.compile(r"^(?:\w|-| ){0,8}$")  # Slot name
+        uim = re.compile(r"^(?:\w|-| |@|\+|\.){0,29}$")  # Userid
+        pwm = re.compile(r"^(?:[ -~]){0,30}$")  # Password
+        dig = re.compile(r"^(?:\d){0,4}$")  # digits
         sem = re.compile(r"^(?:[A-F]|\d){16}$")
 
         self.g_valid = False
         self.clear_device_data()
 
         ucode = self.builder.tkvariables['strlentry'].get()
-        if (len(ucode) > 0) and  ((len(ucode) < 4) or (not int(ucode) in self.g_lctable) or (int(ucode) == 0)):
+        if (len(ucode) > 0) and ((len(ucode) < 4) or (not int(ucode) in self.g_lctable) or (int(ucode) == 0)):
             self.set_invalid('Unlock code must be exactly 4 digits in [1..3] ')
             return
         if ucode == '':
             self.g_ucode = 0
         else:
             ucodei = int(ucode)
-            self.g_ucode = self.g_lctable.index(ucodei)-1 #!!! check zero case
+            self.g_ucode = self.g_lctable.index(ucodei) - 1  # !!! check zero case
 
         for i in range(6):
-            getter = "self.builder.tkvariables[\'sename"+str(i)+"\'].get()"
+            getter = "self.builder.tkvariables[\'sename" + str(i) + "\'].get()"
             slotname = eval(getter).rstrip()
-            if re.match(snm, slotname) == None:
+            if re.match(snm, slotname) is None:
                 self.set_invalid('Username must be 0 to 8 alphanumeric characters: slot ' + str(i))
                 return
             self.g_slotname.append(slotname)
 
-            getter = "self.builder.tkvariables[\'btab"+str(i)+"\'].get()"
+            getter = "self.builder.tkvariables[\'btab" + str(i) + "\'].get()"
             tab = eval(getter)
 
-            getter = "self.builder.tkvariables[\'suid"+str(i)+"\'].get()"
+            getter = "self.builder.tkvariables[\'suid" + str(i) + "\'].get()"
             uid = eval(getter).rstrip()
-            if re.match(uim, uid) == None:
+            if re.match(uim, uid) is None:
                 self.set_invalid('Userid must be 0 to 29 letters, numbers, @, -, + or .: slot ' + str(i))
                 return
             if tab:
                 uid += '\t'
             self.g_uid.append(uid)
 
-            getter = "self.builder.tkvariables[\'spwd"+str(i)+"\'].get()"
+            getter = "self.builder.tkvariables[\'spwd" + str(i) + "\'].get()"
             pwd = eval(getter).rstrip()
-            if re.match(pwm, pwd) == None:
+            if re.match(pwm, pwd) is None:
                 self.set_invalid('Password must be 0 to 30 printable ASCII characters: slot ' + str(i))
                 return
             self.g_pwd.append(pwd)
@@ -614,19 +599,19 @@ class Application(pygubu.TkApplication):
             self.g_pwd.append('')
 
         dto = self.builder.tkvariables['sedto'].get()
-        if ((re.match(dig, dto) == None) or (int(dto) > 255) ):
+        if (re.match(dig, dto) is None) or (int(dto) > 255):
             self.set_invalid('Display timeout must be 0 or less than 256 ')
             return
         self.g_dto = int(dto)
 
         ito = self.builder.tkvariables['seito'].get()
-        if ((re.match(dig, ito) == None) or (int(ito) > 255) ):
+        if (re.match(dig, ito) is None) or (int(ito) > 255):
             self.set_invalid('LED timeout must be 0 or less than 256 ')
             return
         self.g_ito = int(ito)
 
         lto = self.builder.tkvariables['selto'].get()
-        if ((re.match(dig, lto) == None) or (int(lto) > 255) ):
+        if (re.match(dig, lto) is None) or (int(lto) > 255):
             self.set_invalid('Lock timeout must be 0 or less than 256 ')
             return
         self.g_lto = int(lto)
@@ -646,12 +631,12 @@ class Application(pygubu.TkApplication):
 
         self.g_eedata = bytearray()
 
-        for i in range(8): # include phantom entries
+        for i in range(8):  # include phantom entries
             self.g_eedata += bytearray(len(self.g_uid[i]).to_bytes(1, byteorder='little'))
             self.g_eedata += bytearray(len(self.g_pwd[i]).to_bytes(1, byteorder='little'))
-            self.g_eedata += self.g_slotname[i].ljust(8,'\0').encode('utf-8')
-            self.g_eedata += self.g_uid[i].ljust(30,'\0').encode('utf-8')
-            self.g_eedata += self.g_pwd[i].ljust(30,'\0').encode('utf-8')
+            self.g_eedata += self.g_slotname[i].ljust(8, '\0').encode('utf-8')
+            self.g_eedata += self.g_uid[i].ljust(30, '\0').encode('utf-8')
+            self.g_eedata += self.g_pwd[i].ljust(30, '\0').encode('utf-8')
 
         self.g_eedata += bytearray(self.g_logo.to_bytes(1, byteorder='little'))
         self.g_eedata += bytearray(self.g_flip.to_bytes(1, byteorder='little'))
@@ -674,7 +659,7 @@ class Application(pygubu.TkApplication):
         self.g_eedata += crcb
 
         semas = self.builder.tkvariables['ssema'].get()
-        if re.match(sem, semas) == None:
+        if re.match(sem, semas) is None:
             self.set_invalid('Semaphore list must be 8 2-digit uppercase hex bytes')
         self.g_semas = semas
 
@@ -684,7 +669,6 @@ class Application(pygubu.TkApplication):
             self.g_wrbuf = "V%02X\n" % int(self.g_eedver)
             self.g_wrbuf += binascii.hexlify(self.g_eedata).decode("utf-8").upper() + self.g_semas + self.g_sig
             self.eebox.insert(tk.END, self.g_wrbuf)
-
 
         self.green_button('bvalidate')
         self.g_valid = True
@@ -702,10 +686,10 @@ class Application(pygubu.TkApplication):
         self.master.after(400, self.do_restore)
 
     def do_restore(self):
-         self.send_serial(self.g_wrbuf)
-         self.master.after(400, self.clear_serial)
-         self.master.after(600, self.on_read)
-         self.master.after(800, self.on_reset)
+        self.send_serial(self.g_wrbuf)
+        self.master.after(400, self.clear_serial)
+        self.master.after(600, self.on_read)
+        self.master.after(800, self.on_reset)
 
     def on_reset(self):
         self.send_serial("MR")
@@ -715,19 +699,19 @@ class Application(pygubu.TkApplication):
         self.send_serial("Z")
         self.master.after(200, self.close_serial)
 
-
     def on_clear(self):
         # TBD handle clear button
         return
 
-    def on_close_window(self, event = None):
+    def on_close_window(self, event=None):
         self.close_serial()
 
         # Call destroy on toplevel to finish program
         self.mainwindow.master.destroy()
 
-    def cleanup_str(self, s):
-        p = re.compile(r'\r|\n')
+    @staticmethod
+    def cleanup_str(s):
+        p = re.compile(r'[\r\n]')
         s = p.sub("", s)
         p = re.compile(r'^\s+')
         s = p.sub("", s)
@@ -735,39 +719,41 @@ class Application(pygubu.TkApplication):
         s = p.sub("", s)
         return s
 
-    def dbug(self, s):
+    @staticmethod
+    def dbug(s):
         s = s.replace("\n", "[LF]")
         s = s.replace("\r", "[CR]")
         s = s.replace(" ", "[SPC]")
-        print("$"+s+"\n")
+        print("$" + s + "\n")
 
     def generate_pw(self):
         mode = self.builder.tkvariables['sgmode'].get()
-        len = int(self.builder.tkvariables['selen'].get())
+        pwlen = int(self.builder.tkvariables['selen'].get())
 
-        if (len < 6) or (len > 28):
+        if (pwlen < 6) or (pwlen > 28):
             messagebox.showwarning('Warning', 'Selected password length out of range - adjusting')
-            if (len < 6):
-                len = 6
+            if pwlen < 6:
+                pwlen = 6
                 self.builder.tkvariables['selen'].set(str(6))
-            elif (len > 28):
-                len = 28
+            elif pwlen > 28:
+                pwlen = 28
                 self.builder.tkvariables['selen'].set(str(28))
 
         if mode == 'Numeric':
-            return ''.join(secrets.choice(string.digits) for i in range(len))
+            return ''.join(secrets.choice(string.digits) for i in range(pwlen))
         elif mode == 'Alpha':
-            return ''.join(secrets.choice(string.ascii_letters) for i in range(len))
+            return ''.join(secrets.choice(string.ascii_letters) for i in range(pwlen))
         elif mode == 'Alphanumeric':
-            return ''.join(secrets.choice(string.ascii_letters+string.digits) for i in range(len))
+            return ''.join(secrets.choice(string.ascii_letters + string.digits) for i in range(pwlen))
         elif mode == 'Symbols':
-            return ''.join(secrets.choice(string.ascii_letters+string.digits+string.punctuation) for i in range(len))
+            return ''.join(
+                secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(pwlen))
         return ''
-
 
     def on_mfile_item_clicked(self, itemid):
         if itemid == 'mfile_open':
-            filename =  filedialog.askopenfilename(initialdir="%USERPROFILE%/Documents",title="Select file",filetype=(("text files","*.txt"),("all files","*.*")))
+            filename = filedialog.askopenfilename(initialdir="%USERPROFILE%/Documents", title="Select file",
+                                                  filetype=(("text files", "*.txt"), ("all files", "*.*")))
             if filename:
                 f = open(filename, "r")
                 self.g_rdb_ver = f.readline().rstrip()
@@ -780,21 +766,22 @@ class Application(pygubu.TkApplication):
         elif itemid == 'mfile_save':
             self.on_validate()
             if self.g_valid:
-                filename =  filedialog.asksaveasfilename(initialdir = "%USERPROFILE%/Documents", title="Select file",filetypes=(("text files","*.txt"),("all files","*.*")))
+                filename = filedialog.asksaveasfilename(initialdir="%USERPROFILE%/Documents", title="Select file",
+                                                        filetypes=(("text files", "*.txt"), ("all files", "*.*")))
                 if filename:
                     if not '.' in filename:
                         filename += '.txt'
                     f = open(filename, "w")
-                    l = []
-                    l.append("V%02X" % int(self.g_eedver) + '\n')
-                    l.append(binascii.hexlify(self.g_eedata).decode("utf-8").upper() + self.g_semas + self.g_sig + '\n')
+                    l = ["V%02X" % int(self.g_eedver) + '\n',
+                         binascii.hexlify(self.g_eedata).decode("utf-8").upper() + self.g_semas + self.g_sig + '\n']
                     f.writelines(l)
                     f.close()
 
         elif itemid == 'mfile_quit':
             self.on_close_window()
 
-    def on_about_clicked(self):
+    @staticmethod
+    def on_about_clicked():
         messagebox.showinfo('About', 'PWT Configurator.  See https://ayb.ca/pwt')
 
     # Copy/paste/clear/generate handlers
@@ -925,6 +912,7 @@ class Application(pygubu.TkApplication):
     def on_generate5(self):
         self.builder.tkvariables['spwd5'].set(self.generate_pw())
 
+
 ###
 # Scan for serial ports with devices connected
 def scan_serial_ports():
@@ -948,10 +936,10 @@ def scan_serial_ports():
             pass
     return result
 
+
 ###
 # Main
 if __name__ == '__main__':
-
     # Get a list of serial ports
     u_portlist = scan_serial_ports()
     u_portlist.insert(0, '')

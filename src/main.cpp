@@ -21,8 +21,8 @@
  * loop - Arduino loop
  * 
  * TBD
- *      Create desktop configuration sw with upload facility
- *      Sort out EE vers
+ *      Add UUSB diagram in hardware.h
+ *		Add build and test instrcutions to docs
  * 
  * BUGS:
  * 
