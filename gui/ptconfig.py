@@ -353,7 +353,7 @@ class Application(pygubu.TkApplication):
                     self.master.after(500, self.ask_release)
                 else:
                     self.builder.tkvariables['sfwver'].set('N/A')
-           else:
+            else:
                 self.master.after(200, self.get_version)
 
     def ask_release(self):

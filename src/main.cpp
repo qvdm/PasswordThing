@@ -21,8 +21,12 @@
  * loop - Arduino loop
  * 
  * TBD
+<<<<<<< HEAD
  *      Add UUSB diagram in hardware.h
  *		Add build and test instrcutions to docs
+=======
+ *      Firmware upload for pwtgui
+>>>>>>> 0a952e91e60a0f3e14bf94149c5b49cc1bfb509c
  * 
  * BUGS:
  * 
@@ -50,9 +54,9 @@
 #include "menu.h"
 #include "serialui.h"
 
-char Version[]=VERSION_SHORT;
+char Version[]=VERSION_SHORT; // PWT s/w version
 byte eedVer = 4; // eeprom dump format version
-byte eevVer = 2; // eeprom vars schema version
+byte eevVer = 2; // eeprom vars schema version, stored in EE semaphore area
 
 // Forward declare systick function
 void sysTick();
