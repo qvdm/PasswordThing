@@ -477,6 +477,12 @@
           <property name="propagate">True</property>
           <property name="row">2</property>
           <property name="sticky">w</property>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">10</property>
+            </column>
+          </columns>
           <rows>
             <row id="5">
               <property name="pad">0</property>
@@ -485,12 +491,6 @@
               <property name="pad">20</property>
             </row>
           </rows>
-          <columns>
-            <column id="0">
-              <property name="minsize">0</property>
-              <property name="pad">10</property>
-            </column>
-          </columns>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs0">
@@ -1670,7 +1670,7 @@
               <property name="pad">0</property>
             </column>
             <column id="1">
-              <property name="pad">50</property>
+              <property name="pad">0</property>
             </column>
           </columns>
         </layout>
@@ -2101,6 +2101,34 @@
                 </layout>
               </object>
             </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="fmessage">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">Message</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="columnspan">1</property>
+          <property name="propagate">True</property>
+          <property name="row">6</property>
+          <property name="sticky">w</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="lmessage">
+            <property name="text" translatable="yes">Startup</property>
+            <property name="textvariable">string:strmessage</property>
+            <property name="underline">0</property>
+            <property name="width">162</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
           </object>
         </child>
       </object>

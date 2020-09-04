@@ -15,6 +15,9 @@
 # Bugs: fix runtime errors,
 #       read enable not always properly called
 #       Pylint
+#       Change messages to scrolling box, add more
+#       Document operation
+#       Comment functions
 #
 # Notes:
 # 
@@ -132,6 +135,8 @@ class Application(pygubu.TkApplication):
         led.to_red(on=True)
 
         self.pwframe = builder.get_object('fslots', self.master)
+        
+        self.builder.tkvariables['strmessage'].set("Initialized")
 
         builder.connect_callbacks(self)
         self.master.after(100, self.process_serial)
@@ -175,6 +180,10 @@ class Application(pygubu.TkApplication):
         comboobj = self.builder.get_object(cbname, self.master)
         comboobj.current(indx)
 
+    def disp_message(self, message):
+        self.builder.tkvariables['strmessage'].set(message)
+
+
     def on_port_selected(self, event):
         if self.g_serial:
             self.close_serial()
@@ -188,10 +197,13 @@ class Application(pygubu.TkApplication):
         self.disable_button('brescan')
         self.builder.tkvariables['strbconn'].set('Disconnect')
         self.led.to_yellow(on=True)
+        self.disp_message("Serial connected, not active")
+
 
     def set_ser_active(self):
         self.disable_button('brescan')
         self.led.to_green(on=True)
+        self.disp_message("Serial Active")
 
     def set_ser_disconnected(self):
         self.enable_button('brescan')
@@ -202,6 +214,7 @@ class Application(pygubu.TkApplication):
         self.builder.tkvariables['strbconn'].set('Connect')
         self.led.to_red(on=True)
         self.clear_device_data()
+        self.disp_message("Serial Disconnected")
 
     def on_rescan_ports(self):
         if not self.g_serial:
@@ -209,6 +222,7 @@ class Application(pygubu.TkApplication):
             self.u_portlist.insert(0, '')
             self.portcombo['values'] = self.u_portlist
             self.portcombo.current(0)
+            
 
     def setversion(self, s):
         self.builder.tkvariables['strlver'].set(s)
@@ -319,6 +333,8 @@ class Application(pygubu.TkApplication):
         self.red_button('bunlock')
         self.enable_button('bunlock')
         self.enable_button('bzero')
+        self.disp_message("Device locked - enter lock code")
+
 
     def set_unlocked(self):
         self.g_locked = False
@@ -326,6 +342,7 @@ class Application(pygubu.TkApplication):
         self.disable_button('bunlock')
         self.disable_button('bzero')
         self.enable_button('bread')
+        self.disp_message("Device unlocked")
 
     def ask_version(self):
         self.send_serial('V')
@@ -542,6 +559,7 @@ class Application(pygubu.TkApplication):
         messagebox.showerror('Error', error)
         self.red_button('bvalidate')
         self.disable_button('bwrite')
+        self.disp_message("Invalid data");
 
     def on_validate(self):
 
@@ -672,6 +690,8 @@ class Application(pygubu.TkApplication):
 
         self.green_button('bvalidate')
         self.g_valid = True
+        self.disp_message("Data valid");
+
 
     def on_write(self):
         self.on_validate()
