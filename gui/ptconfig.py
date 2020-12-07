@@ -966,6 +966,6 @@ if __name__ == '__main__':
 
     # Create and start the GUI environment
     root = tk.Tk()
-    root.iconbitmap(default='pt.ico')
+    ## root.iconbitmap(default='pt.ico')
     app = Application(root)
     app.run()
