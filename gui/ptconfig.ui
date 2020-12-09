@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<interface>
+<interface version="1.0">
   <object class="tk.Menu" id="mainmenu">
     <property name="tearoff">0</property>
     <child>
@@ -49,49 +49,29 @@
   <object class="ttk.Frame" id="mainwindow">
     <property name="padding">5</property>
     <property name="width">600</property>
-    <layout>
+    <layout manager="grid">
       <property name="column">0</property>
       <property name="propagate">True</property>
       <property name="row">0</property>
       <property name="sticky">nesw</property>
-      <rows>
-        <row id="0">
-          <property name="pad">10</property>
-        </row>
-        <row id="1">
-          <property name="pad">10</property>
-        </row>
-        <row id="2">
-          <property name="pad">10</property>
-        </row>
-        <row id="3">
-          <property name="pad">10</property>
-        </row>
-      </rows>
+      <property type="row" id="0" name="pad">10</property>
+      <property type="row" id="1" name="pad">10</property>
+      <property type="row" id="2" name="pad">10</property>
+      <property type="row" id="3" name="pad">10</property>
     </layout>
     <child>
       <object class="ttk.Frame" id="ftop">
         <property name="height">50</property>
         <property name="width">600</property>
-        <layout>
+        <layout manager="grid">
           <property name="column">0</property>
           <property name="propagate">True</property>
           <property name="row">0</property>
           <property name="sticky">nw</property>
-          <columns>
-            <column id="0">
-              <property name="pad">20</property>
-            </column>
-            <column id="1">
-              <property name="pad">5</property>
-            </column>
-            <column id="2">
-              <property name="pad">10</property>
-            </column>
-            <column id="3">
-              <property name="pad">30</property>
-            </column>
-          </columns>
+          <property type="row" id="0" name="pad">10</property>
+          <property type="row" id="1" name="pad">10</property>
+          <property type="row" id="2" name="pad">10</property>
+          <property type="row" id="3" name="pad">10</property>
         </layout>
         <child>
           <object class="tk.Label" id="lmain">
@@ -100,11 +80,15 @@
             <property name="text" translatable="yes">PWT configurator version 0</property>
             <property name="textvariable">string:strlmain</property>
             <property name="width">0</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -112,11 +96,15 @@
           <object class="tk.Button" id="brescan">
             <property name="command">on_rescan_ports</property>
             <property name="text" translatable="yes">Rescan Ports</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">1</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -124,11 +112,15 @@
           <object class="tk.Label" id="lport">
             <property name="compound">top</property>
             <property name="text" translatable="yes">Port:</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">2</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -140,13 +132,17 @@
             <property name="textvariable">string:tvport</property>
             <property name="validate">all</property>
             <property name="width">16</property>
-            <bind add="" handler="on_port_selected" sequence="&lt;&lt;ComboboxSelected&gt;&gt;" />
-            <layout>
+            <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="on_port_selected" add="" />
+            <layout manager="grid">
               <property name="column">3</property>
               <property name="columnspan">2</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -156,11 +152,15 @@
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Connect</property>
             <property name="textvariable">string:strbconn</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">5</property>
               <property name="padx">10</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -169,12 +169,16 @@
             <property name="height">20</property>
             <property name="takefocus">true</property>
             <property name="width">20</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">6</property>
               <property name="padx">5</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -183,11 +187,15 @@
             <property name="command">on_read</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Read</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">7</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -196,11 +204,15 @@
             <property name="command">on_validate</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Validate</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">8</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -209,12 +221,16 @@
             <property name="command">on_write</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Write</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">9</property>
               <property name="padx">5</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -223,12 +239,16 @@
             <property name="command">on_reset</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Reset </property>
-            <layout>
+            <layout manager="grid">
               <property name="column">10</property>
               <property name="padx">20</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -237,11 +257,15 @@
             <property name="command">on_zero</property>
             <property name="state">disabled</property>
             <property name="text" translatable="yes">Zero</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">11</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
           </object>
         </child>
@@ -249,27 +273,27 @@
           <object class="ttk.Labelframe" id="fdevice">
             <property name="height">50</property>
             <property name="text" translatable="yes">PWT Versions</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="ipadx">5</property>
               <property name="ipady">5</property>
               <property name="propagate">True</property>
               <property name="row">1</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
             <child>
               <object class="ttk.Label" id="lfw">
                 <property name="text" translatable="yes">Firmware:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -278,23 +302,25 @@
                 <property name="text" translatable="yes">NC</property>
                 <property name="textvariable">string:sfwver</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Separator" id="sep1">
                 <property name="orient">vertical</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="padx">10</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -302,11 +328,12 @@
               <object class="tk.Label" id="lvar">
                 <property name="text" translatable="yes">EEV Schema:</property>
                 <property name="textvariable">string:svarver</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -314,34 +341,37 @@
               <object class="tk.Label" id="lvarver">
                 <property name="text" translatable="yes">NC</property>
                 <property name="textvariable">string:strlver</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Separator" id="sep2">
                 <property name="orient">vertical</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="padx">10</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lee">
                 <property name="text" translatable="yes">EED Ver:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -349,11 +379,12 @@
               <object class="ttk.Label" id="leever">
                 <property name="text" translatable="yes">NC</property>
                 <property name="textvariable">string:seedver</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -363,13 +394,17 @@
           <object class="ttk.Labelframe" id="funlock">
             <property name="height">50</property>
             <property name="text" translatable="yes">Unlock Code</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">1</property>
               <property name="ipadx">5</property>
               <property name="ipady">5</property>
               <property name="propagate">True</property>
               <property name="row">1</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
             <child>
               <object class="tk.Entry" id="ulentry">
@@ -377,7 +412,7 @@
                 <property name="justify">left</property>
                 <property name="textvariable">string:strlentry</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="columnspan">1</property>
                   <property name="propagate">True</property>
@@ -391,7 +426,7 @@
                 <property name="command">on_unlock</property>
                 <property name="state">disabled</property>
                 <property name="text" translatable="yes">Unlock</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">1</property>
@@ -406,7 +441,7 @@
             <property name="height">50</property>
             <property name="text" translatable="yes">Password Generator</property>
             <property name="width">200</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">3</property>
               <property name="columnspan">4</property>
               <property name="ipadx">5</property>
@@ -414,19 +449,19 @@
               <property name="propagate">True</property>
               <property name="row">1</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="1">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="pad">20</property>
+              <property type="col" id="1" name="pad">5</property>
+              <property type="col" id="2" name="pad">10</property>
+              <property type="col" id="3" name="pad">30</property>
             </layout>
             <child>
               <object class="tk.Label" id="lmode">
                 <property name="text" translatable="yes">Mode:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -434,21 +469,23 @@
               <object class="ttk.Combobox" id="cmode">
                 <property name="textvariable">string:sgmode</property>
                 <property name="values">Alpha Numeric Alphanumeric Symbols</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="llen">
                 <property name="text" translatable="yes">Length:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -456,10 +493,11 @@
               <object class="tk.Entry" id="elen">
                 <property name="textvariable">string:selen</property>
                 <property name="width">3</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -472,70 +510,58 @@
         <property name="height">50</property>
         <property name="text" translatable="yes">Slots</property>
         <property name="width">600</property>
-        <layout>
+        <layout manager="grid">
           <property name="column">0</property>
           <property name="propagate">True</property>
           <property name="row">2</property>
           <property name="sticky">w</property>
-          <columns>
-            <column id="0">
-              <property name="minsize">0</property>
-              <property name="pad">10</property>
-            </column>
-          </columns>
-          <rows>
-            <row id="5">
-              <property name="pad">0</property>
-            </row>
-            <row id="6">
-              <property name="pad">20</property>
-            </row>
-          </rows>
+          <property type="row" id="0" name="pad">10</property>
+          <property type="row" id="1" name="pad">10</property>
+          <property type="row" id="2" name="pad">10</property>
+          <property type="row" id="3" name="pad">10</property>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs0">
             <property name="height">50</property>
             <property name="width">600</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">20</property>
-                </column>
-                <column id="2">
-                  <property name="pad">10</property>
-                </column>
-                <column id="4">
-                  <property name="pad">10</property>
-                </column>
-                <column id="6">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="minsize">0</property>
+              <property type="col" id="0" name="pad">10</property>
+              <property type="row" id="5" name="pad">0</property>
+              <property type="row" id="6" name="pad">20</property>
             </layout>
             <child>
               <object class="tk.Label" id="ls0">
                 <property name="text" translatable="yes">Slot 0</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lname0">
                 <property name="text" translatable="yes">Name:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -545,22 +571,30 @@
                 <property name="textvariable">string:sename0</property>
                 <property name="validate">all</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="luid0">
                 <property name="text" translatable="yes">Userid:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -569,11 +603,15 @@
                 <property name="justify">left</property>
                 <property name="textvariable">string:suid0</property>
                 <property name="width">20</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -581,22 +619,30 @@
               <object class="ttk.Checkbutton" id="cbtab0">
                 <property name="text" translatable="yes">Tab</property>
                 <property name="variable">boolean:btab0</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lpwd0">
                 <property name="text" translatable="yes">Password:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -605,11 +651,15 @@
                 <property name="justify">left</property>
                 <property name="textvariable">string:spwd0</property>
                 <property name="width">32</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -617,12 +667,16 @@
               <object class="tk.Button" id="bgen0">
                 <property name="command">on_generate0</property>
                 <property name="text" translatable="yes">Generate</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -631,12 +685,16 @@
                 <property name="command">on_copy0</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -645,12 +703,16 @@
                 <property name="command">on_paste0</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -659,11 +721,15 @@
                 <property name="command">on_clear0</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -673,46 +739,44 @@
           <object class="ttk.Frame" id="fs1">
             <property name="height">50</property>
             <property name="width">600</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">1</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">20</property>
-                </column>
-                <column id="2">
-                  <property name="pad">10</property>
-                </column>
-                <column id="4">
-                  <property name="pad">10</property>
-                </column>
-                <column id="6">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="minsize">0</property>
+              <property type="col" id="0" name="pad">10</property>
+              <property type="row" id="5" name="pad">0</property>
+              <property type="row" id="6" name="pad">20</property>
             </layout>
             <child>
               <object class="tk.Label" id="ls1">
                 <property name="text" translatable="yes">Slot 1</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lname1">
                 <property name="text" translatable="yes">Name:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -720,22 +784,30 @@
               <object class="tk.Entry" id="ename1">
                 <property name="textvariable">string:sename1</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="luid1">
                 <property name="text" translatable="yes">Userid:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -743,11 +815,15 @@
               <object class="tk.Entry" id="cuid1">
                 <property name="textvariable">string:suid1</property>
                 <property name="width">20</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -755,22 +831,30 @@
               <object class="ttk.Checkbutton" id="cbtab1">
                 <property name="text" translatable="yes">Tab</property>
                 <property name="variable">boolean:btab1</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lpwd1">
                 <property name="text" translatable="yes">Password:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -778,11 +862,15 @@
               <object class="tk.Entry" id="cpwd1">
                 <property name="textvariable">string:spwd1</property>
                 <property name="width">32</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -790,12 +878,16 @@
               <object class="tk.Button" id="bgen1">
                 <property name="command">on_generate1</property>
                 <property name="text" translatable="yes">Generate</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -804,12 +896,16 @@
                 <property name="command">on_copy1</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -818,12 +914,16 @@
                 <property name="command">on_paste1</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -832,11 +932,15 @@
                 <property name="command">on_clear1</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -846,46 +950,44 @@
           <object class="ttk.Frame" id="fs2">
             <property name="height">50</property>
             <property name="width">600</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">2</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">20</property>
-                </column>
-                <column id="2">
-                  <property name="pad">10</property>
-                </column>
-                <column id="4">
-                  <property name="pad">10</property>
-                </column>
-                <column id="6">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="minsize">0</property>
+              <property type="col" id="0" name="pad">10</property>
+              <property type="row" id="5" name="pad">0</property>
+              <property type="row" id="6" name="pad">20</property>
             </layout>
             <child>
               <object class="tk.Label" id="ls2">
                 <property name="text" translatable="yes">Slot 2</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lname2">
                 <property name="text" translatable="yes">Name:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -893,22 +995,30 @@
               <object class="tk.Entry" id="ename2">
                 <property name="textvariable">string:sename2</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="luid2">
                 <property name="text" translatable="yes">Userid:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -916,11 +1026,15 @@
               <object class="tk.Entry" id="cuid2">
                 <property name="textvariable">string:suid2</property>
                 <property name="width">20</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -928,22 +1042,30 @@
               <object class="ttk.Checkbutton" id="cbtab2">
                 <property name="text" translatable="yes">Tab</property>
                 <property name="variable">boolean:btab2</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lpwd2">
                 <property name="text" translatable="yes">Password:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -951,11 +1073,15 @@
               <object class="tk.Entry" id="cpwd2">
                 <property name="textvariable">string:spwd2</property>
                 <property name="width">32</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -963,12 +1089,16 @@
               <object class="tk.Button" id="bgen2">
                 <property name="command">on_generate2</property>
                 <property name="text" translatable="yes">Generate</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -977,12 +1107,16 @@
                 <property name="command">on_copy2</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -991,12 +1125,16 @@
                 <property name="command">on_paste2</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1005,11 +1143,15 @@
                 <property name="command">on_clear2</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1019,46 +1161,44 @@
           <object class="ttk.Frame" id="fs3">
             <property name="height">50</property>
             <property name="width">600</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">3</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">20</property>
-                </column>
-                <column id="2">
-                  <property name="pad">10</property>
-                </column>
-                <column id="4">
-                  <property name="pad">10</property>
-                </column>
-                <column id="6">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="minsize">0</property>
+              <property type="col" id="0" name="pad">10</property>
+              <property type="row" id="5" name="pad">0</property>
+              <property type="row" id="6" name="pad">20</property>
             </layout>
             <child>
               <object class="tk.Label" id="ls3">
                 <property name="text" translatable="yes">Slot 3</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lname3">
                 <property name="text" translatable="yes">Name:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1066,22 +1206,30 @@
               <object class="tk.Entry" id="ename3">
                 <property name="textvariable">string:sename3</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="luid3">
                 <property name="text" translatable="yes">Userid:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1089,11 +1237,15 @@
               <object class="tk.Entry" id="cuid3">
                 <property name="textvariable">string:suid3</property>
                 <property name="width">20</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1101,22 +1253,30 @@
               <object class="ttk.Checkbutton" id="cbtab3">
                 <property name="text" translatable="yes">Tab</property>
                 <property name="variable">boolean:btab3</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lpwd3">
                 <property name="text" translatable="yes">Password:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1124,11 +1284,15 @@
               <object class="tk.Entry" id="cpwd3">
                 <property name="textvariable">string:spwd3</property>
                 <property name="width">32</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1136,12 +1300,16 @@
               <object class="tk.Button" id="bgen3">
                 <property name="command">on_generate3</property>
                 <property name="text" translatable="yes">Generate</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1150,12 +1318,16 @@
                 <property name="command">on_copy3</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1164,12 +1336,16 @@
                 <property name="command">on_paste3</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1178,11 +1354,15 @@
                 <property name="command">on_clear3</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1192,46 +1372,44 @@
           <object class="ttk.Frame" id="fs4">
             <property name="height">50</property>
             <property name="width">600</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">4</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">20</property>
-                </column>
-                <column id="2">
-                  <property name="pad">10</property>
-                </column>
-                <column id="4">
-                  <property name="pad">10</property>
-                </column>
-                <column id="6">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="minsize">0</property>
+              <property type="col" id="0" name="pad">10</property>
+              <property type="row" id="5" name="pad">0</property>
+              <property type="row" id="6" name="pad">20</property>
             </layout>
             <child>
               <object class="tk.Label" id="ls4">
                 <property name="text" translatable="yes">Slot 4</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lname4">
                 <property name="text" translatable="yes">Name:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1239,22 +1417,30 @@
               <object class="tk.Entry" id="ename4">
                 <property name="textvariable">string:sename4</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="luid4">
                 <property name="text" translatable="yes">Userid:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1262,11 +1448,15 @@
               <object class="tk.Entry" id="cuid4">
                 <property name="textvariable">string:suid4</property>
                 <property name="width">20</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1274,22 +1464,30 @@
               <object class="ttk.Checkbutton" id="cbtab4">
                 <property name="text" translatable="yes">Tab</property>
                 <property name="variable">boolean:btab4</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lpwd4">
                 <property name="text" translatable="yes">Password:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1297,11 +1495,15 @@
               <object class="tk.Entry" id="cpwd4">
                 <property name="textvariable">string:spwd4</property>
                 <property name="width">32</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1309,12 +1511,16 @@
               <object class="tk.Button" id="bgen4">
                 <property name="command">on_generate4</property>
                 <property name="text" translatable="yes">Generate</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1323,12 +1529,16 @@
                 <property name="command">on_copy4</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1337,12 +1547,16 @@
                 <property name="command">on_paste4</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1351,11 +1565,15 @@
                 <property name="command">on_clear4</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1365,46 +1583,44 @@
           <object class="ttk.Frame" id="fs5">
             <property name="height">50</property>
             <property name="width">600</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">5</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">20</property>
-                </column>
-                <column id="2">
-                  <property name="pad">10</property>
-                </column>
-                <column id="4">
-                  <property name="pad">10</property>
-                </column>
-                <column id="6">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="minsize">0</property>
+              <property type="col" id="0" name="pad">10</property>
+              <property type="row" id="5" name="pad">0</property>
+              <property type="row" id="6" name="pad">20</property>
             </layout>
             <child>
               <object class="tk.Label" id="ls5">
                 <property name="text" translatable="yes">Slot 5</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lname5">
                 <property name="text" translatable="yes">Name:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1412,22 +1628,30 @@
               <object class="tk.Entry" id="ename5">
                 <property name="textvariable">string:sename5</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="luid5">
                 <property name="text" translatable="yes">Userid:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1435,11 +1659,15 @@
               <object class="tk.Entry" id="cuid5">
                 <property name="textvariable">string:suid5</property>
                 <property name="width">20</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1447,22 +1675,30 @@
               <object class="ttk.Checkbutton" id="cbtab5">
                 <property name="text" translatable="yes">Tab</property>
                 <property name="variable">boolean:btab5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lpwd5">
                 <property name="text" translatable="yes">Password:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1470,11 +1706,15 @@
               <object class="tk.Entry" id="cpwd5">
                 <property name="textvariable">string:spwd5</property>
                 <property name="width">32</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1482,12 +1722,16 @@
               <object class="tk.Button" id="bgen5">
                 <property name="command">on_generate5</property>
                 <property name="text" translatable="yes">Generate</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">8</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1496,12 +1740,16 @@
                 <property name="command">on_copy5</property>
                 <property name="text" translatable="yes">Copy</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">9</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1510,12 +1758,16 @@
                 <property name="command">on_paste5</property>
                 <property name="text" translatable="yes">Paste</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">10</property>
                   <property name="padx">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1524,11 +1776,15 @@
                 <property name="command">on_clear5</property>
                 <property name="text" translatable="yes">Clear</property>
                 <property name="width">5</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">11</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1538,46 +1794,44 @@
           <object class="ttk.Frame" id="fscb">
             <property name="height">50</property>
             <property name="width">600</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">6</property>
               <property name="sticky">w</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">20</property>
-                </column>
-                <column id="2">
-                  <property name="pad">10</property>
-                </column>
-                <column id="4">
-                  <property name="pad">10</property>
-                </column>
-                <column id="6">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="minsize">0</property>
+              <property type="col" id="0" name="pad">10</property>
+              <property type="row" id="5" name="pad">0</property>
+              <property type="row" id="6" name="pad">20</property>
             </layout>
             <child>
               <object class="tk.Label" id="lscb">
                 <property name="text" translatable="yes">Clipboard</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lnamecb">
                 <property name="text" translatable="yes">Name:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1585,22 +1839,30 @@
               <object class="tk.Entry" id="enamecb">
                 <property name="textvariable">string:senamecb</property>
                 <property name="width">8</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="luidcb">
                 <property name="text" translatable="yes">Userid:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">3</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1608,11 +1870,15 @@
               <object class="tk.Entry" id="cuidcb">
                 <property name="textvariable">string:suidcb</property>
                 <property name="width">20</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">4</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1620,22 +1886,30 @@
               <object class="ttk.Checkbutton" id="cbtabcb">
                 <property name="text" translatable="yes">Tab</property>
                 <property name="variable">boolean:btabcb</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">5</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lpwdcb">
                 <property name="text" translatable="yes">Password:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">6</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1643,11 +1917,15 @@
               <object class="tk.Entry" id="cpwdcb">
                 <property name="textvariable">string:spwdcb</property>
                 <property name="width">32</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">7</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">20</property>
+                  <property type="col" id="2" name="pad">10</property>
+                  <property type="col" id="4" name="pad">10</property>
+                  <property type="col" id="6" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1659,36 +1937,34 @@
       <object class="ttk.Labelframe" id="fsettings">
         <property name="height">200</property>
         <property name="text" translatable="yes">Settings	</property>
-        <layout>
+        <layout manager="grid">
           <property name="column">0</property>
           <property name="columnspan">1</property>
           <property name="propagate">True</property>
           <property name="row">3</property>
           <property name="sticky">w</property>
-          <columns>
-            <column id="0">
-              <property name="pad">0</property>
-            </column>
-            <column id="1">
-              <property name="pad">0</property>
-            </column>
-          </columns>
+          <property type="row" id="0" name="pad">10</property>
+          <property type="row" id="1" name="pad">10</property>
+          <property type="row" id="2" name="pad">10</property>
+          <property type="row" id="3" name="pad">10</property>
         </layout>
         <child>
           <object class="ttk.Frame" id="fs1_1">
             <property name="height">100</property>
             <property name="width">50</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
+              <property type="col" id="0" name="pad">0</property>
+              <property type="col" id="1" name="pad">0</property>
             </layout>
             <child>
               <object class="ttk.Checkbutton" id="cbflip">
                 <property name="text" translatable="yes">Flip Display	</property>
                 <property name="variable">boolean:bcbflip</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -1700,7 +1976,7 @@
               <object class="ttk.Checkbutton" id="cbrevert">
                 <property name="text" translatable="yes">Revert Password</property>
                 <property name="variable">boolean:bcbrevert</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">1</property>
@@ -1712,7 +1988,7 @@
               <object class="ttk.Checkbutton" id="cblogo">
                 <property name="text" translatable="yes">Show URL at Startup</property>
                 <property name="variable">boolean:bcblogo</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">2</property>
@@ -1726,26 +2002,22 @@
           <object class="ttk.Frame" id="fs2_2">
             <property name="height">100</property>
             <property name="width">50</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">1</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">0</property>
-                </column>
-                <column id="1">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="pad">0</property>
+              <property type="col" id="1" name="pad">0</property>
             </layout>
             <child>
               <object class="tk.Label" id="ldto">
                 <property name="text" translatable="yes">Display Timeout:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1754,31 +2026,37 @@
                 <property name="state">normal</property>
                 <property name="textvariable">string:sedto</property>
                 <property name="width">3</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="ldto1">
                 <property name="text" translatable="yes">x10 seconds</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lito">
                 <property name="text" translatable="yes">LED Timeout:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">1</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1787,30 +2065,36 @@
                 <property name="state">normal</property>
                 <property name="textvariable">string:seito</property>
                 <property name="width">3</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">1</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="lito1">
                 <property name="text" translatable="yes">x10 seconds</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">1</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="llto">
                 <property name="text" translatable="yes">Autolock Timeout:</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">2</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1818,21 +2102,25 @@
               <object class="tk.Entry" id="elto">
                 <property name="textvariable">string:selto</property>
                 <property name="width">3</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">2</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="tk.Label" id="llto1">
                 <property name="text" translatable="yes">x10 minutes</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">2</property>
                   <property name="propagate">True</property>
                   <property name="row">2</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">0</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1842,31 +2130,27 @@
           <object class="ttk.Frame" id="fs3_3">
             <property name="height">100</property>
             <property name="width">50</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">3</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">nw</property>
-              <columns>
-                <column id="0">
-                  <property name="pad">10</property>
-                </column>
-                <column id="1">
-                  <property name="pad">10</property>
-                </column>
-              </columns>
+              <property type="col" id="0" name="pad">0</property>
+              <property type="col" id="1" name="pad">0</property>
             </layout>
             <child>
               <object class="tk.Label" id="lbseq">
                 <property name="text" translatable="yes">Button Sequence:</property>
                 <property name="underline">0</property>
                 <property name="width">0</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1875,11 +2159,13 @@
                 <property name="textvariable">string:scbseq</property>
                 <property name="values">"Select Next Generate" "Select Generate Next" "Next Select Generate" "Next Generate Select" "Generate Select Next" "Generate Next Select"</property>
                 <property name="width">28</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1888,12 +2174,14 @@
                 <property name="text" translatable="yes">LED Sequence:</property>
                 <property name="underline">0</property>
                 <property name="width">0</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">1</property>
                   <property name="propagate">True</property>
                   <property name="row">1</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1902,11 +2190,13 @@
                 <property name="textvariable">string:sclseq</property>
                 <property name="values">"Red Yellow Green Magenta Blue Cyan" "Yellow Red Green Magenta Blue Cyan" "Magenta Red Blue Yellow Green Cyan" "Cyan Blue Magenta Green Yellow Red" "Red Yellow Green Blue Magenta Cyan" "Blue Green Yellow Red Cyan Magenta"</property>
                 <property name="width">28</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">1</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1914,11 +2204,13 @@
               <object class="tk.Label" id="lkfail">
                 <property name="font">TkDefaultFont</property>
                 <property name="text" translatable="yes">Unlock failure:	</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">2</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1927,11 +2219,13 @@
                 <property name="textvariable">string:sckfail</property>
                 <property name="values">"Do nothing" "Erase after 3 tries" "Erase after 10 trries" "Doubling timeout starting @"</property>
                 <property name="width">28</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">1</property>
                   <property name="propagate">True</property>
                   <property name="row">2</property>
                   <property name="sticky">w</property>
+                  <property type="col" id="0" name="pad">10</property>
+                  <property type="col" id="1" name="pad">10</property>
                 </layout>
               </object>
             </child>
@@ -1944,7 +2238,7 @@
         <property name="height">50</property>
         <property name="text" translatable="yes">Other Data</property>
         <property name="width">400</property>
-        <layout>
+        <layout manager="grid">
           <property name="column">0</property>
           <property name="ipadx">5</property>
           <property name="ipady">5</property>
@@ -1952,11 +2246,15 @@
           <property name="propagate">True</property>
           <property name="row">4</property>
           <property name="sticky">w</property>
+          <property type="row" id="0" name="pad">10</property>
+          <property type="row" id="1" name="pad">10</property>
+          <property type="row" id="2" name="pad">10</property>
+          <property type="row" id="3" name="pad">10</property>
         </layout>
         <child>
           <object class="tk.Label" id="ldcrc">
             <property name="text" translatable="yes">Device CRC:</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
               <property name="propagate">True</property>
@@ -1969,7 +2267,7 @@
           <object class="tk.Label" id="ldcrcc">
             <property name="text" translatable="yes">NC</property>
             <property name="textvariable">string:sdcrc</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">10</property>
               <property name="propagate">True</property>
@@ -1981,7 +2279,7 @@
         <child>
           <object class="tk.Label" id="llcrc">
             <property name="text" translatable="yes">Local CRC:</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">2</property>
               <property name="padx">5</property>
               <property name="propagate">True</property>
@@ -1994,7 +2292,7 @@
           <object class="tk.Label" id="llcrcc">
             <property name="text" translatable="yes">NC</property>
             <property name="textvariable">string:slcrc</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">3</property>
               <property name="padx">10</property>
               <property name="propagate">True</property>
@@ -2006,7 +2304,7 @@
         <child>
           <object class="tk.Label" id="lsema">
             <property name="text" translatable="yes">Semaphores:</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">4</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
@@ -2018,7 +2316,7 @@
           <object class="tk.Entry" id="esemac">
             <property name="text" translatable="yes">NC</property>
             <property name="textvariable">string:ssema</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">5</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
@@ -2029,7 +2327,7 @@
         <child>
           <object class="tk.Label" id="lsig">
             <property name="text" translatable="yes">Signature:</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">6</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
@@ -2042,7 +2340,7 @@
             <property name="text" translatable="yes">NC</property>
             <property name="textvariable">string:ssig</property>
             <property name="width">8</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">7</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
@@ -2056,10 +2354,14 @@
       <object class="ttk.Frame" id="fterm">
         <property name="height">300</property>
         <property name="width">250</property>
-        <layout>
+        <layout manager="grid">
           <property name="column">0</property>
           <property name="propagate">True</property>
           <property name="row">5</property>
+          <property type="row" id="0" name="pad">10</property>
+          <property type="row" id="1" name="pad">10</property>
+          <property type="row" id="2" name="pad">10</property>
+          <property type="row" id="3" name="pad">10</property>
         </layout>
         <child>
           <object class="tk.Text" id="tterm">
@@ -2068,7 +2370,7 @@
             <property name="state">normal</property>
             <property name="width">112</property>
             <property name="wrap">word</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">0</property>
               <property name="columnspan">1</property>
               <property name="propagate">True</property>
@@ -2082,7 +2384,7 @@
             <property name="height">150</property>
             <property name="text" translatable="yes">EE Data</property>
             <property name="width">300</property>
-            <layout>
+            <layout manager="grid">
               <property name="column">1</property>
               <property name="ipadx">5</property>
               <property name="ipady">5</property>
@@ -2094,7 +2396,7 @@
               <object class="tk.Text" id="tee">
                 <property name="height">18</property>
                 <property name="width">70</property>
-                <layout>
+                <layout manager="grid">
                   <property name="column">0</property>
                   <property name="propagate">True</property>
                   <property name="row">0</property>
@@ -2110,24 +2412,25 @@
         <property name="height">200</property>
         <property name="text" translatable="yes">Message</property>
         <property name="width">200</property>
-        <layout>
+        <layout manager="grid">
           <property name="column">0</property>
           <property name="columnspan">1</property>
           <property name="propagate">True</property>
           <property name="row">6</property>
           <property name="sticky">w</property>
+          <property type="row" id="0" name="pad">10</property>
+          <property type="row" id="1" name="pad">10</property>
+          <property type="row" id="2" name="pad">10</property>
+          <property type="row" id="3" name="pad">10</property>
         </layout>
         <child>
-          <object class="ttk.Label" id="lmessage">
-            <property name="text" translatable="yes">Startup</property>
-            <property name="textvariable">string:strmessage</property>
-            <property name="underline">0</property>
-            <property name="width">162</property>
-            <layout>
-              <property name="column">0</property>
-              <property name="padx">10</property>
+          <object class="tk.Text" id="tmessage">
+            <property name="height">4</property>
+            <property name="text" translatable="yes">Init	</property>
+            <property name="width">187</property>
+            <layout manager="pack">
               <property name="propagate">True</property>
-              <property name="row">0</property>
+              <property name="side">top</property>
             </layout>
           </object>
         </child>

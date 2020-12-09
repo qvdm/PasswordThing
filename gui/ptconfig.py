@@ -63,6 +63,7 @@ class Application(pygubu.TkApplication):
         self.g_ser_rcvstack = []
         self.g_ser_to = 0
         self.g_locked = False
+        self.g_ser_active = False;
 
         self.g_valid = False
 
@@ -128,6 +129,7 @@ class Application(pygubu.TkApplication):
 
         self.termbox = builder.get_object('tterm', self.master)
         self.eebox = builder.get_object('tee', self.master)
+        self.msgbox = builder.get_object('tmessage', self.master)
 
         self.canvas = canvas = builder.get_object('cvled', self.master)
         self.led = led = tk_tools.Led(canvas, size=15)
@@ -136,8 +138,6 @@ class Application(pygubu.TkApplication):
 
         self.pwframe = builder.get_object('fslots', self.master)
         
-        self.builder.tkvariables['strmessage'].set("Initialized")
-
         builder.connect_callbacks(self)
         self.master.after(100, self.process_serial)
 
@@ -181,7 +181,8 @@ class Application(pygubu.TkApplication):
         comboobj.current(indx)
 
     def disp_message(self, message):
-        self.builder.tkvariables['strmessage'].set(message)
+        self.msgbox.insert(tk.END, message + "\n")
+        self.msgbox.see(tk.END)
 
 
     def on_port_selected(self, event):
@@ -203,7 +204,9 @@ class Application(pygubu.TkApplication):
     def set_ser_active(self):
         self.disable_button('brescan')
         self.led.to_green(on=True)
-        self.disp_message("Serial Active")
+        if (not self.g_ser_active) :
+            self.disp_message("Serial Active")
+        self.g_ser_active = True
 
     def set_ser_disconnected(self):
         self.enable_button('brescan')
@@ -215,6 +218,7 @@ class Application(pygubu.TkApplication):
         self.led.to_red(on=True)
         self.clear_device_data()
         self.disp_message("Serial Disconnected")
+        self.g_ser_active = False;
 
     def on_rescan_ports(self):
         if not self.g_serial:
@@ -222,6 +226,7 @@ class Application(pygubu.TkApplication):
             self.u_portlist.insert(0, '')
             self.portcombo['values'] = self.u_portlist
             self.portcombo.current(0)
+            self.g_ser_active = False;
             
 
     def setversion(self, s):
@@ -465,6 +470,8 @@ class Application(pygubu.TkApplication):
             self.populate_var(var_s)
 
             self.enable_button('bvalidate')
+            self.disp_message("Read OK")
+
 
     def populate_pw(self, pwlist):
         for i in range(6):
@@ -481,18 +488,18 @@ class Application(pygubu.TkApplication):
             splitat = 16  # name is 8 bytes
             l, r = s[:splitat], s[splitat:]
             s = r
-            l = l.split('00')[0]
+            #l = l.split('00')[0] 
 
-            slotname = binascii.unhexlify(l).decode('utf-8').rstrip()
+            slotname = binascii.unhexlify(l).decode('utf-8').rstrip('\x00')
 
             splitat = 60  # userid and pw are 30 bytes each
             l, r = s[:splitat], s[splitat:]
             if uidlen:
-                uid = binascii.unhexlify(l).decode('utf-8')[:uidlen]
+                uid = binascii.unhexlify(l).decode('utf-8')[:uidlen].rstrip('\x00')
             else:
                 uid = ''
             if pwdlen:
-                pwd = binascii.unhexlify(r).decode('utf-8')[:pwdlen]
+                pwd = binascii.unhexlify(r).decode('utf-8')[:pwdlen].rstrip('\x00')
             else:
                 pwd = ''
 
@@ -699,6 +706,8 @@ class Application(pygubu.TkApplication):
             self.disable_button('bwrite')
             self.black_button('bvalidate')
             self.master.after(200, self.request_restore)
+            self.disp_message("Write - restoring and resetting");
+
 
     def request_restore(self):
         self.send_serial("ER")
