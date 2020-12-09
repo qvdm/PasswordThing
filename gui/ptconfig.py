@@ -937,15 +937,20 @@ class Application(pygubu.TkApplication):
 # Scan for serial ports with devices connected
 def scan_serial_ports():
     if sys.platform.startswith('win'):
+        print("Windows detected")
         ports = ['COM%s' % (i + 1) for i in range(256)]
     elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
         # this excludes your current terminal "/dev/tty"
+        print("Linux detected")
         ports = glob.glob('/dev/tty[A-Za-z]*')
     elif sys.platform.startswith('darwin'):
+        print("MacOs detected")
         ports = glob.glob('/dev/tty.*')
     else:
+        print("No OS detected")
         raise EnvironmentError('Unsupported platform')
 
+    print(ports)
     result = []
     for port in ports:
         try:
@@ -954,6 +959,7 @@ def scan_serial_ports():
             result.append(port)
         except (OSError, serial.SerialException):
             pass
+    print(result)
     return result
 
 
